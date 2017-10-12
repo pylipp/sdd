@@ -51,3 +51,21 @@ echo_install_info() {
     echo_info "----------------------------------------------------------"
     echo_info "Installing $1..."
 }
+
+setup_xdg_config_link() {
+    # args: 
+    # - application name
+    # - link target file in ~/.files directory
+    # - link source name in ~/.config/<application name>
+
+    application_name="$1"
+    application_config_dir=~/.config/"$application_name"
+
+    mkdir -p "$application_config_dir"
+
+    link_source_path="$application_config_dir"/"$3"
+    mv_existing "$link_source_path"
+
+    echo_info "Setup XDG config link for $application_name..."
+    ln -s ~/.files/"$2" "$link_source_path"
+}

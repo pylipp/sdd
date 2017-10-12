@@ -17,3 +17,6 @@ install_packages asciidoc source-highlight
 git clone https://github.com/asciidoc/asciidoc
 cd qutebrowser/scripts
 ./asciidoc2html.py --asciidoc python2 ~/software/asciidoc/asciidoc.py
+
+# TODO: set links in individual installation files or in single script?
+setup_xdg_config_link qutebrowser qutebrowser_config.py config.py

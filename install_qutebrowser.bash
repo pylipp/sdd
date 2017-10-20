@@ -30,3 +30,4 @@ update-alternatives --config x-www-browser
 # also delete ~/.thunderbird/<profile>.default/mimeTypes.rdf
 # then thunderbird asks for a new default application to open links etc.
 # see also: http://kb.mozillazine.org/Setting_Your_Default_Browser#Setting_the_browser_that_opens_in_Thunderbird_-_Linux
+xdg-mime default qutebrowser.desktop text/html

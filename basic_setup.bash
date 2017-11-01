@@ -30,7 +30,7 @@ sed -i 's/env zsh//g' install.sh
 ./install.sh
 rm -rf .zshrc* install.sh
 ln -s .files/zshrc .zshrc
-ln -s .files/oh-my-zsh/themes/bullet-train.zsh-theme .oh-my-zsh/themes/bullet-train.zsh-theme
+ln -s .files/oh-my-zsh/themes .oh-my-zsh/custom/themes
 chsh -s $(which zsh) || echo exec zsh >> .bashrc
 
 ln -s .files/dir_colors .dir_colors

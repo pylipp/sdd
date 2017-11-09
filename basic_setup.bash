@@ -11,6 +11,10 @@ if [[ ! -z $TMUX ]]; then
     exit
 fi
 
+source ~/.files/setup/utils.bash
+
+install_packages tmux wget curl git zsh
+
 cd
 ln -s .files/tmux.conf .tmux.conf
 
@@ -23,7 +27,7 @@ vim +PlugInstall < /dev/tty
 
 cd
 mkdir -p .tmux/plugins
-install_packages cmake build-essential
+install_packages cmake build-essential xclip
 git clone https://github.com/tmux-plugins/tpm .tmux/plugins/tpm
 cd .tmux/plugins/tpm/bin
 ./install_plugins 

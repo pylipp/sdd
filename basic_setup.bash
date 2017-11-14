@@ -29,8 +29,10 @@ cd
 mkdir -p .tmux/plugins
 install_packages cmake build-essential xclip
 git clone https://github.com/tmux-plugins/tpm .tmux/plugins/tpm
-cd .tmux/plugins/tpm/bin
-./install_plugins 
+cd .tmux/plugins/tpm
+bin/install_plugins 
+cd ../tmux-mem-cpu-load
+git checkout feature/temperature
  
 cd
 wget https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh

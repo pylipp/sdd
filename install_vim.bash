@@ -9,33 +9,33 @@ install_vim() {
     method=${1:-global}
 
     echo_install_info vim
-    if [[ ! -d vim ]]; then
-        if [[ $method = "global" ]]; then
-            sudo apt-get remove -y vim vim-runtime gvim vim-tiny vim-common
-            install_packages libncurses5-dev \
-                libcairo2-dev libx11-dev libxpm-dev libxt-dev python-dev \
-                python3-dev shellcheck xdotool markdown
+    if [[ $method = "global" ]]; then
+        sudo apt-get remove -y vim vim-runtime gvim vim-tiny vim-common
+        install_packages libncurses5-dev \
+            libcairo2-dev libx11-dev libxpm-dev libxt-dev python-dev \
+            python3-dev shellcheck xdotool markdown
 
-            build_vim
-            sudo make install
+        build_vim /usr
+        sudo make install
 
-            sudo update-alternatives --install /usr/bin/editor editor /usr/bin/vim 1
-            sudo update-alternatives --set editor /usr/bin/vim
-            sudo update-alternatives --install /usr/bin/vi vi /usr/bin/vim 1
-            sudo update-alternatives --set vi /usr/bin/vim
-        elif [[ $method = "local" ]]; then
-            build_vim
+        sudo update-alternatives --install /usr/bin/editor editor /usr/bin/vim 1
+        sudo update-alternatives --set editor /usr/bin/vim
+        sudo update-alternatives --install /usr/bin/vi vi /usr/bin/vim 1
+        sudo update-alternatives --set vi /usr/bin/vim
+    elif [[ $method = "local" ]]; then
+        install_prefix=$HOME/software/vim-rt
+        build_vim "$install_prefix"
+        make install
 
-            mkcdir $HOME/.local/bin
-            mv_existing vim
-            ln -s $HOME/software/vim/src/vim vim
-        else
-            echo_error "Unknown method '$method'!"
-            exit 1
-        fi
-
-        setup_vim_config
+        mkcdir $HOME/.local/bin
+        mv_existing vim
+        ln -s $install_prefix/bin/vim vim
+    else
+        echo_error "Unknown method '$method'!"
+        exit 1
     fi
+
+    setup_vim_config
 }
 
 build_vim() {
@@ -62,7 +62,7 @@ build_vim() {
         --enable-python3interp \
         --with-python3-config-dir=$VIM_PYTHON3_CONFIG_DIR \
         --enable-cscope \
-        --prefix=/usr
+        --prefix=$1
 
     make
 }
@@ -85,3 +85,5 @@ setup_vim_config() {
         ./install.py --clang-completer
     fi
 }
+
+install_vim $*

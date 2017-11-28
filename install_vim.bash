@@ -1,5 +1,12 @@
 #!/bin/bash
 
+# Installation script for vim and plugins
+# Installation location: /usr or ~/software/vim-rt
+# Requires: - make
+#           - git
+#           - pip
+#           - python3-dev or python-dev
+
 set -e
 
 source $HOME/.files/setup/utils.bash
@@ -11,9 +18,10 @@ install_vim() {
     echo_install_info vim
     if [[ $method = "global" ]]; then
         sudo apt-get remove -y vim vim-runtime gvim vim-tiny vim-common
-        install_packages libncurses5-dev \
-            libcairo2-dev libx11-dev libxpm-dev libxt-dev python-dev \
-            python3-dev shellcheck xdotool markdown
+        install_packages libncurses5-dev libcairo2-dev libx11-dev libxpm-dev libxt-dev \
+            python-dev python3-dev \
+            build-essential git \
+            shellcheck xdotool markdown
 
         build_vim /usr
         sudo make install
@@ -79,11 +87,12 @@ setup_vim_config() {
     # install linter
     pip install --user vim-vint
 
-    if [[ -d "$HOME/.vim/bundle/YouCompleteMe" ]]; then
+    # don't install on ARM (clang not available on Raspbian)
+    if [[ "$(arch)" = "x86_64" ]] && [[ -d "$HOME/.vim/bundle/YouCompleteMe" ]]; then
         echo_install_info YouCompleteMe
         cd $HOME/.vim/bundle/YouCompleteMe
         ./install.py --clang-completer
     fi
 }
 
-install_vim $*
+install_vim "$@"

@@ -18,7 +18,18 @@ main() {
 
     if [[ $method = "global" ]]; then
         install_packages tmux xclip build-essential cmake
-    elif [[ $method != "local" ]]; then
+    elif [[ $method = "local" ]]; then
+        # hope that these are installed...
+        # install_packages automake libevent-dev
+        mkcswdir
+        git clone https://github.com/tmux/tmux
+        cd tmux
+        git checkout 2.6
+        sh autogen.sh
+        ./configure --prefix="$HOME"/.local
+        make
+        make install
+    else
         echo_error "Unknown method '$method'!"
         exit 1
     fi

@@ -4,7 +4,6 @@
 # Installation location: /usr and ~/software
 # Requires: - git
 #           - make
-#           - pip
 
 set -e
 
@@ -40,10 +39,6 @@ main() {
         sudo make install 
         cd ~/.files/i3/i3lock-fancy
         git checkout multimonitor
-
-        mkvirtualenv --python=$(which python3) bumblebee
-        ~/.virtualenvs/bumblebee/bin/pip install requests psutils netifaces
-        git clone https://github.com/tobi-wan-kenobi/bumblebee-status ~/software/bumblebee-status
     elif [[ $method = "local" ]]; then
         echo_warn "Sorry, local i3 installation is not possible."
     else

@@ -1,7 +1,7 @@
 #! /bin/bash
 
 # Installation script for tmux and plugins
-# Installation location: /usr and ~/.tmux
+# Installation location: /usr (or ~/.local) and ~/.tmux
 # Requires: - git
 #           - pip
 #           - make/cmake
@@ -19,16 +19,13 @@ main() {
     if [[ $method = "global" ]]; then
         install_packages tmux xclip build-essential cmake
     elif [[ $method = "local" ]]; then
-        # hope that these are installed...
-        # install_packages automake libevent-dev
+        # install from gist
         mkcswdir
-        git clone https://github.com/tmux/tmux
-        cd tmux
-        git checkout 2.6
-        sh autogen.sh
-        ./configure --prefix="$HOME"/.local
-        make
-        make install
+        wget https://gist.githubusercontent.com/pylipp/ea5f830532e0c38ff70055cf7337fc43/raw/1117c92060df458cf5d4a7b361333df42094f5bc/install.sh
+        chmod +x install.sh
+        ./install.sh 2.6
+        rm -rf install.sh
+        cd -
     else
         echo_error "Unknown method '$method'!"
         exit 1

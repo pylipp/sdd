@@ -52,6 +52,11 @@ echo_install_info() {
     echo_info "Installing $1..."
 }
 
+setup_link() {
+    echo_info "Setting up link to $1..."
+    ln -s ~/.files/$1 $2
+}
+
 setup_xdg_config_link() {
     # args: 
     # - application name

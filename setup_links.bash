@@ -8,7 +8,7 @@ main() {
     cd $HOME
     for rcfile in ycm_extra_conf.py gitconfig bashrc i3 \
         xinitrc dir_colors latexmkrc pylintrc tigrc direnvrc \
-        pythonrc mailcap profile zprofile xprofile \
+        mailcap profile zprofile xprofile \
         vintrc.yaml
     do
         link_name="."$rcfile

@@ -6,7 +6,7 @@
 # zoom in/out via Ctrl-Shift-PageUp/Down
 # copy/paste via Ctrl-Shift-C/V
 
-source "$HOME"/.files/setup/utils.bash
+source $(dirname "$0")/utils.bash
 
 echo_install_info simple-terminal
 mkcswdir

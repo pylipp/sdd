@@ -7,7 +7,7 @@
 
 set -e
 
-source ~/.files/setup/utils.bash
+source $(dirname "$0")/utils.bash
 
 main() {
     local method=${1:-global}

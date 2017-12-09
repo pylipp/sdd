@@ -11,7 +11,7 @@ if [[ ! -z $TMUX ]]; then
     exit
 fi
 
-source ~/.files/setup/utils.bash
+source $(dirname "$0")/utils.bash
 
 install_packages tmux wget curl git zsh
 

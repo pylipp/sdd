@@ -18,9 +18,7 @@ install_packages tmux wget curl git zsh
 cd
 ln -s .files/tmux.conf .tmux.conf
 
-cd .files
-bash generate_vimrc.sh 
-cd
+ln -s .files/vimrc .vimrc
 ln -s .files/vim .vim
 vim +qa
 vim +PlugInstall < /dev/tty

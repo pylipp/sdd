@@ -80,7 +80,8 @@ setup_vim_config() {
     ln -s $HOME/.files/vim $HOME/.vim
 
     mv_existing $HOME/.vimrc
-    bash $HOME/.files/generate_vimrc.sh
+    ln -s ~/.files/vimrc ~/.vimrc
+
     vim +qall < /dev/tty
     vim +PlugInstall +qall < /dev/tty
 

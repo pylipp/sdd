@@ -4,6 +4,8 @@
 # Installation location: /usr and ~/software
 # Requires: - git
 #           - make
+#           - curl
+#           - bash
 
 set -e
 
@@ -39,6 +41,9 @@ main() {
         cd i3lock
         git checkout 2.10  # does not require autotools
         sudo make install 
+
+        # vim-anywhere utility
+        curl -fsSL https://raw.github.com/cknadler/vim-anywhere/master/install | bash
     elif [[ $method = "local" ]]; then
         echo_warn "Sorry, local i3 installation is not possible."
     else

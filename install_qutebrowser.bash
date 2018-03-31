@@ -11,8 +11,11 @@ install_packages python3-pyqt5 python3-pyqt5.qtwebkit python3-pyqt5.qtquick pyth
 git clone https://github.com/qutebrowser/qutebrowser
 
 cd qutebrowser
-git checkout v1.0.4
+git checkout v1.2.0
 tox -v -e mkvenv-pypi
+
+# updating via
+#tox -r -e mkvenv-pypi
 
 # generate docs
 # https://qutebrowser.org/INSTALL.html#_additional_hints

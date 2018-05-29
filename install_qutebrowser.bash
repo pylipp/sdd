@@ -6,8 +6,8 @@ source $(dirname "$0")/utils.bash
 
 mkcswdir
 
-install_packages python3-pyqt5 python3-pyqt5.qtwebkit python3-pyqt5.qtquick python-tox \
-    python3-sip python3-dev python3-pyqt5.qtsql libqt5sql5-sqlite
+install_packages python-tox
+python -m platform | grep -qi xenial && install_packages libglib2.0-0 libgl1 libfontconfig1 libx11-xcb1 libxi6 libxrender1 libdbus-1-3 || true
 git clone https://github.com/qutebrowser/qutebrowser
 
 cd qutebrowser

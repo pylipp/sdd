@@ -6,6 +6,8 @@
 # zoom in/out via Ctrl-Shift-PageUp/Down
 # copy/paste via Ctrl-Shift-C/V
 
+set -e
+
 source $(dirname "$0")/utils.bash
 
 echo_install_info simple-terminal
@@ -13,18 +15,20 @@ mkcswdir
 
 install_packages libxft-dev
 
-# clone source and checkout revision that matches the patches
+# Clone source and checkout revision that matches the patches
 git clone git://git.suckless.org/st
 cd st || ( echo "Error cloning..."; exit )
-git checkout b331da5
+git checkout 0.8.1
 
-# apply patches for solarized color scheme and custom font/fontsize
-wget https://st.suckless.org/patches/solarized/st-no_bold_colors-20170623-b331da5.diff
-wget https://st.suckless.org/patches/solarized/st-solarized-both-20170626-b331da5.diff
-wget https://st.suckless.org/patches/clipboard/st-clipboard-20170925-b1338e9.diff
-patch < "$HOME"/.files/setup/st-custom-font-20170928-b331da5.diff
-patch < st-no_bold_colors-20170623-b331da5.diff
-patch < st-solarized-both-20170626-b331da5.diff
-patch < st-clipboard-20170925-b1338e9.diff
+# Download patches for solarized color scheme and clipboard behaviour
+wget https://st.suckless.org/patches/solarized/st-no_bold_colors-0.8.1.diff
+wget https://st.suckless.org/patches/solarized/st-solarized-both-0.8.1.diff
+wget https://st.suckless.org/patches/clipboard/st-clipboard-0.8.1.diff
+
+# Apply patches
+patch < "$HOME"/.files/setup/st-custom-font-0.8.1.diff
+patch < st-no_bold_colors-0.8.1.diff
+patch < st-solarized-both-0.8.1.diff
+patch < st-clipboard-0.8.1.diff
 
 sudo make clean install

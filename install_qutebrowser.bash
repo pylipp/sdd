@@ -11,8 +11,9 @@ python -m platform | grep -qi xenial && install_packages libglib2.0-0 libgl1 lib
 git clone https://github.com/qutebrowser/qutebrowser
 
 cd qutebrowser
-git checkout v1.2.0
-tox -v -e mkvenv-pypi
+git checkout v1.4.2
+# work-around of Qt bug; https://github.com/qutebrowser/qutebrowser/commit/e80e695a56516de6bea435345f2ae3589c42d127
+python3 -c 'import sys; print(1 if sys.version < "3.5.4" else 0)' && tox -v -e mkvenv-pypi || tox -v -e mkvenv-pypi-old
 
 # updating via
 #tox -r -e mkvenv-pypi

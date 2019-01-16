@@ -1,9 +1,9 @@
 #! /bin/bash
 
 # Installation script for ripgrep
-# Installation location: /usr/local (or ~/.local)
+# Installation location: /usr (or ~/.local)
 # Requires: - wget
-#           - tar
+#           - tar (local installation)
 
 set -e
 
@@ -15,21 +15,26 @@ main() {
     echo_install_info ripgrep
     mkcswdir
 
-    local ripgrep_version=0.7.1
-    wget https://github.com/BurntSushi/ripgrep/releases/download/$ripgrep_version/ripgrep-$ripgrep_version-x86_64-unknown-linux-musl.tar.gz
-    tar xf ripgrep-$ripgrep_version-x86_64-unknown-linux-musl.tar.gz
+    local ripgrep_version=0.10.0
+    local package_name
+    local github_url=https://github.com/BurntSushi/ripgrep/releases/download/$ripgrep_version
 
     if [[ $method = "global" ]]; then
-        sudo cp ripgrep-$ripgrep_version-x86_64-unknown-linux-musl/rg /usr/local/bin
-        sudo cp ripgrep-$ripgrep_version-x86_64-unknown-linux-musl/complete/_rg /usr/share/zsh/site-functions
+        package_name=ripgrep_$ripgrep_version\_amd64.deb
+        wget $github_url/$package_name
+        sudo dpkg --install $package_name
+        rm $package_name
     elif [[ $method = "local" ]]; then
-        cp ripgrep-$ripgrep_version-x86_64-unknown-linux-musl/rg $HOME/.local/bin
+        package_name=ripgrep-$ripgrep_version-x86_64-unknown-linux-musl
+        wget $github_url/$package_name.tar.gz
+        tar xf $package_name.tar.gz
+        cp $package_name/rg "$HOME"/.local/bin
+        rm -rf $package_name.tar.gz $package_name
     else
         echo_error "Unknown method '$method'!"
         exit 1
     fi
 
-    rm -rf ripgrep-$ripgrep_version-x86_64-unknown-linux-musl.tar.gz ripgrep-$ripgrep_version-x86_64-unknown-linux-musl
 }
 
 main "$@"

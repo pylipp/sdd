@@ -7,7 +7,7 @@ main() {
     echo_info "Setting up symbolic links to .files..."
     cd $HOME
     for rcfile in ycm_extra_conf.py gitconfig bashrc i3 \
-        xinitrc dir_colors latexmkrc pylintrc tigrc direnvrc \
+        xinitrc dir_colors latexmkrc tigrc direnvrc \
         mailcap profile zprofile xprofile \
         vintrc.yaml
     do
@@ -27,7 +27,6 @@ main() {
     ln -s $HOME/.files/feh $HOME/.config/feh
     mkdir -p $HOME/.local/share
     ln -s $HOME/.files/local/share/applications $HOME/.local/share/applications
-    ln -s $HOME/.files/flake8rc $HOME/.config/flake8
 }
 
 main

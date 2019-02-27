@@ -42,7 +42,7 @@ main() {
     done
 
     ln -s .files/zshrc .zshrc
-    ln -s ~/.files/oh-my-zsh/themes .oh-my-zsh/custom/themes
+    ln -s ~/.files/oh-my-zsh/themes/bullet-train.zsh-theme ~/.oh-my-zsh/custom/themes/bullet-train.zsh-theme
 }
 
 main "$@"

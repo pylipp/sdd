@@ -14,7 +14,7 @@ main() {
     if [[ $1 = "install" ]]; then
         python3 -m virtualenv --python=$(which python3) $WORKON_HOME/watson
         source $WORKON_HOME/watson/bin/activate
-        pip install git+https://github.com/TailorDev/Watson@$WATSON_VERSION\#egg=Watson
+        pip install git+https://github.com/TailorDev/Watson@$WATSON_VERSION\#egg=td-watson
 
         mkdir -p ~/.local/bin
         ln -s $WORKON_HOME/watson/bin/watson ~/.local/bin
@@ -27,7 +27,7 @@ main() {
 
     elif [[ "$1" = "update" ]]; then
         source $WORKON_HOME/watson/bin/activate
-        pip install --upgrade git+https://github.com/TailorDev/Watson@$WATSON_VERSION\#egg=Watson
+        pip install --upgrade git+https://github.com/TailorDev/Watson@$WATSON_VERSION\#egg=td-watson
 
         wget -O ~/.local/share/zsh/site-functions/_watson https://raw.githubusercontent.com/TailorDev/Watson/$WATSON_VERSION/watson.zsh-completion
 

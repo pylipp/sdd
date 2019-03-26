@@ -28,26 +28,6 @@ main() {
         # base utilities
         install_packages wget curl gawk scrot zip unzip 
 
-
-        echo_install_info hub
-
-        local ARCH=amd64
-        if [[ $(arch) = armv7l ]]; then
-            ARCH=arm
-        fi
-
-        mkcswdir
-        wget -q https://raw.githubusercontent.com/github/hub/master/version/version.go 
-        local hub_version
-        hub_version=$(grep "var Version" version.go | cut -d" " -f4 | tr -d \")
-        local hub_dir=hub-linux-"$ARCH"-$hub_version
-        wget -q https://github.com/github/hub/releases/download/v$hub_version/$hub_dir.tgz
-        tar xf $hub_dir.tgz
-        sudo $hub_dir/./install && rm -rf $hub_dir $hub_dir.tgz version.go
-        sudo wget -q -O /usr/local/share/zsh/site-functions/_hub \
-            https://raw.githubusercontent.com/github/hub/master/etc/hub.zsh_completion
-
-
         echo_install_info fzf
         # preview colorizer
         install_packages coderay

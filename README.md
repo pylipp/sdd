@@ -79,6 +79,18 @@ It is distinguished between
         ├── framework
         └── setup
 
+## Contributing
+
+### Testing
+
+The program is tested in a container environment using the `bats` framework.
+Clone this repository and build the Docker image to run tests.
+
+    git clone https://github.com/pylipp/sdd
+    cd sdd
+    docker build test/setup -t sdd:latest
+    test/run.sh
+
 ## Synopsis
 
     PROGRAMNAME COMMAND OPTION

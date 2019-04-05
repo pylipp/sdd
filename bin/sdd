@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+# Main executable of the sdd program
+
+exit 0

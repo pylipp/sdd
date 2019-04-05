@@ -2,4 +2,22 @@
 
 # Main executable of the sdd program
 
-exit 0
+SCRIPTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+
+# shellcheck source=../lib/sdd/framework/utils.bash
+source "$SCRIPTDIR"/../lib/sdd/framework/utils.bash
+
+main() {
+    local command=$1
+    local exit_code=0
+
+    if [ "$command" = "install" ]; then
+        shift
+        utils_install "$@"
+        exit_code=$?
+    fi
+
+    exit $exit_code
+}
+
+main "$@"

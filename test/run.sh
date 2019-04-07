@@ -16,4 +16,7 @@ else
     docker exec $container_id bats -r framework
 fi
 
+test_outcome=$?
+
 [ "$1" != "--debug" ] && docker kill $container_id
+exit $test_outcome

@@ -2,6 +2,22 @@
 
 > A framework to manage installation of apps from web sources for non-root users on Linux systems
 
+## Installation
+
+Clone the directory and run the installer to install `sdd` to `~/.local`:
+
+    git clone https://github.com/pylipp/sdd
+    cd sdd
+    ./install.sh
+
+You can specify the installation directory with the `PREFIX` environment variable:
+
+    PREFIX=/usr ./install.sh
+
+Please verify that the `bin` sub-directory of the installation directory is present in your `PATH`. You might want to append this to your shell configuration file:
+
+    export PATH="~/.local/bin:$PATH"
+
 ## Requirements
 
 ### Prioritized

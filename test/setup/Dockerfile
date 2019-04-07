@@ -6,6 +6,8 @@ ENV LC_ALL C.UTF-8
 RUN apt-get update && \
   apt-get install --yes git
 
+RUN apt-get install --yes wget
+
 RUN git clone https://github.com/bats-core/bats-core.git && \
   cd bats-core && \
   git checkout v1.1.0 && \

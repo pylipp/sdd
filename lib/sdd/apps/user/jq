@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+JQ_VERSION=jq-1.6
+
+sdd_install() {
+  wget -O "$SDD_INSTALL_PREFIX/bin/jq" https://github.com/stedolan/jq/releases/download/$JQ_VERSION/jq-linux64
+  chmod u+x "$SDD_INSTALL_PREFIX/bin/jq"
+}

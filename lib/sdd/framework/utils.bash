@@ -21,8 +21,15 @@ utils_install() {
         else
             # Source app management file and execute installation function if found
             source "$appfilepath"
-            sdd_install 2>/dev/null || { printf 'No sdd_install function for "%s" provided' "$app" >&2; return 4; }
-            printf 'Installed "%s".' "$app"
+            local stderrlog=/tmp/sdd-install-$app.stderr
+            sdd_install 2>$stderrlog
+
+            if [ $? -eq 0 ]; then
+                printf 'Installed "%s".' "$app"
+            else
+                printf 'Error installing "%s": %s' "$app" "$(<$stderrlog)" >&2
+                return 4
+            fi
         fi
     done
 

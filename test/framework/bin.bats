@@ -21,7 +21,8 @@
 
   run sdd install valid_app
   [ "$status" -eq 4 ]
-  [ "$output" = 'No sdd_install function for "valid_app" provided' ]
+  [[ "$output" = 'Error installing "valid_app": '* ]]
+  [[ "$output" = *'sdd_install: command not found' ]]
 
   rm $appfilepath
   [ ! -f $appfilepath ]

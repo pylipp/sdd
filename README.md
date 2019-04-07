@@ -81,6 +81,11 @@ It is distinguished between
 
 ## Contributing
 
+### Requirements
+
+- `git`
+- `docker`
+
 ### Testing
 
 The program is tested in a container environment using the `bats` framework.
@@ -90,6 +95,18 @@ Clone this repository and build the Docker image to run tests.
     cd sdd
     docker build test/setup -t sdd:latest
     test/run.sh
+
+### Extending
+
+You're looking for managing an app but it's not included in `sdd` yet? Here's how contribute an app management script:
+
+1. Fork this repository.
+1. In your fork, create a feature branch.
+1. Create an empty bash file named after the app in `lib/sdd/apps/user`.
+1. Add a test in `test/apps/<app>.bats`, e.g. verifying the version of the app to be installed.
+1. Add three functions `sdd_install`, `sdd_update`, `sdd_remove` with respective functionality.
+1. Add the new files, commit, and push.
+1. Open a PR!
 
 ## Synopsis
 

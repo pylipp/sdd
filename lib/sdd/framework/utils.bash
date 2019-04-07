@@ -22,6 +22,7 @@ utils_install() {
             # Source app management file and execute installation function if found
             source "$appfilepath"
             sdd_install 2>/dev/null || { printf 'No sdd_install function for "%s" provided' "$app" >&2; return 4; }
+            printf 'Installed "%s".' "$app"
         fi
     done
 

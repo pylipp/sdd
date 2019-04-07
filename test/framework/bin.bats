@@ -31,18 +31,18 @@
 @test "invoking install command with valid app succeeds" {
   # Create app management file for 'valid_app' containing an sdd_install
   # function that creates an executable 'valid_app'
-  local appfilepath=../lib/sdd/apps/user/valid_app
-  echo 'sdd_install() { local app=$SDD_INSTALL_PREFIX/bin/valid_app; echo '\\#!/usr/bin/env bash' > $app; chmod +x $app; }' > $appfilepath
+  local appfilepath=../lib/sdd/apps/user/really_valid_app
+  echo 'sdd_install() { local app=$SDD_INSTALL_PREFIX/bin/really_valid_app; echo '\\#!/usr/bin/env bash' > $app; chmod +x $app; }' > $appfilepath
 
-  run sdd install valid_app
+  run sdd install really_valid_app
   [ "$status" -eq 0 ]
-  [ "$output" = 'Installed "valid_app".' ]
+  [ "$output" = 'Installed "really_valid_app".' ]
   # Execute the app
-  run valid_app
+  run really_valid_app
   [ "$status" -eq 0 ]
 
   rm $appfilepath
   [ ! -f $appfilepath ]
-  rm $SDD_INSTALL_PREFIX/bin/valid_app
-  [ ! -f $SDD_INSTALL_PREFIX/bin/valid_app ]
+  rm $SDD_INSTALL_PREFIX/bin/really_valid_app
+  [ ! -f $SDD_INSTALL_PREFIX/bin/really_valid_app ]
 }

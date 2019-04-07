@@ -43,6 +43,7 @@
 
   rm $appfilepath
   [ ! -f $appfilepath ]
+  SDD_INSTALL_PREFIX=${SDD_INSTALL_PREFIX:-$HOME/.local}
   rm $SDD_INSTALL_PREFIX/bin/really_valid_app
   [ ! -f $SDD_INSTALL_PREFIX/bin/really_valid_app ]
 }

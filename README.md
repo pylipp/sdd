@@ -18,6 +18,18 @@ Please verify that the `bin` sub-directory of the installation directory is pres
 
     export PATH="~/.local/bin:$PATH"
 
+## Usage
+
+Install an app to `SDD_INSTALL_PREFIX` (defaults to `~/.local`) with
+
+    sdd install <app>
+
+You can specify a custom installation prefix like this:
+
+    SDD_INSTALL_PREFIX=~/bin sdd install <app>
+
+or by exporting the `SDD_INSTALL_PREFIX` environment variable.
+
 ## Requirements
 
 ### Prioritized

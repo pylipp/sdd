@@ -7,6 +7,10 @@ SCRIPTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 # shellcheck source=../lib/sdd/framework/utils.bash
 source "$SCRIPTDIR"/../lib/sdd/framework/utils.bash
 
+SDD_INSTALL_PREFIX=${SDD_INSTALL_PREFIX:-$HOME/.local}
+export SDD_INSTALL_PREFIX
+mkdir -p "$SDD_INSTALL_PREFIX"/bin
+
 main() {
     local command=$1
     local exit_code=0

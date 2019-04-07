@@ -15,6 +15,6 @@ RUN git clone https://github.com/bats-core/bats-core.git && \
   cd .. && \
   rm -rf bats-core
 
-ENV PATH=/opt/sdd/bin:$PATH
+ENV PATH=/root/.local/bin:/opt/sdd/bin:$PATH
 
 ENTRYPOINT /bin/bash

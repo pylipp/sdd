@@ -1,37 +1,13 @@
-#! /bin/bash
+#!/usr/bin/env bash
 
-# Installation script for qmlfmt
-# Installation location: /usr/local (or ~/.local)
-# Requires: - wget
-#           - tar (local installation)
+QMLFMT_VERSION=1.0.71
+QMLFMT_TARFILE=qmlfmt.tar.gz
 
-set -e
+sdd_install() {
+    wget -P /tmp https://github.com/jesperhh/qmlfmt/releases/download/$QMLFMT_VERSION/$QMLFMT_TARFILE
+    tar xf /tmp/$QMLFMT_TARFILE
 
-source $(dirname "$0")/utils.bash
+    mv /tmp/qmlfmt $SDD_INSTALL_PREFIX/bin
 
-main() {
-    local method=${1:-global}
-
-    echo_install_info qmlfmt
-    mkcswdir
-
-    local qmlfmt_version=1.0.71
-    local tarfile=qmlfmt.tar.gz
-    local github_url=https://github.com/jesperhh/qmlfmt/releases/download/$qmlfmt_version/$tarfile
-
-    wget $github_url
-    tar xf $tarfile
-
-    if [[ $method = "global" ]]; then
-        sudo mv qmlfmt /usr/local/bin
-    elif [[ $method = "local" ]]; then
-        mv qmlfmt ~/.local/bin
-    else
-        echo_error "Unknown method '$method'!"
-        exit 1
-    fi
-
-    rm $tarfile
+    rm /tmp/$QMLFMT_TARFILE
 }
-
-main "$@"

@@ -88,6 +88,12 @@ It is distinguished between
 ## Specification
 
 - R1: The program can be executed in a Docker container.
+- R2: The program depends on:
+    - `git`
+    - `wget`
+- R3: An installation script is provided.
+- R4: See R1.
+- R5: The program provides an `install` command to install one or more apps.
 
 ### Exemplary visualization
 

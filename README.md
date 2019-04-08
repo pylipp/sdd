@@ -37,7 +37,7 @@ or by exporting the `SDD_INSTALL_PREFIX` environment variable.
 1. The program shall run on Linux systems.
 1. The program shall have as little dependencies as possible.
 1. The program shall be simple to install.
-1. The program shall expose a command line interface.
+1. The program shall expose a user-friendly command line interface.
 1. The program shall provide functionality to manage apps that are not made available by distribution package managers. The fundamental functionality comprises
     1. installation,
     1. removal, and

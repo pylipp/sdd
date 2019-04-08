@@ -2,6 +2,26 @@
 
 SCRIPTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
+utils_usage() {
+    while IFS= read -r line; do
+        printf '%s\n' "$line"
+    done <<END_OF_HELP_TEXT
+Usage: sdd [OPTIONS] COMMAND [APP [APP...]]
+
+A framework to manage installation of apps from web sources for non-root users
+on Linux systems. For more info visit https://github.com/pylipp/sdd
+
+APP is the name of the application to manage.
+
+Supported commands:
+    install
+
+Options:
+    --help      Display help message
+
+END_OF_HELP_TEXT
+}
+
 utils_install() {
     # Install one or more apps
     if [ $# -eq 0 ]; then

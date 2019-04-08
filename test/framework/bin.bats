@@ -1,12 +1,19 @@
-@test "invoking main executable succeeds" {
+@test "invoking main executable prints usage" {
   run sdd
   [ "$status" -eq 0 ]
+  [ "${lines[0]}" = "Usage: sdd [OPTIONS] COMMAND [APP [APP...]]" ]
 }
 
 @test "invoking unknown command fails" {
   run sdd unknown-command
   [ "$status" -eq 127 ]
   [ "$output" = 'Unknown command "unknown-command"' ]
+}
+
+@test "invoking help option prints usage" {
+  run sdd --help
+  [ "$status" -eq 0 ]
+  [ "${lines[0]}" = "Usage: sdd [OPTIONS] COMMAND [APP [APP...]]" ]
 }
 
 @test "invoking install command without argument fails" {

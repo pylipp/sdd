@@ -1,6 +1,12 @@
-@test "invoking main executable" {
+@test "invoking main executable succeeds" {
   run sdd
   [ "$status" -eq 0 ]
+}
+
+@test "invoking unknown command fails" {
+  run sdd unknown-command
+  [ "$status" -eq 127 ]
+  [ "$output" = 'Unknown command "unknown-command"' ]
 }
 
 @test "invoking install command without argument fails" {

@@ -19,6 +19,9 @@ main() {
         shift
         utils_install "$@"
         exit_code=$?
+    elif [ ! -z "$command" ]; then
+        printf 'Unknown command "%s"\n' "$command" >&2
+        exit_code=127
     fi
 
     exit $exit_code

@@ -36,6 +36,12 @@ You can specify a custom installation prefix like this:
 
 or by exporting the `SDD_INSTALL_PREFIX` environment variable.
 
+To remove an app, run
+
+    sdd remove <app>
+
+The usage of `SDD_INSTALL_PREFIX` is the same as for the `install` command.
+
 ## Requirements
 
 ### Prioritized
@@ -101,7 +107,7 @@ It is distinguished between
 - R3: A bootstrap installation script is provided.
 - R4: The program is able to update itself.
 - R5: See R1.
-- R6: The program provides an `install` command to install one or more apps.
+- R6: The program provides an `install` command to install one or more apps and a `remove` command to remove one or more apps.
 
 ### Exemplary visualization
 

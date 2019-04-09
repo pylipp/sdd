@@ -60,3 +60,52 @@
   rm $SDD_INSTALL_PREFIX/bin/really_valid_app
   [ ! -f $SDD_INSTALL_PREFIX/bin/really_valid_app ]
 }
+
+@test "invoking remove command without argument fails" {
+  run sdd remove
+  [ "$status" -eq 1 ]
+  [ "$output" = 'Specify at least one app to remove.' ]
+}
+
+@test "invoking remove command with invalid app fails" {
+  run sdd remove invalid_app
+  [ "$status" -eq 2 ]
+  [ "$output" = 'App "invalid_app" could not be found.' ]
+}
+
+@test "invoking remove command with valid app but without sdd_remove present fails" {
+  local appfilepath=../lib/sdd/apps/user/valid_app
+  touch $appfilepath
+
+  run sdd remove valid_app
+  [ "$status" -eq 4 ]
+  [[ "$output" = 'Error removing "valid_app": '* ]]
+  [[ "$output" = *'sdd_remove: command not found' ]]
+
+  rm $appfilepath
+  [ ! -f $appfilepath ]
+}
+
+@test "invoking remove command with valid app succeeds" {
+  # Assume that 'valid_app' was installed properly
+  SDD_INSTALL_PREFIX=${SDD_INSTALL_PREFIX:-$HOME/.local}
+  mkdir -p "$SDD_INSTALL_PREFIX"/bin
+  apppath="$SDD_INSTALL_PREFIX"/bin/valid_app
+  echo '#!/usr/bin/env bash' > "$apppath"
+  chmod +x "$apppath"
+
+  run valid_app
+  [ "$status" -eq 0 ]
+
+  # Create app management file for 'valid_app' containing an sdd_remove
+  # function that removes the executable 'valid_app'
+  local appfilepath=../lib/sdd/apps/user/valid_app
+  echo "sdd_remove() { rm $apppath; }" > $appfilepath
+
+  run sdd remove valid_app
+  [ "$status" -eq 0 ]
+  [ "$output" = 'Removed "valid_app".' ]
+  [ ! -f "$apppath" ]
+
+  rm $appfilepath
+}

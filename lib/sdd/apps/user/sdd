@@ -5,3 +5,8 @@ sdd_install() {
     /tmp/sdd/bootstrap.sh
     rm -rf /tmp/sdd
 }
+
+sdd_uninstall() {
+    rm -f "$SDD_INSTALL_PREFIX/bin/sdd"
+    rm -rf "$SDD_INSTALL_PREFIX/lib/sdd"
+}

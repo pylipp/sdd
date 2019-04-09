@@ -18,6 +18,12 @@ Please verify that the `bin` sub-directory of the installation directory is pres
 
     export PATH="~/.local/bin:$PATH"
 
+## Updating
+
+Once the program is bootstrapped, update to the latest version (GitHub master) by
+
+    sdd install sdd
+
 ## Usage
 
 Install an app to `SDD_INSTALL_PREFIX` (defaults to `~/.local`) with
@@ -37,6 +43,7 @@ or by exporting the `SDD_INSTALL_PREFIX` environment variable.
 1. The program shall run on Linux systems.
 1. The program shall have as little dependencies as possible.
 1. The program shall be simple to install.
+1. The program shall be simple to update.
 1. The program shall expose a user-friendly command line interface.
 1. The program shall provide functionality to manage apps that are not made available by distribution package managers. The fundamental functionality comprises
     1. installation,
@@ -92,8 +99,9 @@ It is distinguished between
     - `git`
     - `wget`
 - R3: A bootstrap installation script is provided.
-- R4: See R1.
-- R5: The program provides an `install` command to install one or more apps.
+- R4: The program is able to update itself.
+- R5: See R1.
+- R6: The program provides an `install` command to install one or more apps.
 
 ### Exemplary visualization
 

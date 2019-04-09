@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+sdd_install() {
+    git clone https://github.com/pylipp/sdd /tmp/sdd
+    /tmp/sdd/bootstrap.sh
+    rm -rf /tmp/sdd
+}

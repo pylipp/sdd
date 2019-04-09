@@ -4,15 +4,15 @@
 
 ## Installation
 
-Clone the directory and run the installer to install `sdd` to `~/.local`:
+Clone the directory and run the bootstrap script to install `sdd` to `~/.local`:
 
     git clone https://github.com/pylipp/sdd
     cd sdd
-    ./install.sh
+    ./bootstrap.sh
 
 You can specify the installation directory with the `PREFIX` environment variable:
 
-    PREFIX=/usr ./install.sh
+    PREFIX=/usr ./bootstrap.sh
 
 Please verify that the `bin` sub-directory of the installation directory is present in your `PATH`. You might want to append this to your shell configuration file:
 
@@ -91,7 +91,7 @@ It is distinguished between
 - R2: The program depends on:
     - `git`
     - `wget`
-- R3: An installation script is provided.
+- R3: A bootstrap installation script is provided.
 - R4: See R1.
 - R5: The program provides an `install` command to install one or more apps.
 

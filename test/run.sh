@@ -4,7 +4,7 @@
 
 # Usage: ./run.sh [--debug]
 # Options:
-#   --debug         Leave container alive after running the suite
+#   --debug         Attach to container after running tests
 # Environment variables:
 #   NO_APP_TESTS    If non-empty, run only framework tests
 
@@ -18,5 +18,10 @@ fi
 
 test_outcome=$?
 
-[ "$1" != "--debug" ] && docker kill $container_id
+if [ "$1" = "--debug" ]; then
+    docker attach $container_id
+else
+    docker kill $container_id
+fi
+
 exit $test_outcome

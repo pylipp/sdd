@@ -15,7 +15,7 @@ APP is the name of the application to manage.
 
 Supported commands:
     install
-    remove
+    uninstall
 
 Options:
     --help      Display help message
@@ -57,10 +57,10 @@ utils_install() {
     return 0
 }
 
-utils_remove() {
-    # Remove one or more apps
+utils_uninstall() {
+    # Uninstall one or more apps
     if [ $# -eq 0 ]; then
-        printf 'Specify at least one app to remove.\n' >&2
+        printf 'Specify at least one app to uninstall.\n' >&2
         return 1
     fi
 
@@ -74,15 +74,15 @@ utils_remove() {
             printf 'App "%s" could not be found.\n' "$app" >&2
             return 2
         else
-            # Source app management file and execute removing function if found
+            # Source app management file and execute uninstalling function if found
             source "$appfilepath"
-            local stderrlog=/tmp/sdd-remove-$app.stderr
-            sdd_remove 2>$stderrlog
+            local stderrlog=/tmp/sdd-uninstall-$app.stderr
+            sdd_uninstall 2>$stderrlog
 
             if [ $? -eq 0 ]; then
-                printf 'Removed "%s".\n' "$app"
+                printf 'Uninstalled "%s".\n' "$app"
             else
-                printf 'Error removing "%s": %s\n' "$app" "$(<$stderrlog)" >&2
+                printf 'Error uninstalling "%s": %s\n' "$app" "$(<$stderrlog)" >&2
                 return 4
             fi
         fi

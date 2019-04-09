@@ -36,9 +36,9 @@ You can specify a custom installation prefix like this:
 
 or by exporting the `SDD_INSTALL_PREFIX` environment variable.
 
-To remove an app, run
+To uninstall an app, run
 
-    sdd remove <app>
+    sdd uninstall <app>
 
 The usage of `SDD_INSTALL_PREFIX` is the same as for the `install` command.
 
@@ -94,7 +94,7 @@ It is distinguished between
 ### Description
 
 1. Framework files contain the logic to run the program. They provide generic utility methods (generating symlinks, reading environment variables, etc.). Examples are: program executable, library files.
-1. App management files contain instructions to manage specific apps. For each app, at least one management file exists. A management file contains at least methods for installing, updating, and removing an app. Management files are organized in directories indicating their level (user or root).
+1. App management files contain instructions to manage specific apps. For each app, at least one management file exists. A management file contains at least methods for installing, updating, and uninstalling an app. Management files are organized in directories indicating their level (user or root).
 1. Testing files cover the functionality of both the framework and the app management files. They are executed in an isolated environment.
 1. Project meta-files comprise documentation files, configuration files for development tools, an installation script, among others.
 
@@ -107,7 +107,7 @@ It is distinguished between
 - R3: A bootstrap installation script is provided.
 - R4: The program is able to update itself.
 - R5: See R1.
-- R6: The program provides an `install` command to install one or more apps and a `remove` command to remove one or more apps.
+- R6: The program provides an `install` command to install one or more apps and a `uninstall` command to uninstall one or more apps.
 
 ### Exemplary visualization
 
@@ -152,7 +152,7 @@ You're looking for managing an app but it's not included in `sdd` yet? Here's ho
 1. In your fork, create a feature branch.
 1. Create an empty bash file named after the app in `lib/sdd/apps/user`.
 1. Add a test in `test/apps/<app>.bats`, e.g. verifying the version of the app to be installed.
-1. Add three functions `sdd_install`, `sdd_update`, `sdd_remove` with respective functionality.
+1. Add three functions `sdd_install`, `sdd_update`, `sdd_uninstall` with respective functionality.
 1. Add the new files, commit, and push.
 1. Open a PR!
 
@@ -168,7 +168,7 @@ You're looking for managing an app but it's not included in `sdd` yet? Here's ho
 
 - `install`
 - `update`
-- `remove` / `uninstall`
+- `uninstall`
 
 ### Options
 

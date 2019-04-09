@@ -57,28 +57,28 @@ teardown() {
   [ "$status" -eq 0 ]
 }
 
-@test "invoking remove command without argument fails" {
-  run sdd remove
+@test "invoking uninstall command without argument fails" {
+  run sdd uninstall
   [ "$status" -eq 1 ]
-  [ "$output" = 'Specify at least one app to remove.' ]
+  [ "$output" = 'Specify at least one app to uninstall.' ]
 }
 
-@test "invoking remove command with invalid app fails" {
-  run sdd remove invalid_app
+@test "invoking uninstall command with invalid app fails" {
+  run sdd uninstall invalid_app
   [ "$status" -eq 2 ]
   [ "$output" = 'App "invalid_app" could not be found.' ]
 }
 
-@test "invoking remove command with valid app but without sdd_remove present fails" {
+@test "invoking uninstall command with valid app but without sdd_uninstall present fails" {
   touch $validappfilepath
 
-  run sdd remove valid_app
+  run sdd uninstall valid_app
   [ "$status" -eq 4 ]
-  [[ "$output" = 'Error removing "valid_app": '* ]]
-  [[ "$output" = *'sdd_remove: command not found' ]]
+  [[ "$output" = 'Error uninstalling "valid_app": '* ]]
+  [[ "$output" = *'sdd_uninstall: command not found' ]]
 }
 
-@test "invoking remove command with valid app succeeds" {
+@test "invoking uninstall command with valid app succeeds" {
   # Assume that 'valid_app' was installed properly
   SDD_INSTALL_PREFIX=${SDD_INSTALL_PREFIX:-$HOME/.local}
   mkdir -p "$SDD_INSTALL_PREFIX"/bin
@@ -89,12 +89,12 @@ teardown() {
   run valid_app
   [ "$status" -eq 0 ]
 
-  # Create app management file for 'valid_app' containing an sdd_remove
-  # function that removes the executable 'valid_app'
-  echo "sdd_remove() { rm $apppath; }" > $validappfilepath
+  # Create app management file for 'valid_app' containing an sdd_uninstall
+  # function that uninstalls the executable 'valid_app'
+  echo "sdd_uninstall() { rm $apppath; }" > $validappfilepath
 
-  run sdd remove valid_app
+  run sdd uninstall valid_app
   [ "$status" -eq 0 ]
-  [ "$output" = 'Removed "valid_app".' ]
+  [ "$output" = 'Uninstalled "valid_app".' ]
   [ ! -f "$apppath" ]
 }

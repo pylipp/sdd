@@ -1,7 +1,8 @@
 @test "sdd of recent version can be installed and uninstalled" {
   run sdd install sdd
   [ $status -eq 0 ]
-  [ "$output" = 'Installed "sdd".' ]
+  [[ "${lines[0]}" = 'Latest version available: '* ]]
+  [ "${lines[1]}" = 'Installed "sdd".' ]
 
   # Installed sdd should be first in PATH
   run which sdd
@@ -12,7 +13,6 @@
   # is not yet present in the repo which is cloned for installation. Hence
   # explicitely use the 'test' binary
   run /opt/sdd/bin/sdd uninstall sdd
-  echo $output
   [ $status -eq 0 ]
   [ "$output" = 'Uninstalled "sdd".' ]
 

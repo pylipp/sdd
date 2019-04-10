@@ -55,8 +55,18 @@ _utils_manage() {
         else
             # Source app management file and execute managing function if found
             source "$appfilepath"
+
+            local version
+            if [ $manage = "install" ]; then
+                version=$(sdd_fetch_latest_version 2>/dev/null)
+
+                if [ $? -eq 0 ]; then
+                    printf 'Latest version available: %s\n' $version
+                fi
+            fi
+
             local stderrlog=/tmp/sdd-$manage-$app.stderr
-            sdd_$manage 2>$stderrlog
+            sdd_$manage $version 2>$stderrlog
 
             if [ $? -eq 0 ]; then
                 printf "${manage^}ed \"%s\".\n" "$app"

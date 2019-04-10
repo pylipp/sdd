@@ -62,7 +62,7 @@ The usage of `SDD_INSTALL_PREFIX` is the same as for the `install` command.
 1. The program shall optionally allow `root` to manage apps.
 1. The program shall optionally allow for 'hybrid' (user and root) management.
 1. The program shall inform about optional dependencies required during app installation.
-1. The program shall install the latest released version of an app if available.
+1. The program shall install the latest released version of an app if not specified otherwise.
 1. The program shall take user-defined app versions into account for installation.
 1. The program shall enable reproducible app installations by freezing version numbers of installed apps.
 
@@ -108,6 +108,7 @@ It is distinguished between
 - R4: The program is able to update itself.
 - R5: See R1.
 - R6: The program provides an `install` command to install one or more apps and a `uninstall` command to uninstall one or more apps.
+- R11: The program is able to find the latest version of an app online.
 
 ### Exemplary visualization
 

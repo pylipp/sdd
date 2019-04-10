@@ -51,7 +51,9 @@ teardown() {
 
   run sdd install valid_app
   [ "$status" -eq 0 ]
-  [ "$output" = 'Installed "valid_app".' ]
+  [ "${lines[0]}" = 'Latest version available: 1.0' ]
+  [ "${lines[1]}" = 'Installed "valid_app".' ]
+
   # Execute the app
   run valid_app
   [ "$status" -eq 0 ]

@@ -1,12 +1,21 @@
 #!/usr/bin/env bash
 
 sdd_install() {
+    local version=$1
     git clone https://github.com/pylipp/sdd /tmp/sdd
-    /tmp/sdd/bootstrap.sh
-    rm -rf /tmp/sdd
+    cd /tmp/sdd
+    git checkout $version >/dev/null
+    ./bootstrap.sh
+    cd ..
+    rm -rf sdd
 }
 
 sdd_uninstall() {
     rm -f "$SDD_INSTALL_PREFIX/bin/sdd"
     rm -rf "$SDD_INSTALL_PREFIX/lib/sdd"
+}
+
+sdd_fetch_latest_version() {
+    # Fetch SHA of latest commit on master branch
+    wget -qO- https://api.github.com/repos/pylipp/sdd/commits/master | grep -m1 sha | awk '{ print $2; }' | sed 's/[",]//g'
 }

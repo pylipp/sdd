@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+apppath=$SDD_INSTALL_PREFIX/bin/valid_app
+
+sdd_install() {
+    echo '#!/usr/bin/env bash' > "$apppath"
+    chmod +x "$apppath"
+}
+
+sdd_uninstall() {
+  rm "$apppath"
+}

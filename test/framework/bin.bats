@@ -47,7 +47,7 @@ teardown() {
 @test "invoking install command with valid app succeeds" {
   # Create app management file for 'valid_app' containing an sdd_install
   # function that creates an executable 'valid_app'
-  echo 'sdd_install() { local app=$SDD_INSTALL_PREFIX/bin/valid_app; echo '\\#!/usr/bin/env bash' > $app; chmod +x $app; }' > $validappfilepath
+  cp framework/fixtures/valid_app $validappfilepath
 
   run sdd install valid_app
   [ "$status" -eq 0 ]
@@ -79,22 +79,19 @@ teardown() {
 }
 
 @test "invoking uninstall command with valid app succeeds" {
-  # Assume that 'valid_app' was installed properly
-  SDD_INSTALL_PREFIX=${SDD_INSTALL_PREFIX:-$HOME/.local}
-  mkdir -p "$SDD_INSTALL_PREFIX"/bin
-  apppath="$SDD_INSTALL_PREFIX"/bin/valid_app
-  echo '#!/usr/bin/env bash' > "$apppath"
-  chmod +x "$apppath"
-
-  run valid_app
-  [ "$status" -eq 0 ]
-
   # Create app management file for 'valid_app' containing an sdd_uninstall
   # function that uninstalls the executable 'valid_app'
-  echo "sdd_uninstall() { rm $apppath; }" > $validappfilepath
+  cp framework/fixtures/valid_app $validappfilepath
+
+  # Install 'valid_app'
+  sdd install valid_app
+  run valid_app
+  [ "$status" -eq 0 ]
 
   run sdd uninstall valid_app
   [ "$status" -eq 0 ]
   [ "$output" = 'Uninstalled "valid_app".' ]
-  [ ! -f "$apppath" ]
+
+  run which valid_app
+  [ "$status" -eq 1 ]
 }

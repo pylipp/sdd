@@ -64,7 +64,9 @@ The usage of `SDD_INSTALL_PREFIX` is the same as for the `install` command.
 1. The program shall inform about optional dependencies required during app installation.
 1. The program shall install the latest released version of an app if not specified otherwise.
 1. The program shall take user-defined app versions into account for installation.
-1. The program shall enable reproducible app installations by freezing version numbers of installed apps.
+1. The program shall enable reproducible app installations.
+1. The program shall keep track of installed apps.
+1. The program shall update an app only if the specified version is not yet installed.
 
 ### Development
 
@@ -75,12 +77,12 @@ The usage of `SDD_INSTALL_PREFIX` is the same as for the `install` command.
 ### Optional
 
 1. The program shall install app dependencies using the distribution package manager if unavoidable.
-1. The program shall check for the availability of new app versions.
 1. The program shall provide useful output when a command fails.
 1. The program shall be configurable.
 1. The program shall provide functionality to list installed apps.
 1. The program shall provide functionality to list available apps.
 1. The program shall provide functionality to manage system configuration (e.g. enabling automatic mounting of USB devices).
+1. The program shall optionally output information about internal procedures.
 
 ## Project structure
 
@@ -109,6 +111,13 @@ It is distinguished between
 - R5: See R1.
 - R6: The program provides an `install` command to install one or more apps and a `uninstall` command to uninstall one or more apps.
 - R11: The program is able to find the latest version of an app online.
+- R12: The program takes into account an app version specified in the CLI when installing. This takes precedence of an app version specified in the program configuration.
+- R13: The program holds a record of installed apps.
+
+### Optional
+
+- R4 / R5: The program provides a `list` command with the options `--installed` and `--all`.
+- R7: The program provides a `--verbose` option.
 
 ### Exemplary visualization
 

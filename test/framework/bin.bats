@@ -92,7 +92,7 @@ teardown() {
 
   run sdd uninstall valid_app
   [ "$status" -eq 0 ]
-  [ "$output" = 'Uninstalled "valid_app".' ]
+  [ "${lines[0]}" = 'Uninstalled "valid_app".' ]
 
   run which valid_app
   [ "$status" -eq 1 ]

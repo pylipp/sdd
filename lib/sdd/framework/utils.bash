@@ -24,22 +24,9 @@ END_OF_HELP_TEXT
 }
 
 utils_install() {
-    _utils_manage install "$@"
-    return $?
-}
-
-utils_uninstall() {
-    _utils_manage uninstall "$@"
-    return $?
-}
-
-_utils_manage() {
-    local manage=$1
-    shift
-
-    # Manage one or more apps
+    # Install one or more apps
     if [ $# -eq 0 ]; then
-        printf "Specify at least one app to $manage.\n" >&2
+        printf 'Specify at least one app to install.\n' >&2
         return 1
     fi
 
@@ -53,29 +40,57 @@ _utils_manage() {
             printf 'App "%s" could not be found.\n' "$app" >&2
             return 2
         else
-            # Source app management file and execute managing function if found
+            # Source app management file and execute installation function if found
             source "$appfilepath"
 
-            local version
-            if [ $manage = "install" ]; then
-                version=$(sdd_fetch_latest_version 2>/dev/null)
-
-                if [ $? -eq 0 ]; then
-                    printf 'Latest version available: %s\n' $version
-                fi
+            local version=$(sdd_fetch_latest_version 2>/dev/null)
+            if [ ! -z $version ]; then
+                printf 'Latest version available: %s\n' $version
             fi
 
-            local stderrlog=/tmp/sdd-$manage-$app.stderr
-            sdd_$manage $version 2>$stderrlog
+            local stderrlog=/tmp/sdd-install-$app.stderr
+            sdd_install $version 2>$stderrlog
 
             if [ $? -eq 0 ]; then
-                printf "${manage^}ed \"%s\".\n" "$app"
+                printf 'Installed "%s".\n' "$app"
             else
-                printf "Error ${manage}ing \"%s\": %s\n" "$app" "$(<$stderrlog)"  >&2
+                printf 'Error installing "%s": %s\n' "$app" "$(<$stderrlog)" >&2
                 return 4
             fi
         fi
     done
 
     return 0
+}
+
+utils_uninstall() {
+    # Uninstall one or more apps
+    if [ $# -eq 0 ]; then
+        printf 'Specify at least one app to uninstall.\n' >&2
+        return 1
+    fi
+
+    # Iterate over arguments
+    local appfilepath
+    for app in "$@"; do
+        appfilepath="$SCRIPTDIR/../apps/user/$app"
+
+        # Check whether filepath exists
+        if [ ! -f "$appfilepath" ]; then
+            printf 'App "%s" could not be found.\n' "$app" >&2
+            return 2
+        else
+            source "$appfilepath"
+
+            local stderrlog=/tmp/sdd-uninstall-$app.stderr
+            sdd_uninstall 2>$stderrlog
+
+            if [ $? -eq 0 ]; then
+                printf 'Uninstalled "%s".\n' "$app"
+            else
+                printf 'Error uninstalling "%s": %s\n' "$app" "$(<$stderrlog)" >&2
+                return 4
+            fi
+        fi
+    done
 }

@@ -13,12 +13,16 @@ on Linux systems. For more info visit https://github.com/pylipp/sdd
 
 APP is the name of the application to manage.
 
-Supported commands:
+Commands:
     install
     uninstall
+    list
 
-Options:
+General options:
     --help      Display help message
+
+Options for list command:
+    --installed List installed apps
 
 END_OF_HELP_TEXT
 }
@@ -98,4 +102,16 @@ utils_uninstall() {
             fi
         fi
     done
+}
+
+utils_list() {
+    local option=$1
+
+    if [ "$option" = "--installed" ]; then
+        # List app names only; versions can be queried separately
+        cut -d"=" -f1 "$SDD_DATA_DIR"/apps/installed | sort | uniq
+    else
+        printf 'Unknown option "%s".\n' "$option" >&2
+        return 1
+    fi
 }

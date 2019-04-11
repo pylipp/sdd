@@ -42,6 +42,10 @@ To uninstall an app, run
 
 The usage of `SDD_INSTALL_PREFIX` is the same as for the `install` command.
 
+List installed apps by running
+
+    sdd list --installed
+
 ## Requirements
 
 ### Prioritized

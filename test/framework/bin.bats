@@ -1,8 +1,10 @@
 validappfilepath=../lib/sdd/apps/user/valid_app
+appsrecordfilepath=$HOME/.local/share/sdd/apps/installed
 
 teardown() {
   rm -f "$validappfilepath"
   rm -f ${SDD_INSTALL_PREFIX:-$HOME/.local}/bin/valid_app
+  rm -f "$appsrecordfilepath"
 }
 
 @test "invoking main executable prints usage" {
@@ -59,7 +61,7 @@ teardown() {
   [ "$status" -eq 0 ]
 
   # The installed app version is recorded
-  [ "$(tail -n1 $HOME/.local/share/sdd/apps/installed)" = "valid_app=1.0" ]
+  [ "$(tail -n1 $appsrecordfilepath)" = "valid_app=1.0" ]
 }
 
 @test "invoking uninstall command without argument fails" {
@@ -99,4 +101,13 @@ teardown() {
 
   run which valid_app
   [ "$status" -eq 1 ]
+}
+
+@test "invoking list with --installed option displays installed apps" {
+  cp framework/fixtures/valid_app $validappfilepath
+  sdd install valid_app
+
+  run sdd list --installed
+  [ $status -eq 0 ]
+  [ "${lines[0]}" = "valid_app" ]
 }

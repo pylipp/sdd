@@ -27,6 +27,10 @@ main() {
         shift
         utils_uninstall "$@"
         exit_code=$?
+    elif [ "$command" = "list" ]; then
+        shift
+        utils_list "$@"
+        exit_code=$?
     elif [ "$command" = "--help" ]; then
         utils_usage
     elif [ ! -z "$command" ]; then

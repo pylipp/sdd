@@ -53,6 +53,11 @@ utils_install() {
 
             if [ $? -eq 0 ]; then
                 printf 'Installed "%s".\n' "$app"
+
+                if [ ! -z $version ]; then
+                    # Record installed app and version
+                    echo $app=$version >> "$SDD_DATA_DIR"/apps/installed
+                fi
             else
                 printf 'Error installing "%s": %s\n' "$app" "$(<$stderrlog)" >&2
                 return 4

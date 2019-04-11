@@ -57,6 +57,9 @@ teardown() {
   # Execute the app
   run valid_app
   [ "$status" -eq 0 ]
+
+  # The installed app version is recorded
+  [ "$(tail -n1 $HOME/.local/share/sdd/apps/installed)" = "valid_app=1.0" ]
 }
 
 @test "invoking uninstall command without argument fails" {

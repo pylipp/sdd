@@ -118,6 +118,8 @@ utils_uninstall() {
 
         if [ $? -eq 0 ]; then
             printf 'Uninstalled "%s".\n' "$app"
+            # Remove app install records
+            sed -i "/^$app/d" "$SDD_DATA_DIR"/apps/installed
         else
             printf 'Error uninstalling "%s": %s\n' "$app" "$(<$stderrlog)" >&2
             return_code=4

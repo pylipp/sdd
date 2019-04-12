@@ -124,4 +124,9 @@ teardown() {
   run sdd list --installed
   [ $status -eq 0 ]
   [ "${lines[0]}" = "valid_app" ]
+
+  sdd uninstall valid_app
+  run sdd list --installed
+  [ $status -eq 0 ]
+  [ "$output" = "" ]
 }

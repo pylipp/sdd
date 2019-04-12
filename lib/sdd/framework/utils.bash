@@ -69,8 +69,9 @@ utils_install() {
         # Source app management file and execute installation function if found
         source "$appfilepath"
 
-        local version=$(sdd_fetch_latest_version 2>/dev/null)
-        if [ ! -z $version ]; then
+        local version
+        version=$(sdd_fetch_latest_version 2>/dev/null)
+        if [ $? -eq 0 ]; then
             printf 'Latest version available: %s\n' $version
         fi
 

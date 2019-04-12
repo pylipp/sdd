@@ -64,6 +64,20 @@ teardown() {
   [ "$(tail -n1 $appsrecordfilepath)" = "valid_app=1.0" ]
 }
 
+@test "invoking install command with valid and non-existing app installs only valid one" {
+  cp framework/fixtures/valid_app $validappfilepath
+
+  run sdd install valid_app invalid_app
+  [ "$status" -eq 2 ]
+  [ "${lines[0]}" = 'App "invalid_app" could not be found.' ]
+
+  run valid_app
+  [ "$status" -eq 0 ]
+
+  run which invalid_app
+  [ "$status" -eq 1 ]
+}
+
 @test "invoking uninstall command without argument fails" {
   run sdd uninstall
   [ "$status" -eq 1 ]

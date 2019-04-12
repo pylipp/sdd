@@ -27,81 +27,103 @@ Options for list command:
 END_OF_HELP_TEXT
 }
 
+_validate_apps() {
+    local return_code=0
+    local appfilepath
+    local apps=()
+    for app in "$@"; do
+        appfilepath="$SCRIPTDIR/../apps/user/$app"
+
+        # Check whether filepath exists
+        if [ ! -f "$appfilepath" ]; then
+            printf 'App "%s" could not be found.\n' "$app" >&2
+            return_code=2
+        else
+            apps+=($app)
+        fi
+    done
+
+    echo ${apps[@]}
+    return $return_code
+}
+
 utils_install() {
+    local return_code=0
+
     # Install one or more apps
     if [ $# -eq 0 ]; then
         printf 'Specify at least one app to install.\n' >&2
         return 1
     fi
 
-    # Iterate over arguments
+    # Separate definition and command substitution because 'local' itself is a
+    # command, hence 'local apps=($(command))' would always have exit code 0
+    local apps=()
+    apps=($(_validate_apps "$@"))
+    return_code=$?
+
     local appfilepath
-    for app in "$@"; do
+    for app in "${apps[@]}"; do
         appfilepath="$SCRIPTDIR/../apps/user/$app"
 
-        # Check whether filepath exists
-        if [ ! -f "$appfilepath" ]; then
-            printf 'App "%s" could not be found.\n' "$app" >&2
-            return 2
-        else
-            # Source app management file and execute installation function if found
-            source "$appfilepath"
+        # Source app management file and execute installation function if found
+        source "$appfilepath"
 
-            local version=$(sdd_fetch_latest_version 2>/dev/null)
+        local version=$(sdd_fetch_latest_version 2>/dev/null)
+        if [ ! -z $version ]; then
+            printf 'Latest version available: %s\n' $version
+        fi
+
+        local stderrlog=/tmp/sdd-install-$app.stderr
+        sdd_install $version 2>$stderrlog
+
+        if [ $? -eq 0 ]; then
+            printf 'Installed "%s".\n' "$app"
+
             if [ ! -z $version ]; then
-                printf 'Latest version available: %s\n' $version
+                # Record installed app and version
+                echo $app=$version >> "$SDD_DATA_DIR"/apps/installed
             fi
-
-            local stderrlog=/tmp/sdd-install-$app.stderr
-            sdd_install $version 2>$stderrlog
-
-            if [ $? -eq 0 ]; then
-                printf 'Installed "%s".\n' "$app"
-
-                if [ ! -z $version ]; then
-                    # Record installed app and version
-                    echo $app=$version >> "$SDD_DATA_DIR"/apps/installed
-                fi
-            else
-                printf 'Error installing "%s": %s\n' "$app" "$(<$stderrlog)" >&2
-                return 4
-            fi
+        else
+            printf 'Error installing "%s": %s\n' "$app" "$(<$stderrlog)" >&2
+            return_code=4
         fi
     done
 
-    return 0
+    return $return_code
 }
 
 utils_uninstall() {
+    local return_code=0
+
     # Uninstall one or more apps
     if [ $# -eq 0 ]; then
         printf 'Specify at least one app to uninstall.\n' >&2
         return 1
     fi
 
-    # Iterate over arguments
+    local apps=()
+    apps=($(_validate_apps "$@"))
+    return_code=$?
+
     local appfilepath
-    for app in "$@"; do
+    for app in "${apps[@]}"; do
         appfilepath="$SCRIPTDIR/../apps/user/$app"
 
-        # Check whether filepath exists
-        if [ ! -f "$appfilepath" ]; then
-            printf 'App "%s" could not be found.\n' "$app" >&2
-            return 2
+        source "$appfilepath"
+
+        local stderrlog=/tmp/sdd-uninstall-$app.stderr
+        sdd_uninstall 2>$stderrlog
+
+        if [ $? -eq 0 ]; then
+            printf 'Uninstalled "%s".\n' "$app"
         else
-            source "$appfilepath"
-
-            local stderrlog=/tmp/sdd-uninstall-$app.stderr
-            sdd_uninstall 2>$stderrlog
-
-            if [ $? -eq 0 ]; then
-                printf 'Uninstalled "%s".\n' "$app"
-            else
-                printf 'Error uninstalling "%s": %s\n' "$app" "$(<$stderrlog)" >&2
-                return 4
-            fi
+            printf 'Error uninstalling "%s": %s\n' "$app" "$(<$stderrlog)" >&2
+            return_code=4
         fi
     done
+
+    return $return_code
 }
 
 utils_list() {

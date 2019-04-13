@@ -31,10 +31,10 @@ teardown() {
   [ "$output" = 'Specify at least one app to install.' ]
 }
 
-@test "invoking install command with invalid app fails" {
-  run sdd install invalid_app
+@test "invoking install command with non-existing app fails" {
+  run sdd install non_existing_app
   [ "$status" -eq 2 ]
-  [ "$output" = 'App "invalid_app" could not be found.' ]
+  [ "$output" = 'App "non_existing_app" could not be found.' ]
 }
 
 @test "invoking install command with valid app but without sdd_install present fails" {
@@ -67,9 +67,9 @@ teardown() {
 @test "invoking install command with valid and non-existing app installs only valid one" {
   cp framework/fixtures/valid_app $validappfilepath
 
-  run sdd install valid_app invalid_app
+  run sdd install valid_app non_existing_app
   [ "$status" -eq 2 ]
-  [ "${lines[0]}" = 'App "invalid_app" could not be found.' ]
+  [ "${lines[0]}" = 'App "non_existing_app" could not be found.' ]
 
   run valid_app
   [ "$status" -eq 0 ]
@@ -84,10 +84,10 @@ teardown() {
   [ "$output" = 'Specify at least one app to uninstall.' ]
 }
 
-@test "invoking uninstall command with invalid app fails" {
-  run sdd uninstall invalid_app
+@test "invoking uninstall command with non-existing app fails" {
+  run sdd uninstall non_existing_app
   [ "$status" -eq 2 ]
-  [ "$output" = 'App "invalid_app" could not be found.' ]
+  [ "$output" = 'App "non_existing_app" could not be found.' ]
 }
 
 @test "invoking uninstall command with valid app but without sdd_uninstall present fails" {

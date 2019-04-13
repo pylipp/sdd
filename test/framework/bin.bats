@@ -132,13 +132,21 @@ teardown() {
   [ "$status" -eq 1 ]
 }
 
-@test "invoking list with --installed option displays installed apps" {
+@test "invoking list with --installed option displays installed apps including versions" {
   cp framework/fixtures/valid_app $validappfilepath
   sdd install valid_app
 
   run sdd list --installed
   [ $status -eq 0 ]
-  [ "${lines[0]}" = "valid_app" ]
+  [ "${lines[0]}" = "valid_app=1.0" ]
+
+  # Bump version number
+  sed -i 's/1.0/1.1/' $validappfilepath
+  sdd install valid_app
+
+  run sdd list --installed
+  [ $status -eq 0 ]
+  [ "${lines[0]}" = "valid_app=1.1" ]
 
   sdd uninstall valid_app
   run sdd list --installed

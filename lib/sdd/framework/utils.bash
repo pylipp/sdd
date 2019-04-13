@@ -86,10 +86,8 @@ utils_install() {
         if [ $? -eq 0 ]; then
             printf 'Installed "%s".\n' "$app"
 
-            if [ ! -z $version ]; then
-                # Record installed app and version
-                echo $app=$version >> "$SDD_DATA_DIR"/apps/installed
-            fi
+            # Record installed app and version (can be empty)
+            echo $app=$version >> "$SDD_DATA_DIR"/apps/installed
         else
             printf 'Error installing "%s": %s\n' "$app" "$(<$stderrlog)" >&2
             return_code=4
@@ -138,8 +136,10 @@ utils_list() {
     local option=$1
 
     if [ "$option" = "--installed" ]; then
-        # List app names only; versions can be queried separately
-        cut -d"=" -f1 "$SDD_DATA_DIR"/apps/installed | sort | uniq
+        # List apps installed most recently by filtering unique app names first
+        for app in $(cut -d"=" -f1 "$SDD_DATA_DIR"/apps/installed | sort | uniq | xargs); do
+            grep "^$app=" "$SDD_DATA_DIR"/apps/installed | tail -n1
+        done
     else
         printf 'Unknown option "%s".\n' "$option" >&2
         return 1

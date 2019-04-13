@@ -43,9 +43,8 @@ teardown() {
   touch $invalidappfilepath
 
   run sdd install invalid_app
-  [ "$status" -eq 4 ]
-  [[ "$output" = 'Error installing "invalid_app": '* ]]
-  [[ "$output" = *'sdd_install: command not found' ]]
+  [ "$status" -eq 3 ]
+  [ "$output" = 'No install function present for "invalid_app".' ]
 }
 
 @test "invoking install command with valid app succeeds" {
@@ -80,6 +79,21 @@ teardown() {
   [ "$status" -eq 1 ]
 }
 
+@test "invoking install command with valid and invalid app installs only valid one" {
+  cp framework/fixtures/valid_app $validappfilepath
+  touch $invalidappfilepath
+
+  run sdd install valid_app invalid_app
+  [ "$status" -eq 3 ]
+  [ "${lines[0]}" = 'No install function present for "invalid_app".' ]
+
+  run valid_app
+  [ "$status" -eq 0 ]
+
+  run which invalid_app
+  [ "$status" -eq 1 ]
+}
+
 @test "invoking uninstall command without argument fails" {
   run sdd uninstall
   [ "$status" -eq 1 ]
@@ -96,9 +110,8 @@ teardown() {
   touch $invalidappfilepath
 
   run sdd uninstall invalid_app
-  [ "$status" -eq 4 ]
-  [[ "$output" = 'Error uninstalling "invalid_app": '* ]]
-  [[ "$output" = *'sdd_uninstall: command not found' ]]
+  [ "$status" -eq 3 ]
+  [ "${lines[0]}" = 'No uninstall function present for "invalid_app".' ]
 }
 
 @test "invoking uninstall command with valid app succeeds" {

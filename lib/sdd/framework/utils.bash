@@ -29,6 +29,8 @@ END_OF_HELP_TEXT
 
 _validate_apps() {
     local return_code=0
+    local manage=$1
+    shift
     local appfilepath
     local apps=()
     for app in "$@"; do
@@ -38,6 +40,9 @@ _validate_apps() {
         if [ ! -f "$appfilepath" ]; then
             printf 'App "%s" could not be found.\n' "$app" >&2
             return_code=2
+        elif ! grep -q sdd_$manage "$appfilepath"; then
+            printf "No $manage function present for \"%s\".\n" "$app" >&2
+            return_code=3
         else
             apps+=($app)
         fi
@@ -59,7 +64,7 @@ utils_install() {
     # Separate definition and command substitution because 'local' itself is a
     # command, hence 'local apps=($(command))' would always have exit code 0
     local apps=()
-    apps=($(_validate_apps "$@"))
+    apps=($(_validate_apps install "$@"))
     return_code=$?
 
     local appfilepath
@@ -104,7 +109,7 @@ utils_uninstall() {
     fi
 
     local apps=()
-    apps=($(_validate_apps "$@"))
+    apps=($(_validate_apps uninstall "$@"))
     return_code=$?
 
     local appfilepath

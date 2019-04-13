@@ -1,8 +1,10 @@
 validappfilepath=../lib/sdd/apps/user/valid_app
+invalidappfilepath=../lib/sdd/apps/user/invalid_app
 appsrecordfilepath=$HOME/.local/share/sdd/apps/installed
 
 teardown() {
   rm -f "$validappfilepath"
+  rm -f "$invalidappfilepath"
   rm -f ${SDD_INSTALL_PREFIX:-$HOME/.local}/bin/valid_app
   rm -f "$appsrecordfilepath"
 }
@@ -37,12 +39,12 @@ teardown() {
   [ "$output" = 'App "non_existing_app" could not be found.' ]
 }
 
-@test "invoking install command with valid app but without sdd_install present fails" {
-  touch $validappfilepath
+@test "invoking install command with existing app but without sdd_install present fails" {
+  touch $invalidappfilepath
 
-  run sdd install valid_app
+  run sdd install invalid_app
   [ "$status" -eq 4 ]
-  [[ "$output" = 'Error installing "valid_app": '* ]]
+  [[ "$output" = 'Error installing "invalid_app": '* ]]
   [[ "$output" = *'sdd_install: command not found' ]]
 }
 
@@ -90,12 +92,12 @@ teardown() {
   [ "$output" = 'App "non_existing_app" could not be found.' ]
 }
 
-@test "invoking uninstall command with valid app but without sdd_uninstall present fails" {
-  touch $validappfilepath
+@test "invoking uninstall command with existing app but without sdd_uninstall present fails" {
+  touch $invalidappfilepath
 
-  run sdd uninstall valid_app
+  run sdd uninstall invalid_app
   [ "$status" -eq 4 ]
-  [[ "$output" = 'Error uninstalling "valid_app": '* ]]
+  [[ "$output" = 'Error uninstalling "invalid_app": '* ]]
   [[ "$output" = *'sdd_uninstall: command not found' ]]
 }
 

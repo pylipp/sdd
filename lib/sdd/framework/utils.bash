@@ -121,8 +121,11 @@ utils_uninstall() {
 
         if [ $? -eq 0 ]; then
             printf 'Uninstalled "%s".\n' "$app"
-            # Remove app install records
-            sed -i "/^$app/d" "$SDD_DATA_DIR"/apps/installed
+
+            if [ -f "$SDD_DATA_DIR"/apps/installed ]; then
+                # Remove app install records
+                sed -i "/^$app/d" "$SDD_DATA_DIR"/apps/installed
+            fi
         else
             printf 'Error uninstalling "%s": %s\n' "$app" "$(<$stderrlog)" >&2
             return_code=4
@@ -136,10 +139,12 @@ utils_list() {
     local option=$1
 
     if [ "$option" = "--installed" ]; then
-        # List apps installed most recently by filtering unique app names first
-        for app in $(cut -d"=" -f1 "$SDD_DATA_DIR"/apps/installed | sort | uniq | xargs); do
-            grep "^$app=" "$SDD_DATA_DIR"/apps/installed | tail -n1
-        done
+        if [ -f "$SDD_DATA_DIR"/apps/installed ]; then
+            # List apps installed most recently by filtering unique app names first
+            for app in $(cut -d"=" -f1 "$SDD_DATA_DIR"/apps/installed | sort | uniq | xargs); do
+                grep "^$app=" "$SDD_DATA_DIR"/apps/installed | tail -n1
+            done
+        fi
     else
         printf 'Unknown option "%s".\n' "$option" >&2
         return 1

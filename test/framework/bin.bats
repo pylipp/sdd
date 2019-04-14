@@ -165,3 +165,13 @@ teardown() {
   [ $status -eq 0 ]
   [ "$output" = "" ]
 }
+
+@test "invoking list with --available option displays available apps" {
+  cp framework/fixtures/valid_app $validappfilepath
+
+  run sdd list --available
+  [ $status -eq 0 ]
+
+  run grep -q valid_app <<<"$output"
+  [ $status -eq 0 ]
+}

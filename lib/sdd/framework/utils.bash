@@ -162,6 +162,8 @@ utils_list() {
                 grep "^$app=" "$SDD_DATA_DIR"/apps/installed | tail -n1
             done
         fi
+    elif [ "$option" = "--available" ]; then
+        ls -1 "$SCRIPTDIR/../apps/user"
     else
         printf 'Unknown option "%s".\n' "$option" >&2
         return 1

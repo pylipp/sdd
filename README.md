@@ -58,6 +58,10 @@ List installed apps by running
 
     sdd list --installed
 
+List all apps available for management in `sdd` with
+
+    sdd list --available
+
 ## Requirements
 
 ### Prioritized
@@ -132,7 +136,7 @@ It is distinguished between
 
 ### Optional
 
-- R4 / R5: The program provides a `list` command with the options `--installed` and `--all`.
+- R4 / R5: The program provides a `list` command with the options `--installed` and `--available`.
 - R7: The program provides a `--verbose` option.
 
 ### Exemplary visualization

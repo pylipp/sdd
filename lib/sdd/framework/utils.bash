@@ -61,10 +61,14 @@ utils_install() {
         return 1
     fi
 
-    # Separate definition and command substitution because 'local' itself is a
-    # command, hence 'local apps=($(command))' would always have exit code 0
+    # Extract only app names from arguments for validation
+    local all_apps=()
+    for arg in "$@"; do
+        all_apps+=($(echo $arg | cut -d"=" -f1))
+    done
+
     local apps=()
-    apps=($(_validate_apps install "$@"))
+    apps=($(_validate_apps install "${all_apps[@]}"))
     return_code=$?
 
     local appfilepath
@@ -75,9 +79,22 @@ utils_install() {
         source "$appfilepath"
 
         local version
-        version=$(sdd_fetch_latest_version 2>/dev/null)
-        if [ $? -eq 0 ]; then
-            printf 'Latest version available: %s\n' $version
+        # Try to parse version from arguments
+        for arg in "$@"; do
+            if [[ $arg = $app=* ]]; then
+                version=$(echo $arg | cut -d"=" -f2)
+                printf 'Specified version: %s\n' $version
+                break
+            fi
+        done
+
+        # Fall back to latest version if available
+        if [ -z $version ]; then
+            version=$(sdd_fetch_latest_version 2>/dev/null)
+
+            if [ $? -eq 0 ]; then
+                printf 'Latest version available: %s\n' $version
+            fi
         fi
 
         local stderrlog=/tmp/sdd-install-$app.stderr

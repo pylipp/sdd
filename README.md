@@ -36,6 +36,10 @@ You can specify a custom installation prefix like this:
 
 or by exporting the `SDD_INSTALL_PREFIX` environment variable.
 
+By default, `sdd` installs the latest version of the app available. You can specify a version for installation:
+
+    sdd install <app>=<version>
+
 To uninstall an app, run
 
     sdd uninstall <app>

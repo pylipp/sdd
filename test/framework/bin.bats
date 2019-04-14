@@ -94,6 +94,18 @@ teardown() {
   [ "$status" -eq 1 ]
 }
 
+@test "invoking install command with valid app and version succeeds" {
+  cp framework/fixtures/valid_app $validappfilepath
+
+  run sdd install valid_app=1.1
+  [ "$status" -eq 0 ]
+  [ "${lines[0]}" = 'Specified version: 1.1' ]
+  [ "${lines[1]}" = 'Installed "valid_app".' ]
+
+  # The installed app version is recorded
+  [ "$(tail -n1 $appsrecordfilepath)" = "valid_app=1.1" ]
+}
+
 @test "invoking uninstall command without argument fails" {
   run sdd uninstall
   [ "$status" -eq 1 ]

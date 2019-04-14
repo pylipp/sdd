@@ -18,6 +18,14 @@ Please verify that the `bin` sub-directory of the installation directory is pres
 
     export PATH="~/.local/bin:$PATH"
 
+Same applies for the `MANPATH`:
+
+    export MANPATH="~/.local/share/man:$MANPATH"
+
+For enabling `zsh` completion functions (`oh-my-zsh` users: put this before the line that sources `oh-my-zsh.sh` since it calls `compinit` for setting up completions):
+    
+    fpath=(~/.local/share/zsh/site-functions $fpath)
+
 ## Updating
 
 Once the program is bootstrapped, update to the latest version (GitHub master) by

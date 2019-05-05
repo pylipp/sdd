@@ -5,14 +5,15 @@ It is attempted to derive the development of `sdd` according to requirements and
 Requirement | Specification
 --- | ---
 The program shall run on Linux systems. | The program can be executed in a Docker container.
-The program shall have as little dependencies as possible. | The program depends on `git` and `wget`.
+The program shall have as little dependencies as possible. | The program depends on `bash`, `git` and `wget`.
 The program shall be simple to install. | A bootstrap installation script is provided.
 The program shall be simple to update. | The program is able to update itself.
 The program shall expose a user-friendly command line interface. | The program complies to standards given by common command line tools.
 The program shall provide functionality to manage apps that are not made available by distribution package managers. The fundamental functionality comprises installation, removal, and updating. Management includes the app's binary (i.e. main executable), runtime files (e.g. library files), and convenience (e.g. shell completion or man pages) files. | The program provides an `install` command to install one or more apps and a `uninstall` command to uninstall one or more apps.
-The program shall allow `user`s (i.e. without requiring super-user privileges) to manage apps. |
+The program shall allow `user`s (i.e. without requiring super-user privileges) to manage apps. | The program manages apps in the user's home directory in subdirectories of `~/.local`.
 The program shall optionally allow `root` to manage apps. |
 The program shall optionally allow for 'hybrid' (user and root) management. |
+The program shall allow for custom management that extends or overwrites the built-in management. | The program takes custom app management files in the `~/.config/sdd/apps` directory into account for additional management instructions.
 The program shall inform about optional dependencies required during app installation. |
 The program shall install the latest released version of an app if not specified otherwise. | The program is able to find the latest version of an app online.
 The program shall take user-defined app versions into account for installation. | The program takes into account an app version specified in the CLI when installing. This takes precedence of an app version specified in the program configuration.

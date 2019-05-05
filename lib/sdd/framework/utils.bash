@@ -34,12 +34,17 @@ _validate_apps() {
     local appfilepath
     local apps=()
     for app in "$@"; do
-        appfilepath="$SCRIPTDIR/../apps/user/$app"
+        local appfilepath="$SCRIPTDIR/../apps/user/$app"
+        local customappfilepath="$HOME/.config/sdd/apps/$app"
 
         # Check whether filepath exists
         if [ ! -f "$appfilepath" ]; then
-            printf 'App "%s" could not be found.\n' "$app" >&2
-            return_code=2
+            if [ ! -f "$customappfilepath" ]; then
+                printf 'App "%s" could not be found.\n' "$app" >&2
+                return_code=2
+            else
+                apps+=($app)
+            fi
         elif ! grep -q sdd_$manage "$appfilepath"; then
             printf "No $manage function present for \"%s\".\n" "$app" >&2
             return_code=3
@@ -73,11 +78,6 @@ utils_install() {
 
     local appfilepath
     for app in "${apps[@]}"; do
-        appfilepath="$SCRIPTDIR/../apps/user/$app"
-
-        # Source app management file and execute installation function if found
-        source "$appfilepath"
-
         local version
         # Try to parse version from arguments
         for arg in "$@"; do
@@ -88,24 +88,45 @@ utils_install() {
             fi
         done
 
-        # Fall back to latest version if available
-        if [ -z $version ]; then
-            version=$(sdd_fetch_latest_version 2>/dev/null)
-
-            if [ $? -eq 0 ]; then
-                printf 'Latest version available: %s\n' $version
-            fi
-        fi
-
         local stderrlog=/tmp/sdd-install-$app.stderr
-        sdd_install $version 2>$stderrlog
+        local success=False
 
-        if [ $? -eq 0 ]; then
-            printf 'Installed "%s".\n' "$app"
+        for dir in "$SCRIPTDIR/../apps/user" "$HOME/.config/sdd/apps"; do
+            appfilepath="$dir/$app"
 
-            # Record installed app and version (can be empty)
-            echo $app=$version >> "$SDD_DATA_DIR"/apps/installed
-        else
+            if [ ! -f "$appfilepath" ]; then
+                continue
+            fi
+
+            # Cleanup current scope
+            unset -f sdd_install 2> /dev/null || true
+            # Source app management file
+            source "$appfilepath"
+
+            # Fall back to latest version if available
+            # If both the built-in and a custom app management file define the
+            # sdd_fetch_latest_version function, the first definition is used
+            if [ -z $version ]; then
+                version=$(sdd_fetch_latest_version 2>/dev/null)
+
+                if [ $? -eq 0 ]; then
+                    printf 'Latest version available: %s\n' $version
+                fi
+            fi
+
+            # Execute installation
+            sdd_install $version 2>$stderrlog
+
+            if [ $? -eq 0 ] && [ $success = False ]; then
+                printf 'Installed "%s".\n' "$app"
+                success=True
+
+                # Record installed app and version (can be empty)
+                echo $app=$version >> "$SDD_DATA_DIR"/apps/installed
+            fi
+        done
+
+        if [ $success = False ]; then
             printf 'Error installing "%s": %s\n' "$app" "$(<$stderrlog)" >&2
             return_code=4
         fi

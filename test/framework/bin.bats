@@ -1,4 +1,5 @@
 validappfilepath=../lib/sdd/apps/user/valid_app
+validcustomappfilepath=$HOME/.config/sdd/apps/valid_app
 invalidappfilepath=../lib/sdd/apps/user/invalid_app
 appsrecordfilepath=$HOME/.local/share/sdd/apps/installed
 
@@ -7,6 +8,7 @@ teardown() {
   rm -f "$invalidappfilepath"
   rm -f ${SDD_INSTALL_PREFIX:-$HOME/.local}/bin/valid_app
   rm -f "$appsrecordfilepath"
+  rm -rf $HOME/.config/sdd
 }
 
 @test "invoking main executable prints usage" {
@@ -53,6 +55,26 @@ teardown() {
   cp framework/fixtures/valid_app $validappfilepath
 
   run sdd install valid_app
+  [ "$status" -eq 0 ]
+  [ "${lines[0]}" = 'Latest version available: 1.0' ]
+  [ "${lines[1]}" = 'Installed "valid_app".' ]
+
+  # Execute the app
+  run valid_app
+  [ "$status" -eq 0 ]
+
+  # The installed app version is recorded
+  [ "$(tail -n1 $appsrecordfilepath)" = "valid_app=1.0" ]
+}
+
+@test "invoking install command with valid custom app succeeds" {
+  # Create app management file for 'valid_app' containing an sdd_install
+  # function that creates an executable 'valid_app'
+  mkdir -p $(dirname $validcustomappfilepath)
+  cp framework/fixtures/valid_app $validcustomappfilepath
+
+  run sdd install valid_app
+  echo $output
   [ "$status" -eq 0 ]
   [ "${lines[0]}" = 'Latest version available: 1.0' ]
   [ "${lines[1]}" = 'Installed "valid_app".' ]

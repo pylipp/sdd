@@ -120,6 +120,23 @@ teardown() {
   [ "$status" -eq 1 ]
 }
 
+@test "invoking install command with valid custom and non-existing app installs only custom one" {
+  mkdir -p $(dirname $validcustomappfilepath)
+  cp framework/fixtures/valid_app $validcustomappfilepath
+
+  run sdd install valid_app non_existing_app
+  [ "$status" -eq 2 ]
+  [ "${lines[0]}" = 'App "non_existing_app" could not be found.' ]
+  [ "${lines[1]}" = 'Latest version available: 1.0' ]
+  [ "${lines[2]}" = 'Installed "valid_app".' ]
+
+  run valid_app
+  [ "$status" -eq 0 ]
+
+  run which non_existing_app
+  [ "$status" -eq 1 ]
+}
+
 @test "invoking install command with valid app and version succeeds" {
   cp framework/fixtures/valid_app $validappfilepath
 

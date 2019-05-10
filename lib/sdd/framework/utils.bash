@@ -29,8 +29,6 @@ END_OF_HELP_TEXT
 
 _validate_apps() {
     local return_code=0
-    local manage=$1
-    shift
     local appfilepath
     local apps=()
     for app in "$@"; do
@@ -45,9 +43,6 @@ _validate_apps() {
             else
                 apps+=($app)
             fi
-        elif ! grep -q sdd_$manage "$appfilepath"; then
-            printf "No $manage function present for \"%s\".\n" "$app" >&2
-            return_code=3
         else
             apps+=($app)
         fi
@@ -73,7 +68,7 @@ utils_install() {
     done
 
     local apps=()
-    apps=($(_validate_apps install "${all_apps[@]}"))
+    apps=($(_validate_apps "${all_apps[@]}"))
     return_code=$?
 
     local appfilepath
@@ -145,7 +140,7 @@ utils_uninstall() {
     fi
 
     local apps=()
-    apps=($(_validate_apps uninstall "$@"))
+    apps=($(_validate_apps "$@"))
     return_code=$?
 
     local appfilepath

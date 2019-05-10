@@ -45,8 +45,9 @@ teardown() {
   touch $invalidappfilepath
 
   run sdd install invalid_app
-  [ "$status" -eq 3 ]
-  [ "$output" = 'No install function present for "invalid_app".' ]
+  [ "$status" -eq 4 ]
+  [[ "$output" = 'Error installing "invalid_app": '* ]]
+  [[ "$output" = *'sdd_install: command not found' ]]
 }
 
 @test "invoking install command with valid app succeeds" {
@@ -106,8 +107,11 @@ teardown() {
   touch $invalidappfilepath
 
   run sdd install valid_app invalid_app
-  [ "$status" -eq 3 ]
-  [ "${lines[0]}" = 'No install function present for "invalid_app".' ]
+  [ "$status" -eq 4 ]
+  [ "${lines[0]}" = 'Latest version available: 1.0' ]
+  [ "${lines[1]}" = 'Installed "valid_app".' ]
+  [[ "${lines[2]}" = 'Error installing "invalid_app": '* ]]
+  [[ "${lines[2]}" = *'sdd_install: command not found' ]]
 
   run valid_app
   [ "$status" -eq 0 ]
@@ -144,8 +148,9 @@ teardown() {
   touch $invalidappfilepath
 
   run sdd uninstall invalid_app
-  [ "$status" -eq 3 ]
-  [ "${lines[0]}" = 'No uninstall function present for "invalid_app".' ]
+  [ "$status" -eq 4 ]
+  [[ "$output" = 'Error uninstalling "invalid_app": '* ]]
+  [[ "$output" = *'sdd_uninstall: command not found' ]]
 }
 
 @test "invoking uninstall command with valid app succeeds" {

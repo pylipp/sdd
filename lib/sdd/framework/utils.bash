@@ -76,6 +76,11 @@ utils_install() {
 
     local appfilepath
     for app in "${apps[@]}"; do
+
+        if [ -f "$HOME/.config/sdd/apps/$app" ]; then
+            printf 'Custom installation for "%s" found.\n' "$app"
+        fi
+
         local version
         # Try to parse version from arguments
         for arg in "$@"; do

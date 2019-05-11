@@ -3,10 +3,9 @@
   run sdd install qmlfmt
   echo $output
   [ $status -eq 0 ]
-  [ "$output" = 'Installed "qmlfmt".' ]
+  [[ "${lines[0]}" = 'Latest version available: '* ]]
+  [ "${lines[1]}" = 'Installed "qmlfmt".' ]
 
   run qmlfmt --version
   [ $status -eq 0 ]
-  echo $output
-  [ $output = "jq-1.6" ]
 }

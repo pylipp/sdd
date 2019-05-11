@@ -229,6 +229,26 @@ teardown() {
   [ "$status" -eq 1 ]
 }
 
+@test "invoking uninstall command with valid customized app succeeds" {
+  mkdir -p $(dirname $validcustomappfilepath)
+  echo "sdd_uninstall() { touch /tmp/uninstalled; }" > $validcustomappfilepath
+  cp framework/fixtures/valid_app $validappfilepath
+
+  run sdd install valid_app
+  [ "$status" -eq 0 ]
+
+  run sdd uninstall valid_app
+  [ "$status" -eq 0 ]
+  [ "${lines[0]}" = 'Custom uninstallation for "valid_app" found.' ]
+  [ "${lines[1]}" = 'Uninstalled "valid_app".' ]
+
+  # This file is expected to have been created by the custom sdd_uninstall
+  [ -f /tmp/uninstalled ]
+
+  run which valid_app
+  [ "$status" -eq 1 ]
+}
+
 @test "invoking list with --installed option displays installed apps including versions" {
   cp framework/fixtures/valid_app $validappfilepath
   sdd install valid_app

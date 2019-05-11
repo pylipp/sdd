@@ -166,21 +166,39 @@ utils_uninstall() {
 
     local appfilepath
     for app in "${apps[@]}"; do
-        appfilepath="$SCRIPTDIR/../apps/user/$app"
-
-        source "$appfilepath"
+        if [ -f "$HOME/.config/sdd/apps/$app" ]; then
+            printf 'Custom uninstallation for "%s" found.\n' "$app"
+        fi
 
         local stderrlog=/tmp/sdd-uninstall-$app.stderr
-        sdd_uninstall 2>$stderrlog
+        local success=False
 
-        if [ $? -eq 0 ]; then
-            printf 'Uninstalled "%s".\n' "$app"
+        for dir in "$SCRIPTDIR/../apps/user" "$HOME/.config/sdd/apps"; do
+            appfilepath="$dir/$app"
 
-            if [ -f "$SDD_DATA_DIR"/apps/installed ]; then
-                # Remove app install records
-                sed -i "/^$app/d" "$SDD_DATA_DIR"/apps/installed
+            if [ ! -f "$appfilepath" ]; then
+                continue
             fi
-        else
+
+            # Cleanup current scope
+            unset -f sdd_uninstall 2> /dev/null || true
+            # Source app management file
+            source "$appfilepath"
+            # Execute uninstallation
+            sdd_uninstall 2>>$stderrlog
+
+            if [ $? -eq 0 ] && [ $success = False ]; then
+                printf 'Uninstalled "%s".\n' "$app"
+                success=True
+
+                if [ -f "$SDD_DATA_DIR"/apps/installed ]; then
+                    # Remove app install records
+                    sed -i "/^$app/d" "$SDD_DATA_DIR"/apps/installed
+                fi
+            fi
+        done
+
+        if [ $success = False ]; then
             printf 'Error uninstalling "%s": %s\n' "$app" "$(<$stderrlog)" >&2
             return_code=4
         fi

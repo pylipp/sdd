@@ -62,6 +62,21 @@ List all apps available for management in `sdd` with
 
     sdd list --available
 
+## Customization
+
+You can both
+
+- define app management files for apps that are not shipped with `sdd`, and
+- extend app management files for apps that are shipped with `sdd`.
+
+The procedure in either case is:
+
+1. Create an empty bash file named after the app in `~/.config/sdd/apps` (without `.bash` extension).
+1. Add the functions `sdd_install` and/or `sdd_uninstall` with respective functionality.
+1. You're able to manage the app as described in the 'Usage' section. `sdd` tells you when it found a customization for the app specified on the command line.
+
+For exemplary files, see my personal definitions and extensions [here](https://github.com/pylipp/dotfiles/tree/master/sdd_apps).
+
 ## Project structure
 
 It is distinguished between

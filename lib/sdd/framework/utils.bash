@@ -104,7 +104,11 @@ utils_install() {
                 unset -f sdd_fetch_latest_version 2> /dev/null || true
                 source "$appfilepath"
 
-                version=$(sdd_fetch_latest_version 2>/dev/null)
+                local version_from_file
+                version_from_file=$(sdd_fetch_latest_version 2>/dev/null)
+                if [ $? -eq 0 ]; then
+                    version=$version_from_file
+                fi
             done
 
             if [[ -n $version ]]; then

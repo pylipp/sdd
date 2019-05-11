@@ -87,6 +87,26 @@ teardown() {
   [ "$(tail -n1 $appsrecordfilepath)" = "valid_app=1.0" ]
 }
 
+@test "invoking install command with valid customized app succeeds" {
+  # Custom app management file specifies newer version
+  mkdir -p $(dirname $validcustomappfilepath)
+  cp framework/fixtures/valid_app $validcustomappfilepath
+  sed -i 's/1.0/1.1/' $validcustomappfilepath
+  cp framework/fixtures/valid_app $validappfilepath
+
+  run sdd install valid_app
+  [ "$status" -eq 0 ]
+  [ "${lines[0]}" = 'Latest version available: 1.1' ]
+  [ "${lines[1]}" = 'Installed "valid_app".' ]
+
+  # Execute the app
+  run valid_app
+  [ "$status" -eq 0 ]
+
+  # The installed app version is recorded
+  [ "$(tail -n1 $appsrecordfilepath)" = "valid_app=1.1" ]
+}
+
 @test "invoking install command with valid and non-existing app installs only valid one" {
   cp framework/fixtures/valid_app $validappfilepath
 

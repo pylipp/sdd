@@ -86,6 +86,27 @@ utils_install() {
             fi
         done
 
+        # If version not specified, try to read it from the app management
+        # files. The custom definition takes precedence over the built-in one.
+        if [ -z $version ]; then
+            for dir in "$SCRIPTDIR/../apps/user" "$HOME/.config/sdd/apps"; do
+                appfilepath="$dir/$app"
+
+                if [ ! -f "$appfilepath" ]; then
+                    continue
+                fi
+
+                unset -f sdd_fetch_latest_version 2> /dev/null || true
+                source "$appfilepath"
+
+                version=$(sdd_fetch_latest_version 2>/dev/null)
+            done
+
+            if [[ -n $version ]]; then
+                printf 'Latest version available: %s\n' $version
+            fi
+        fi
+
         local stderrlog=/tmp/sdd-install-$app.stderr
         local success=False
 
@@ -100,18 +121,6 @@ utils_install() {
             unset -f sdd_install 2> /dev/null || true
             # Source app management file
             source "$appfilepath"
-
-            # Fall back to latest version if available
-            # If both the built-in and a custom app management file define the
-            # sdd_fetch_latest_version function, the first definition is used
-            if [ -z $version ]; then
-                version=$(sdd_fetch_latest_version 2>/dev/null)
-
-                if [ $? -eq 0 ]; then
-                    printf 'Latest version available: %s\n' $version
-                fi
-            fi
-
             # Execute installation
             sdd_install $version 2>$stderrlog
 

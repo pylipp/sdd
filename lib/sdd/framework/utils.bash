@@ -127,7 +127,7 @@ utils_install() {
             # Source app management file
             source "$appfilepath"
             # Execute installation
-            sdd_install $version 2>$stderrlog
+            sdd_install $version 2>>$stderrlog
 
             if [ $? -eq 0 ] && [ $success = False ]; then
                 printf 'Installed "%s".\n' "$app"

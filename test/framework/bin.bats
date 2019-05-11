@@ -75,7 +75,6 @@ teardown() {
   cp framework/fixtures/valid_app $validcustomappfilepath
 
   run sdd install valid_app
-  echo $output
   [ "$status" -eq 0 ]
   [ "${lines[0]}" = 'Latest version available: 1.0' ]
   [ "${lines[1]}" = 'Installed "valid_app".' ]

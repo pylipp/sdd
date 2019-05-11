@@ -32,17 +32,20 @@ _validate_apps() {
     local appfilepath
     local apps=()
     for app in "$@"; do
-        local appfilepath="$SCRIPTDIR/../apps/user/$app"
-        local customappfilepath="$HOME/.config/sdd/apps/$app"
+        local nr_misses=0
 
-        # Check whether filepath exists
-        if [ ! -f "$appfilepath" ]; then
-            if [ ! -f "$customappfilepath" ]; then
-                printf 'App "%s" could not be found.\n' "$app" >&2
-                return_code=2
-            else
-                apps+=($app)
+        for dir in "$SCRIPTDIR/../apps/user" "$HOME/.config/sdd/apps"; do
+            appfilepath="$dir/$app"
+
+            # Check whether app available
+            if [ ! -f "$appfilepath" ]; then
+                ((nr_misses++))
             fi
+        done
+
+        if [ $nr_misses -eq 2 ]; then
+            printf 'App "%s" could not be found.\n' "$app" >&2
+            return_code=2
         else
             apps+=($app)
         fi

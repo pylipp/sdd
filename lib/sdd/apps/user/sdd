@@ -16,6 +16,5 @@ sdd_uninstall() {
 }
 
 sdd_fetch_latest_version() {
-    # Fetch SHA of latest commit on master branch
-    wget -qO- https://api.github.com/repos/pylipp/sdd/commits/master | grep -m1 sha | awk '{ print $2; }' | sed 's/[",]//g'
+    _sha_of_github_master pylipp sdd
 }

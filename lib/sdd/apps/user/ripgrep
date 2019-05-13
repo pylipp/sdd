@@ -37,5 +37,5 @@ sdd_uninstall() {
 }
 
 sdd_fetch_latest_version() {
-    wget -qO- https://api.github.com/repos/BurntSushi/ripgrep/releases/latest | grep tag_name | awk '{ print $2; }' | sed 's/[",]//g'
+    _tag_name_of_latest_github_release BurntSushi ripgrep
 }

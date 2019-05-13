@@ -224,3 +224,17 @@ utils_list() {
         return 1
     fi
 }
+
+_tag_name_of_latest_github_release() {
+    # Fetch tag name of latest release on GitHub
+    local github_user=$1
+    local repo_name=$2
+    wget -qO- https://api.github.com/repos/$github_user/$repo_name/releases/latest | grep tag_name | awk '{ print $2; }' | sed 's/[",]//g'
+}
+
+_sha_of_github_master() {
+    # Fetch SHA of latest commit on GitHub master branch
+    local github_user=$1
+    local repo_name=$2
+    wget -qO- https://api.github.com/repos/$github_user/$repo_name/commits/master | grep -m1 sha | awk '{ print $2; }' | sed 's/[",]//g'
+}

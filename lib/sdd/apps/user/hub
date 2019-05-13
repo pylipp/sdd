@@ -1,0 +1,31 @@
+#!/bin/bash
+
+sdd_install() {
+    local version=$1
+    local arch=amd64
+    if [[ $(arch) = armv7l ]]; then
+        arch=arm
+    fi
+
+    # Strip prefixed v from version number for package name
+    local package=hub-linux-$arch-$(echo $version | tr -d v)
+
+    wget -P /tmp https://github.com/github/hub/releases/download/$version/$package.tgz
+    cd /tmp
+    tar xf $package.tgz
+
+    PREFIX="$SDD_INSTALL_PREFIX" $package/install
+
+    mkdir -p "$SDD_INSTALL_PREFIX"/share/zsh/site-functions
+    cp $package/etc/hub.zsh_completion "$SDD_INSTALL_PREFIX"/share/zsh/site-functions/_hub
+
+    rm -rf $package $package.tgz
+}
+
+sdd_uninstall() {
+    rm -rf "$SDD_INSTALL_PREFIX"/bin/hub "$SDD_INSTALL_PREFIX"/share/vim/**/pullrequest.vim "$SDD_INSTALL_PREFIX"/share/man/man1/hub* "$SDD_INSTALL_PREFIX"/share/zsh/site-functions/_hub
+}
+
+sdd_fetch_latest_version() {
+    _tag_name_of_latest_github_release github hub
+}

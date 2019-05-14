@@ -33,20 +33,15 @@ main() {
 
     [[ $(command -v tmux >/dev/null 2>&1) ]] || ( echo_error "Tmux not installed!"; exit 1; )
 
-    git clone https://github.com/ashneo76/tpm --branch customizations ~/.tmux/plugins/tpm
-    pip install --user tmuxp
+    git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 
     # set up config files for plugin installation
     mv_existing ~/.tmux.conf
-    mv_existing ~/.tmuxp
     ln -s ~/.files/tmux.conf ~/.tmux.conf
-    ln -s ~/.files/tmuxp ~/.tmuxp
 
-    cd ~/.tmux/plugins
-    tpm/bin/install_plugins
-
-    # issue warning; tmux-mem-cpu-load pluging requires cmake
-    [[ $(command -v cmake >/dev/null 2>&1) ]] || echo_error "cmake not installed!"
+    cd ~/.tmux/plugins/tpm
+    git checkout 26d9ace
+    bin/install_plugins
 }
 
 main "$@"

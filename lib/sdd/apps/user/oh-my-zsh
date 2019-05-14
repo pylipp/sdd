@@ -1,0 +1,24 @@
+#! /bin/bash
+
+sdd_install() {
+    local version=${1:-master}
+    wget -P /tmp https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/$version/tools/install.sh
+    local install_path=/tmp/install.sh
+
+    # Don't execute zsh when installation is done
+    sed -i '/env zsh/ d' $install_path
+
+    chmod +x $install_path
+    # Trick the oh-my-zsh logic to run chsh
+    SHELL=zsh $install_path
+
+    rm $install_path
+}
+
+sdd_uninstall() {
+    rm -rf ${ZSH:-~/.oh-my-zsh}
+}
+
+sdd_fetch_latest_version() {
+    _sha_of_github_master robbyrussell oh-my-zsh
+}

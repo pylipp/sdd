@@ -32,15 +32,7 @@ bin/install_plugins
 cd ../tmux-mem-cpu-load
 git checkout feature/temperature
  
-cd
-wget https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh
-sed -i 's/env zsh//g' install.sh
-chmod +x install.sh
-./install.sh
-rm -rf .zshrc* install.sh
-ln -s .files/zshrc .zshrc
-ln -s ~/.files/oh-my-zsh/themes .oh-my-zsh/custom/themes
-chsh -s $(which zsh) || echo exec zsh >> .bashrc
+sdd install oh-my-zsh
 
 ln -s .files/dir_colors .dir_colors
 ln -s .files/gitconfig .gitconfig

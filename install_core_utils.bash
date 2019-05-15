@@ -16,9 +16,9 @@ main() {
 
         # development utilities
         install_packages \
-            g++ cmake build-essential doxygen graphviz python-dev exuberant-ctags
+            cmake build-essential doxygen graphviz python-dev exuberant-ctags
         # workflow
-        install_packages tig tmux direnv silversearcher-ag xclip
+        install_packages tig direnv silversearcher-ag xclip
         # system utilities
         install_packages network-manager usbmount lm-sensors htop
         # libraries

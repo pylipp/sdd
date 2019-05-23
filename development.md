@@ -5,7 +5,7 @@ It is attempted to derive the development of `sdd` according to requirements and
 Requirement | Specification
 --- | ---
 The program shall run on Linux systems. | The program can be executed in a Docker container.
-The program shall have as little dependencies as possible. | The program depends on `bash`, `git` and `wget`.
+The program shall have as little dependencies as possible. | The program depends on `bash`, `git` and `wget`. Python-related apps require `python3`.
 The program shall be simple to install. | A bootstrap installation script is provided.
 The program shall be simple to update. | The program is able to update itself.
 The program shall expose a user-friendly command line interface. | The program complies to standards given by common command line tools.

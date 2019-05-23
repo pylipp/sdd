@@ -238,3 +238,9 @@ _sha_of_github_master() {
     local repo_name=$2
     wget -qO- https://api.github.com/repos/$github_user/$repo_name/commits/master | grep -m1 sha | awk '{ print $2; }' | sed 's/[",]//g'
 }
+
+_name_of_latest_github_tag() {
+    local github_user=$1
+    local repo_name=$2
+    wget -qO- https://api.github.com/repos/$github_user/$repo_name/tags | grep -m1 name | awk '{ print $2; }' | sed 's/[",]//g'
+}

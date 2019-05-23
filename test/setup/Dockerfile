@@ -4,9 +4,9 @@ ENV LANG C.UTF-8
 ENV LC_ALL C.UTF-8
 
 RUN apt-get update && \
-  apt-get install --yes git
+  apt-get install --yes git wget
 
-RUN apt-get install --yes wget
+RUN apt-get install --yes python3
 
 RUN git clone https://github.com/bats-core/bats-core.git && \
   cd bats-core && \

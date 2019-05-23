@@ -21,9 +21,9 @@ else
     exit 1
 fi
 
-sdd install oh-my-zsh tmux
+sdd install oh-my-zsh tmux pip
 
-for step in install_core_utils setup_python install_vim install_st; do
+for step in install_core_utils install_vim install_st; do
     bash $HOME/.files/setup/$step.bash $method
 done
 

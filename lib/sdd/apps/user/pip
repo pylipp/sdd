@@ -1,0 +1,19 @@
+#! /bin/bash
+
+sdd_install() {
+    command -v python3 || return 1
+
+    cd /tmp
+    wget https://bootstrap.pypa.io/get-pip.py
+
+    python3 get-pip.py --user
+    rm get-pip.py
+}
+
+sdd_uninstall() {
+    "$SDD_INSTALL_PREFIX"/bin/pip uninstall --yes pip
+}
+
+sdd_fetch_latest_version() {
+    _name_of_latest_github_tag pypa pip
+}

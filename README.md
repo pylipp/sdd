@@ -103,12 +103,20 @@ It is distinguished between
 ### Testing
 
 The program is tested in a container environment using the `bats` framework.
-Clone this repository and build the Docker image to run tests.
+Clone this repository and pull the Docker image to run tests.
 
     git clone https://github.com/pylipp/sdd
+    docker pull pylipp/sdd
     cd sdd
-    docker build test/setup -t sdd:latest
     test/run.sh
+    # For skipping tests of apps
+    NO_APP_TESTS=1 test/run.sh
+    # For attaching to the test container after the tests have completed
+    test/run.sh --debug
+
+For building the image, run
+
+    docker build test/setup -t sdd:latest
 
 ### Extending
 

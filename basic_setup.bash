@@ -21,7 +21,7 @@ ln -s .files/vim .vim
 vim +qa
 vim +PlugInstall < /dev/tty
 
-sdd install oh-my-zsh tmux
+sdd install oh-my-zsh tmux direnv
 
 ln -s .files/dir_colors .dir_colors
 ln -s .files/gitconfig .gitconfig

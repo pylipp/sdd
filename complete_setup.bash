@@ -21,7 +21,7 @@ else
     exit 1
 fi
 
-sdd install oh-my-zsh tmux pip
+sdd install oh-my-zsh tmux pip direnv
 
 for step in install_core_utils install_vim install_st; do
     bash $HOME/.files/setup/$step.bash $method

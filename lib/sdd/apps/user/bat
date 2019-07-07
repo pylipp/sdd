@@ -2,7 +2,7 @@
 
 sdd_install() {
     local version=$1
-    local package=bat-$version-x86_64-unknown-linux-gnu
+    local package=bat-$version-x86_64-unknown-linux-musl
 
     wget -P /tmp https://github.com/sharkdp/bat/releases/download/$version/$package.tar.gz
     cd /tmp
@@ -20,22 +20,6 @@ sdd_install() {
 sdd_uninstall() {
     rm -f "$SDD_INSTALL_PREFIX"/bin/bat
     rm -f "$SDD_INSTALL_PREFIX"/share/man/man1/bat.1
-}
-
-foo() {
-    # https://github.com/sharkdp/bat/issues/34#issuecomment-385634632
-    # Get theme
-    mkdir -p ~/.config/bat/themes
-    cd ~/.config/bat/themes
-    git clone https://github.com/braver/Solarized
-    ln -sf "Solarized/Solarized (dark).tmTheme" Default.tmTheme
-
-    # Get language definition files
-    mkdir -p ~/.config/bat/syntaxes
-    cd ~/.config/bat/syntaxes
-    git clone https://github.com/sublimehq/Packages/
-    rm -rf Packages/Markdown
-    git clone https://github.com/jonschlinkert/sublime-markdown-extended
 }
 
 sdd_fetch_latest_version() {

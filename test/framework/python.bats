@@ -14,7 +14,7 @@ teardown() {
 @test "installation of python app is enabled" {
   source ../lib/sdd/framework/python.bash
 
-  run python_install pip
+  run sdd_pyinstall pip
   [ "$status" -eq 0 ]
 
   run pip --version
@@ -24,5 +24,5 @@ teardown() {
   [ "$output" = "$SDD_INSTALL_PREFIX/bin/pip" ]
   [ "$status" -eq 0 ]
 
-  unset -f python_install
+  unset -f sdd_pyinstall
 }

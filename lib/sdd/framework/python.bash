@@ -2,7 +2,7 @@
 
 VENV_DIR=${WORKON_HOME:-$HOME/.virtualenvs}
 
-python_install() {
+sdd_pyinstall() {
     set -e
 
     local app=$1

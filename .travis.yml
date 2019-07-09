@@ -1,0 +1,11 @@
+language: minimal
+dist: xenial
+
+services:
+  - docker
+
+before_install:
+  - docker pull pylipp/sdd
+
+script:
+  - ./test/run.sh

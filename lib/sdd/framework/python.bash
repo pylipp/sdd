@@ -2,6 +2,22 @@
 
 VENV_DIR=${WORKON_HOME:-$HOME/.virtualenvs}
 
+python_install() {
+    local return_code=1
+    local app=$1
+
+    local stderrlog=/tmp/sdd-pyinstall-$app.stderr
+
+    sdd_pyinstall $app 2>>$stderrlog
+
+    if [ $? -eq 0 ]; then
+        printf 'Installed "%s".\n' "$app"
+        return_code=0
+    fi
+
+    return $return_code
+}
+
 sdd_pyinstall() {
     set -e
 

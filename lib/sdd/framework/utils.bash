@@ -17,6 +17,7 @@ Commands:
     install
     uninstall
     list
+    pyinstall
 
 General options:
     --help      Display help message

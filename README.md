@@ -62,6 +62,14 @@ List all apps available for management in `sdd` with
 
     sdd list --available
 
+### Experimental features
+
+Install an app provided by a Python package of same name available on PyPI with
+
+    sdd pyinstall <app>
+
+The package is installed into an isolated Python virtual environment which requires a Python version including the `venv` module (on Debian-based systems install it using the `python3-venv` package).
+
 ## Customization
 
 You can both

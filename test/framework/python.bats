@@ -26,3 +26,12 @@ teardown() {
 
   unset -f sdd_pyinstall
 }
+
+@test "invoking pyinstall command with valid app succeeds" {
+  run sdd pyinstall pip
+  [ $status -eq 0 ]
+  [ "${lines[-1]}" = 'Installed "pip".' ]
+
+  run pip --version
+  [ $status -eq 0 ]
+}

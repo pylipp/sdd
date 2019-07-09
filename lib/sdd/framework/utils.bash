@@ -1,6 +1,6 @@
 # Utility functions for sdd framework
 
-SCRIPTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+FRAMEWORKDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
 utils_usage() {
     while IFS= read -r line; do
@@ -34,7 +34,7 @@ _validate_apps() {
     for app in "$@"; do
         local nr_misses=0
 
-        for dir in "$SCRIPTDIR/../apps/user" "$HOME/.config/sdd/apps"; do
+        for dir in "$FRAMEWORKDIR/../apps/user" "$HOME/.config/sdd/apps"; do
             appfilepath="$dir/$app"
 
             # Check whether app available
@@ -94,7 +94,7 @@ utils_install() {
         # If version not specified, try to read it from the app management
         # files. The custom definition takes precedence over the built-in one.
         if [ -z $version ]; then
-            for dir in "$SCRIPTDIR/../apps/user" "$HOME/.config/sdd/apps"; do
+            for dir in "$FRAMEWORKDIR/../apps/user" "$HOME/.config/sdd/apps"; do
                 appfilepath="$dir/$app"
 
                 if [ ! -f "$appfilepath" ]; then
@@ -119,7 +119,7 @@ utils_install() {
         local stderrlog=/tmp/sdd-install-$app.stderr
         local success=False
 
-        for dir in "$SCRIPTDIR/../apps/user" "$HOME/.config/sdd/apps"; do
+        for dir in "$FRAMEWORKDIR/../apps/user" "$HOME/.config/sdd/apps"; do
             appfilepath="$dir/$app"
 
             if [ ! -f "$appfilepath" ]; then
@@ -173,7 +173,7 @@ utils_uninstall() {
         local stderrlog=/tmp/sdd-uninstall-$app.stderr
         local success=False
 
-        for dir in "$SCRIPTDIR/../apps/user" "$HOME/.config/sdd/apps"; do
+        for dir in "$FRAMEWORKDIR/../apps/user" "$HOME/.config/sdd/apps"; do
             appfilepath="$dir/$app"
 
             if [ ! -f "$appfilepath" ]; then
@@ -218,7 +218,7 @@ utils_list() {
             done
         fi
     elif [ "$option" = "--available" ]; then
-        ls -1 "$SCRIPTDIR/../apps/user"
+        ls -1 "$FRAMEWORKDIR/../apps/user"
     else
         printf 'Unknown option "%s".\n' "$option" >&2
         return 1

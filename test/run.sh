@@ -8,7 +8,7 @@
 # Environment variables:
 #   NO_APP_TESTS    If non-empty, run only framework tests
 
-container_id=$(docker run -d -it --rm --volume "$(pwd)":/opt/sdd --workdir /opt/sdd/test sdd:latest)
+container_id=$(docker run -d -it --rm --volume "$(pwd)":/opt/sdd --workdir /opt/sdd/test pylipp/sdd:latest)
 
 if [[ -z $NO_APP_TESTS ]]; then
     docker exec $container_id bats -r .

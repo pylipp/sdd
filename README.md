@@ -1,5 +1,7 @@
 # `setup-da-distro`
 
+[![Build Status](https://travis-ci.org/pylipp/sdd.svg?branch=master)](https://travis-ci.org/pylipp/sdd)
+
 > A framework to manage installation of apps from web sources for non-root users on Linux systems
 
 ## Installation

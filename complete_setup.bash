@@ -22,6 +22,7 @@ else
 fi
 
 sdd install oh-my-zsh tmux pip direnv
+sdd install watson=aa901567c5aa6129ff6dae799eddbfb0be06cb65
 
 for step in install_core_utils install_vim install_st; do
     bash $HOME/.files/setup/$step.bash $method

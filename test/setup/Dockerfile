@@ -17,4 +17,4 @@ RUN git clone https://github.com/bats-core/bats-core.git && \
 
 ENV PATH=/root/.local/bin:/opt/sdd/bin:$PATH
 
-ENTRYPOINT /bin/bash
+CMD ["/bin/bash"]

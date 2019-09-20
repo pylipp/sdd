@@ -5,7 +5,7 @@
   [ "${lines[1]}" = 'Installed "diff-so-fancy".' ]
 
   run diff-so-fancy --version
-  [ $status -eq 0 ]
+  [ $status -eq 255 ]
 
   run sdd uninstall diff-so-fancy
   [ $status -eq 0 ]

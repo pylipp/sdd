@@ -2,7 +2,7 @@
 
 sdd_install() {
     local version=$1
-    wget -O "$SDD_INSTALL_PREFIX/bin/diff-so-fancy" https://raw.githubusercontent.com/so-fancy/diff-so-fancy/$version/diff-so-fancy
+    wget -O "$SDD_INSTALL_PREFIX/bin/diff-so-fancy" https://raw.githubusercontent.com/so-fancy/diff-so-fancy/$version/third_party/build_fatpack/diff-so-fancy
     chmod u+x "$SDD_INSTALL_PREFIX/bin/diff-so-fancy"
     # git config --global core.pager "diff-so-fancy | less --tabs=4 -RFX"
 }

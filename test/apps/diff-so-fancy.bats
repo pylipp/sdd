@@ -7,8 +7,8 @@ load '/usr/local/libexec/bats-assert/load.bash'
   [[ "${lines[0]}" = 'Latest version available: '* ]]
   [ "${lines[1]}" = 'Installed "diff-so-fancy".' ]
 
-  run diff-so-fancy --version
-  assert_failure 255
+  run diff-so-fancy --colors
+  assert_success
 
   run sdd uninstall diff-so-fancy
   [ $status -eq 0 ]

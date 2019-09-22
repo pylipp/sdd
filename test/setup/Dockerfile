@@ -17,4 +17,6 @@ RUN git clone https://github.com/bats-core/bats-core.git && \
 
 ENV PATH=/root/.local/bin:/opt/sdd/bin:$PATH
 
+RUN echo 'set -o vi' >> /root/.bashrc
+
 CMD ["/bin/bash"]

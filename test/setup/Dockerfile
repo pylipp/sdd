@@ -15,6 +15,14 @@ RUN git clone https://github.com/bats-core/bats-core.git && \
   cd .. && \
   rm -rf bats-core
 
+RUN git clone https://github.com/ztombol/bats-support /usr/local/libexec/bats-support && \
+  cd /usr/local/libexec/bats-support && \
+  git checkout v0.3.0
+
+RUN git clone https://github.com/jasonkarns/bats-assert-1 /usr/local/libexec/bats-assert && \
+  cd /usr/local/libexec/bats-assert && \
+  git checkout v2.0.0
+
 ENV PATH=/root/.local/bin:/opt/sdd/bin:$PATH
 
 RUN echo 'set -o vi' >> /root/.bashrc

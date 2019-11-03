@@ -66,6 +66,10 @@ List all apps available for management in `sdd` with
 
 `sdd` is verbose. Any program output during management is forwarded to the terminal, and to respective `stdout`/`stderr` log files in `/tmp`.
 
+You can always consult
+
+    sdd --help
+
 ## Customization
 
 You can both

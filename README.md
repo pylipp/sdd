@@ -66,14 +66,6 @@ List all apps available for management in `sdd` with
 
 `sdd` is verbose. Any program output during management is forwarded to the terminal, and to respective `stdout`/`stderr` log files in `/tmp`.
 
-### Experimental features
-
-Install an app provided by a Python package of same name available on PyPI with
-
-    sdd pyinstall <app>
-
-The package is installed into an isolated Python virtual environment which requires a Python version including the `venv` module (on Debian-based systems install it using the `python3-venv` package).
-
 ## Customization
 
 You can both
@@ -141,3 +133,7 @@ You're looking for managing an app but it's not included in `sdd` yet? Here's ho
 1. Add three functions `sdd_install`, `sdd_update`, `sdd_uninstall` with respective functionality.
 1. Add the new files, commit, and push.
 1. Open a PR!
+
+## Python apps
+
+Consider using [`pipx`](https://pipxproject.github.io/pipx/) for installing Python applications (in isolated environments).

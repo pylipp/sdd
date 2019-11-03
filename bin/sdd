@@ -6,8 +6,6 @@ SCRIPTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
 # shellcheck source=../lib/sdd/framework/utils.bash
 source "$SCRIPTDIR"/../lib/sdd/framework/utils.bash
-# shellcheck source=../lib/sdd/framework/python.bash
-source "$SCRIPTDIR"/../lib/sdd/framework/python.bash
 
 SDD_INSTALL_PREFIX=${SDD_INSTALL_PREFIX:-$HOME/.local}
 export SDD_INSTALL_PREFIX
@@ -32,10 +30,6 @@ main() {
     elif [ "$command" = "list" ]; then
         shift
         utils_list "$@"
-        exit_code=$?
-    elif [ "$command" = "pyinstall" ]; then
-        shift
-        python_install "$@"
         exit_code=$?
     elif [ "$command" = "--help" ]; then
         utils_usage

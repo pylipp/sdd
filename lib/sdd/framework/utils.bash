@@ -24,6 +24,7 @@ General options:
 
 Options for list command:
     --installed List installed apps
+    --available List apps available for installation
 
 END_OF_HELP_TEXT
 }

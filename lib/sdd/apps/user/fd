@@ -1,0 +1,32 @@
+#! /bin/bash
+
+sdd_install() {
+    local version=$1
+    local package=fd-$version-x86_64-unknown-linux-musl
+
+    wget -P /tmp https://github.com/sharkdp/fd/releases/download/$version/$package.tar.gz
+    cd /tmp
+    tar xf $package.tar.gz
+
+    mv $package/fd "$SDD_INSTALL_PREFIX"/bin
+
+    # Install man page
+    mkdir -p "$SDD_INSTALL_PREFIX"/share/man/man1
+    mv $package/fd.1 "$SDD_INSTALL_PREFIX"/share/man/man1
+
+    # Install zsh completion
+    mkdir -p "$SDD_INSTALL_PREFIX"/share/zsh/site-functions
+    cp $package/autocomplete/_fd "$SDD_INSTALL_PREFIX"/share/zsh/site-functions/_fd
+
+    rm -rf $package.tar.gz $package
+}
+
+sdd_uninstall() {
+    rm -v "$SDD_INSTALL_PREFIX"/bin/fd
+    rm -v "$SDD_INSTALL_PREFIX"/share/man/man1/fd.1
+    rm -v "$SDD_INSTALL_PREFIX"/share/zsh/site-functions/_fd
+}
+
+sdd_fetch_latest_version() {
+    _tag_name_of_latest_github_release sharkdp fd
+}

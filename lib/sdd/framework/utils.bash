@@ -117,6 +117,7 @@ utils_install() {
             fi
         fi
 
+        local stdoutlog=/tmp/sdd-install-$app.stdout
         local stderrlog=/tmp/sdd-install-$app.stderr
         local success=False
 
@@ -131,8 +132,9 @@ utils_install() {
             unset -f sdd_install 2> /dev/null || true
             # Source app management file
             source "$appfilepath"
-            # Execute installation
-            sdd_install $version 2>>$stderrlog
+            # Execute installation; tee stdout/stderr to files, see
+            # https://stackoverflow.com/a/53051506
+            { sdd_install $version > >(tee $stdoutlog ); } 2> >(tee $stderrlog >&2 )
 
             if [ $? -eq 0 ] && [ $success = False ]; then
                 printf 'Installed "%s".\n' "$app"
@@ -144,7 +146,7 @@ utils_install() {
         done
 
         if [ $success = False ]; then
-            printf 'Error installing "%s": %s\n' "$app" "$(<$stderrlog)" >&2
+            printf 'Error installing "%s". See above and %s.\n' "$app" "$stderrlog" >&2
             return_code=4
         fi
     done
@@ -171,6 +173,7 @@ utils_uninstall() {
             printf 'Custom uninstallation for "%s" found.\n' "$app"
         fi
 
+        local stdoutlog=/tmp/sdd-uninstall-$app.stdout
         local stderrlog=/tmp/sdd-uninstall-$app.stderr
         local success=False
 
@@ -185,8 +188,9 @@ utils_uninstall() {
             unset -f sdd_uninstall 2> /dev/null || true
             # Source app management file
             source "$appfilepath"
-            # Execute uninstallation
-            sdd_uninstall 2>>$stderrlog
+            # Execute uninstallation; tee stdout/stderr to files, see
+            # https://stackoverflow.com/a/53051506
+            { sdd_uninstall > >(tee $stdoutlog ); } 2> >(tee $stderrlog >&2 )
 
             if [ $? -eq 0 ] && [ $success = False ]; then
                 printf 'Uninstalled "%s".\n' "$app"
@@ -200,7 +204,7 @@ utils_uninstall() {
         done
 
         if [ $success = False ]; then
-            printf 'Error uninstalling "%s": %s\n' "$app" "$(<$stderrlog)" >&2
+            printf 'Error uninstalling "%s". See above and %s.\n' "$app" "$stderrlog" >&2
             return_code=4
         fi
     done

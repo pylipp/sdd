@@ -2,7 +2,7 @@
   run sdd install bat
   [ $status -eq 0 ]
   [[ "${lines[0]}" = 'Latest version available: '* ]]
-  [ "${lines[1]}" = 'Installed "bat".' ]
+  [ "${lines[-1]}" = 'Installed "bat".' ]
 
   run bat --version
   [ $status -eq 0 ]

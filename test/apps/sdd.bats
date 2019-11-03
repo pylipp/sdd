@@ -2,7 +2,7 @@
   run sdd install sdd
   [ $status -eq 0 ]
   [[ "${lines[0]}" = 'Latest version available: '* ]]
-  [ "${lines[1]}" = 'Installed "sdd".' ]
+  [ "${lines[-1]}" = 'Installed "sdd".' ]
 
   # Installed sdd should be first in PATH
   run which sdd

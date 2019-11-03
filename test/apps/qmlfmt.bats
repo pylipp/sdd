@@ -4,7 +4,7 @@
   echo $output
   [ $status -eq 0 ]
   [[ "${lines[0]}" = 'Latest version available: '* ]]
-  [ "${lines[1]}" = 'Installed "qmlfmt".' ]
+  [ "${lines[-1]}" = 'Installed "qmlfmt".' ]
 
   run qmlfmt --version
   [ $status -eq 0 ]

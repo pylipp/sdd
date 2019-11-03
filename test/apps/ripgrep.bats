@@ -2,7 +2,7 @@
   run sdd install ripgrep
   [ $status -eq 0 ]
   [[ "${lines[0]}" = 'Latest version available: '* ]]
-  [ "${lines[1]}" = 'Installed "ripgrep".' ]
+  [ "${lines[-1]}" = 'Installed "ripgrep".' ]
 
   run rg --version
   [ $status -eq 0 ]

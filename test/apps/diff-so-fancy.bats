@@ -5,7 +5,7 @@ load '/usr/local/libexec/bats-assert/load.bash'
   run sdd install diff-so-fancy
   [ $status -eq 0 ]
   [[ "${lines[0]}" = 'Latest version available: '* ]]
-  [ "${lines[1]}" = 'Installed "diff-so-fancy".' ]
+  [ "${lines[-1]}" = 'Installed "diff-so-fancy".' ]
 
   run diff-so-fancy --colors
   assert_success

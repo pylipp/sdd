@@ -2,7 +2,7 @@
   run sdd install hub
   [ $status -eq 0 ]
   [[ "${lines[0]}" = 'Latest version available: '* ]]
-  [ "${lines[1]}" = 'Installed "hub".' ]
+  [ "${lines[-1]}" = 'Installed "hub".' ]
 
   run hub --version
   [ $status -eq 0 ]

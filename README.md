@@ -64,6 +64,8 @@ List all apps available for management in `sdd` with
 
     sdd list --available
 
+`sdd` is verbose. Any program output during management is forwarded to the terminal, and to respective `stdout`/`stderr` log files in `/tmp`.
+
 ### Experimental features
 
 Install an app provided by a Python package of same name available on PyPI with

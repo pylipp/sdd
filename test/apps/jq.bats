@@ -2,7 +2,7 @@
   run sdd install jq
   [ $status -eq 0 ]
   [[ "${lines[0]}" = 'Latest version available: '* ]]
-  [ "${lines[1]}" = 'Installed "jq".' ]
+  [ "${lines[-1]}" = 'Installed "jq".' ]
 
   run jq --version
   [ $status -eq 0 ]

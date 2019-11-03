@@ -2,7 +2,7 @@
   run sdd install direnv
   [ $status -eq 0 ]
   [[ "${lines[0]}" = 'Latest version available: '* ]]
-  [ "${lines[1]}" = 'Installed "direnv".' ]
+  [ "${lines[-1]}" = 'Installed "direnv".' ]
 
   run direnv version
   [ $status -eq 0 ]

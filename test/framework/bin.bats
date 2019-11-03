@@ -1,3 +1,6 @@
+load '/usr/local/libexec/bats-support/load.bash'
+load '/usr/local/libexec/bats-assert/load.bash'
+
 validappfilepath=../lib/sdd/apps/user/valid_app
 validcustomappfilepath=$HOME/.config/sdd/apps/valid_app
 invalidappfilepath=../lib/sdd/apps/user/invalid_app
@@ -46,8 +49,8 @@ teardown() {
 
   run sdd install invalid_app
   [ "$status" -eq 4 ]
-  [[ "$output" = 'Error installing "invalid_app": '* ]]
-  [[ "$output" = *'sdd_install: command not found' ]]
+  assert_output -e 'Error installing "invalid_app". See above and /tmp/sdd-install-invalid_app.stderr.\n*'
+  assert_output -p 'sdd_install: command not found'
 }
 
 @test "invoking install command with valid app succeeds" {
@@ -150,8 +153,8 @@ teardown() {
   [ "$status" -eq 4 ]
   [ "${lines[0]}" = 'Latest version available: 1.0' ]
   [ "${lines[1]}" = 'Installed "valid_app".' ]
-  [[ "${lines[2]}" = 'Error installing "invalid_app": '* ]]
-  [[ "${lines[2]}" = *'sdd_install: command not found' ]]
+  assert_output -e 'Error installing "invalid_app". See above and /tmp/sdd-install-invalid_app.stderr.\n*'
+  assert_output -p 'sdd_install: command not found'
 
   run valid_app
   [ "$status" -eq 0 ]
@@ -207,8 +210,8 @@ teardown() {
 
   run sdd uninstall invalid_app
   [ "$status" -eq 4 ]
-  [[ "$output" = 'Error uninstalling "invalid_app": '* ]]
-  [[ "$output" = *'sdd_uninstall: command not found' ]]
+  assert_output -e 'Error uninstalling "invalid_app". See above and /tmp/sdd-uninstall-invalid_app.stderr.\n*'
+  assert_output -p 'sdd_uninstall: command not found'
 }
 
 @test "invoking uninstall command with valid app succeeds" {

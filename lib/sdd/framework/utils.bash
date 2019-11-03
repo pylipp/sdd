@@ -20,11 +20,21 @@ Commands:
 
 General options:
     --help      Display help message
+    --version   Display version information
 
 Options for list command:
     --installed List installed apps
 
 END_OF_HELP_TEXT
+}
+
+utils_version() {
+    if [ ! -e "$SDD_DATA_DIR"/apps/installed ]; then
+        printf 'Cannot find %s.\n' "$SDD_DATA_DIR"/apps/installed >&2
+        return 1;
+    fi
+
+    tac "$SDD_DATA_DIR"/apps/installed | grep -m 1 '^sdd=' | cut -d '=' -f2
 }
 
 _validate_apps() {

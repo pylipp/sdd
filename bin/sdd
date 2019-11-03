@@ -33,6 +33,9 @@ main() {
         exit_code=$?
     elif [ "$command" = "--help" ]; then
         utils_usage
+    elif [ "$command" = "--version" ]; then
+        utils_version
+        exit_code=$?
     elif [ ! -z "$command" ]; then
         printf 'Unknown command "%s"\n' "$command" >&2
         exit_code=127

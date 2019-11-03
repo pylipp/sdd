@@ -4,10 +4,15 @@ teardown() {
 }
 
 @test "Default sdd installation succeeds" {
+  [ ! -e "$HOME/.local/share/sdd/apps/installed" ]
+
   run ../bootstrap.sh
   [ $status -eq 0 ]
 
   [ -e "$HOME/.local/bin/sdd" ]
+
+  run grep '^sdd=' "$HOME/.local/share/sdd/apps/installed"
+  [ $status -eq 0 ]
   
   run "$HOME/.local/bin/sdd"
   [ "$status" -eq 0 ]

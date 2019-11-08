@@ -86,7 +86,13 @@ utils_install() {
     return_code=$?
 
     for app in "${apps[@]}"; do
-        _utils_install_one "$app" "@"
+        local stdoutlog=/tmp/sdd-install-$app.stdout
+        local stderrlog=/tmp/sdd-install-$app.stderr
+
+        # Execute installation; tee stdout/stderr to files, see
+        # https://stackoverflow.com/a/53051506
+        { _utils_install_one "$app" "$@"> >(tee $stdoutlog ); } 2> >(tee $stderrlog >&2 )
+
         ((return_code+=$?))
     done
 
@@ -166,8 +172,6 @@ _utils_install_one() {
         fi
     fi
 
-    local stdoutlog=/tmp/sdd-install-$app.stdout
-    local stderrlog=/tmp/sdd-install-$app.stderr
     local success=False
 
     for dir in "$FRAMEWORKDIR/../apps/user" "$HOME/.config/sdd/apps"; do
@@ -181,9 +185,7 @@ _utils_install_one() {
         unset -f sdd_install 2> /dev/null || true
         # Source app management file
         source "$appfilepath"
-        # Execute installation; tee stdout/stderr to files, see
-        # https://stackoverflow.com/a/53051506
-        { sdd_install $version > >(tee $stdoutlog ); } 2> >(tee $stderrlog >&2 )
+        sdd_install $version
 
         if [ $? -eq 0 ] && [ $success = False ]; then
             printf 'Installed "%s".\n' "$app"

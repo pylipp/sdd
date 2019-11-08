@@ -178,6 +178,13 @@ utils_uninstall() {
     return_code=$?
 
     for app in "${apps[@]}"; do
+        local stdoutlog=/tmp/sdd-uninstall-$app.stdout
+        local stderrlog=/tmp/sdd-uninstall-$app.stderr
+
+        # Execute uninstallation; tee stdout/stderr to files, see
+        # https://stackoverflow.com/a/53051506
+        { _utils_uninstall_one "$app" > >(tee $stdoutlog ); } 2> >(tee $stderrlog >&2 )
+
         return_code=$?
     done
 
@@ -190,8 +197,6 @@ _utils_uninstall_one() {
         printf 'Custom uninstallation for "%s" found.\n' "$app"
     fi
 
-    local stdoutlog=/tmp/sdd-uninstall-$app.stdout
-    local stderrlog=/tmp/sdd-uninstall-$app.stderr
     local success=False
 
     local appfilepath
@@ -206,9 +211,7 @@ _utils_uninstall_one() {
         unset -f sdd_uninstall 2> /dev/null || true
         # Source app management file
         source "$appfilepath"
-        # Execute uninstallation; tee stdout/stderr to files, see
-        # https://stackoverflow.com/a/53051506
-        { sdd_uninstall > >(tee $stdoutlog ); } 2> >(tee $stderrlog >&2 )
+        sdd_uninstall
 
         if [ $? -eq 0 ] && [ $success = False ]; then
             printf 'Uninstalled "%s".\n' "$app"

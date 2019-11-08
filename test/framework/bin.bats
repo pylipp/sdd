@@ -228,6 +228,12 @@ teardown() {
   [ "$status" -eq 0 ]
   [ "${lines[0]}" = 'Uninstalled "valid_app".' ]
 
+  # Check log file content
+  run cat /tmp/sdd-uninstall-valid_app.stdout
+  assert_output 'Uninstalled "valid_app".'
+  run cat /tmp/sdd-uninstall-valid_app.stderr
+  assert_output ''
+
   run which valid_app
   [ "$status" -eq 1 ]
 }

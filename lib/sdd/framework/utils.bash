@@ -185,7 +185,7 @@ utils_uninstall() {
         # https://stackoverflow.com/a/53051506
         { _utils_uninstall_one "$app" > >(tee $stdoutlog ); } 2> >(tee $stderrlog >&2 )
 
-        return_code=$?
+        ((return_code+=$?))
     done
 
     return $return_code

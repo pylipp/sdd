@@ -209,7 +209,7 @@ teardown() {
   touch $invalidappfilepath
 
   run sdd uninstall invalid_app
-  [ "$status" -eq 4 ]
+  assert_failure 8
   assert_output -e 'Error uninstalling "invalid_app". See above and /tmp/sdd-uninstall-invalid_app.stderr.\n*'
   assert_output -p 'sdd_uninstall: command not found'
 }

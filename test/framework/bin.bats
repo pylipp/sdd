@@ -293,6 +293,30 @@ teardown() {
   [ "$(tail -n1 $appsrecordfilepath)" = "valid_app=1.1" ]
 }
 
+@test "invoking update command with existing app but without sdd_uninstall present fails" {
+  touch $invalidappfilepath
+
+  run sdd update invalid_app
+  assert_failure 4
+  assert_line -n 0 -p 'sdd_uninstall: command not found'
+  assert_line -n 1 'Error updating "invalid_app". See above and /tmp/sdd-update-invalid_app.stderr.'
+  assert_equal ${#lines[@]} 2
+}
+
+@test "invoking update command with existing app but without sdd_install present fails" {
+  cat > $invalidappfilepath <<FILE
+  #!/usr/bin/env bash
+  sdd_uninstall() { return; }
+FILE
+
+  run sdd update invalid_app
+  assert_failure 4
+  assert_line -n 0 'Uninstalled "invalid_app".'
+  assert_line -n 1 -p 'sdd_install: command not found'
+  assert_line -n 2 'Error updating "invalid_app". See above and /tmp/sdd-update-invalid_app.stderr.'
+  assert_equal ${#lines[@]} 3
+}
+
 @test "invoking list with --installed option displays installed apps including versions" {
   cp framework/fixtures/valid_app $validappfilepath
   sdd install valid_app

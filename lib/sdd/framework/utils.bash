@@ -263,8 +263,10 @@ _utils_update_one() {
     _utils_uninstall_one "$app"
     return_code=$?
 
-    _utils_install_one "$app" "$@"
-    ((return_code+=$?))
+    if [ $return_code -eq 0 ]; then
+        _utils_install_one "$app" "$@"
+        return_code=$?
+    fi
 
     if [ $return_code -eq 0 ]; then
         printf 'Updated "%s".\n' "$app"
@@ -289,9 +291,15 @@ utils_update() {
         local stdoutlog=/tmp/sdd-update-$app.stdout
         local stderrlog=/tmp/sdd-update-$app.stderr
 
+        local rc
         { _utils_update_one "$app" > >(tee $stdoutlog ); } 2> >(tee $stderrlog >&2 )
+        rc=$?
 
-        ((return_code+=$?))
+        if [ $rc -ne 0 ]; then
+            printf 'Error updating "%s". See above and %s.\n' "$app" "$stderrlog" > >(tee -a $stderrlog >&2 )
+
+            ((return_code+=rc))
+        fi
     done
 
     return $return_code

@@ -92,9 +92,15 @@ utils_install() {
 
         # Execute installation; tee stdout/stderr to files, see
         # https://stackoverflow.com/a/53051506
+        local rc
         { _utils_install_one "$app" "$@"> >(tee $stdoutlog ); } 2> >(tee $stderrlog >&2 )
+        rc=$?
 
-        ((return_code+=$?))
+        if [ $rc -ne 0 ]; then
+            printf 'Error installing "%s". See above and %s.\n' "$app" "$stderrlog" > >(tee -a $stderrlog >&2 )
+
+            ((return_code+=rc))
+        fi
     done
 
     return $return_code
@@ -119,9 +125,15 @@ utils_uninstall() {
 
         # Execute uninstallation; tee stdout/stderr to files, see
         # https://stackoverflow.com/a/53051506
+        local rc
         { _utils_uninstall_one "$app" > >(tee $stdoutlog ); } 2> >(tee $stderrlog >&2 )
+        rc=$?
 
-        ((return_code+=$?))
+        if [ $rc -ne 0 ]; then
+            printf 'Error uninstalling "%s". See above and %s.\n' "$app" "$stderrlog" > >(tee -a $stderrlog >&2 )
+
+            ((return_code+=rc))
+        fi
     done
 
     return $return_code
@@ -198,7 +210,6 @@ _utils_install_one() {
     done
 
     if [ $success = False ]; then
-        printf 'Error installing "%s". See above and %s.\n' "$app" "$stderrlog" >&2
         return_code=4
     fi
 
@@ -239,7 +250,6 @@ _utils_uninstall_one() {
     done
 
     if [ $success = False ]; then
-        printf 'Error uninstalling "%s". See above and %s.\n' "$app" "$stderrlog" >&2
         return_code=4
     fi
 

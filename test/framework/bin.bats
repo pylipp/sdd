@@ -48,7 +48,7 @@ teardown() {
   touch $invalidappfilepath
 
   run sdd install invalid_app
-  [ "$status" -eq 4 ]
+  assert_failure 8
   assert_output -e 'Error installing "invalid_app". See above and /tmp/sdd-install-invalid_app.stderr.\n*'
   assert_output -p 'sdd_install: command not found'
 }
@@ -135,7 +135,7 @@ teardown() {
   cp framework/fixtures/valid_app $validappfilepath
 
   run sdd install valid_app non_existing_app
-  [ "$status" -eq 2 ]
+  assert_failure 4
   [ "${lines[0]}" = 'App "non_existing_app" could not be found.' ]
 
   run valid_app
@@ -150,7 +150,7 @@ teardown() {
   touch $invalidappfilepath
 
   run sdd install valid_app invalid_app
-  [ "$status" -eq 4 ]
+  assert_failure 8
   [ "${lines[0]}" = 'Latest version available: 1.0' ]
   [ "${lines[1]}" = 'Installed "valid_app".' ]
   assert_output -e 'Error installing "invalid_app". See above and /tmp/sdd-install-invalid_app.stderr.\n*'
@@ -168,7 +168,7 @@ teardown() {
   cp framework/fixtures/valid_app $validcustomappfilepath
 
   run sdd install valid_app non_existing_app
-  [ "$status" -eq 2 ]
+  assert_failure 4
   [ "${lines[0]}" = 'App "non_existing_app" could not be found.' ]
   [ "${lines[1]}" = 'Custom installation for "valid_app" found.' ]
   [ "${lines[2]}" = 'Latest version available: 1.0' ]
@@ -186,8 +186,8 @@ teardown() {
 
   run sdd install valid_app=1.1
   [ "$status" -eq 0 ]
-  [ "${lines[0]}" = 'Specified version: 1.1' ]
-  [ "${lines[1]}" = 'Installed "valid_app".' ]
+  assert_line -n 0 'Specified version: 1.1'
+  assert_line -n 1 'Installed "valid_app".'
 
   # The installed app version is recorded
   [ "$(tail -n1 $appsrecordfilepath)" = "valid_app=1.1" ]

@@ -85,80 +85,9 @@ utils_install() {
     apps=($(_validate_apps "${all_apps[@]}"))
     return_code=$?
 
-    local appfilepath
     for app in "${apps[@]}"; do
-
-        if [ -f "$HOME/.config/sdd/apps/$app" ]; then
-            printf 'Custom installation for "%s" found.\n' "$app"
-        fi
-
-        local version
-        # Try to parse version from arguments
-        for arg in "$@"; do
-            if [[ $arg = $app=* ]]; then
-                version=$(echo $arg | cut -d"=" -f2)
-                printf 'Specified version: %s\n' $version
-                break
-            fi
-        done
-
-        # If version not specified, try to read it from the app management
-        # files. The custom definition takes precedence over the built-in one.
-        if [ -z $version ]; then
-            for dir in "$FRAMEWORKDIR/../apps/user" "$HOME/.config/sdd/apps"; do
-                appfilepath="$dir/$app"
-
-                if [ ! -f "$appfilepath" ]; then
-                    continue
-                fi
-
-                unset -f sdd_fetch_latest_version 2> /dev/null || true
-                source "$appfilepath"
-
-                local version_from_file
-                version_from_file=$(sdd_fetch_latest_version 2>/dev/null)
-                if [ $? -eq 0 ]; then
-                    version=$version_from_file
-                fi
-            done
-
-            if [[ -n $version ]]; then
-                printf 'Latest version available: %s\n' $version
-            fi
-        fi
-
-        local stdoutlog=/tmp/sdd-install-$app.stdout
-        local stderrlog=/tmp/sdd-install-$app.stderr
-        local success=False
-
-        for dir in "$FRAMEWORKDIR/../apps/user" "$HOME/.config/sdd/apps"; do
-            appfilepath="$dir/$app"
-
-            if [ ! -f "$appfilepath" ]; then
-                continue
-            fi
-
-            # Cleanup current scope
-            unset -f sdd_install 2> /dev/null || true
-            # Source app management file
-            source "$appfilepath"
-            # Execute installation; tee stdout/stderr to files, see
-            # https://stackoverflow.com/a/53051506
-            { sdd_install $version > >(tee $stdoutlog ); } 2> >(tee $stderrlog >&2 )
-
-            if [ $? -eq 0 ] && [ $success = False ]; then
-                printf 'Installed "%s".\n' "$app"
-                success=True
-
-                # Record installed app and version (can be empty)
-                echo $app=$version >> "$SDD_DATA_DIR"/apps/installed
-            fi
-        done
-
-        if [ $success = False ]; then
-            printf 'Error installing "%s". See above and %s.\n' "$app" "$stderrlog" >&2
-            return_code=4
-        fi
+        _utils_install_one "$app" "@"
+        ((return_code+=$?))
     done
 
     return $return_code
@@ -187,6 +116,88 @@ utils_uninstall() {
 
         ((return_code+=$?))
     done
+
+    return $return_code
+}
+
+_utils_install_one() {
+    local app="$1"
+    # The remaining arguments apps to be installed, as passed into utils_install,
+    # i.e. possibly with versions specified
+    shift
+
+    if [ -f "$HOME/.config/sdd/apps/$app" ]; then
+        printf 'Custom installation for "%s" found.\n' "$app"
+    fi
+
+    local version
+    # Try to parse version from arguments
+    for arg in "$@"; do
+        if [[ $arg = $app=* ]]; then
+            version=$(echo $arg | cut -d"=" -f2)
+            printf 'Specified version: %s\n' $version
+            break
+        fi
+    done
+
+    local appfilepath
+    # If version not specified, try to read it from the app management
+    # files. The custom definition takes precedence over the built-in one.
+    if [ -z $version ]; then
+        for dir in "$FRAMEWORKDIR/../apps/user" "$HOME/.config/sdd/apps"; do
+            appfilepath="$dir/$app"
+
+            if [ ! -f "$appfilepath" ]; then
+                continue
+            fi
+
+            unset -f sdd_fetch_latest_version 2> /dev/null || true
+            source "$appfilepath"
+
+            local version_from_file
+            version_from_file=$(sdd_fetch_latest_version 2>/dev/null)
+            if [ $? -eq 0 ]; then
+                version=$version_from_file
+            fi
+        done
+
+        if [[ -n $version ]]; then
+            printf 'Latest version available: %s\n' $version
+        fi
+    fi
+
+    local stdoutlog=/tmp/sdd-install-$app.stdout
+    local stderrlog=/tmp/sdd-install-$app.stderr
+    local success=False
+
+    for dir in "$FRAMEWORKDIR/../apps/user" "$HOME/.config/sdd/apps"; do
+        appfilepath="$dir/$app"
+
+        if [ ! -f "$appfilepath" ]; then
+            continue
+        fi
+
+        # Cleanup current scope
+        unset -f sdd_install 2> /dev/null || true
+        # Source app management file
+        source "$appfilepath"
+        # Execute installation; tee stdout/stderr to files, see
+        # https://stackoverflow.com/a/53051506
+        { sdd_install $version > >(tee $stdoutlog ); } 2> >(tee $stderrlog >&2 )
+
+        if [ $? -eq 0 ] && [ $success = False ]; then
+            printf 'Installed "%s".\n' "$app"
+            success=True
+
+            # Record installed app and version (can be empty)
+            echo $app=$version >> "$SDD_DATA_DIR"/apps/installed
+        fi
+    done
+
+    if [ $success = False ]; then
+        printf 'Error installing "%s". See above and %s.\n' "$app" "$stderrlog" >&2
+        return_code=4
+    fi
 
     return $return_code
 }

@@ -15,6 +15,7 @@ APP is the name of the application to manage.
 
 Commands:
     install
+    update
     uninstall
     list
 
@@ -241,6 +242,47 @@ _utils_uninstall_one() {
         printf 'Error uninstalling "%s". See above and %s.\n' "$app" "$stderrlog" >&2
         return_code=4
     fi
+
+    return $return_code
+}
+
+_utils_update_one() {
+    local app="$1"
+    local return_code
+
+    _utils_uninstall_one "$app"
+    return_code=$?
+
+    _utils_install_one "$app" "$@"
+    ((return_code+=$?))
+
+    if [ $return_code -eq 0 ]; then
+        printf 'Updated "%s".\n' "$app"
+    fi
+
+    return $return_code
+}
+
+utils_update() {
+    local return_code=0
+
+    if [ $# -eq 0 ]; then
+        printf 'Specify at least one app to update.\n' >&2
+        return 1
+    fi
+
+    local apps=()
+    apps=($(_validate_apps "$@"))
+    return_code=$?
+
+    for app in "${apps[@]}"; do
+        local stdoutlog=/tmp/sdd-update-$app.stdout
+        local stderrlog=/tmp/sdd-update-$app.stderr
+
+        { _utils_update_one "$app" > >(tee $stdoutlog ); } 2> >(tee $stderrlog >&2 )
+
+        ((return_code+=$?))
+    done
 
     return $return_code
 }

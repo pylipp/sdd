@@ -23,6 +23,10 @@ main() {
         shift
         utils_install "$@"
         exit_code=$?
+    elif [ "$command" = "update" ]; then
+        shift
+        utils_update "$@"
+        exit_code=$?
     elif [ "$command" = "uninstall" ]; then
         shift
         utils_uninstall "$@"

@@ -258,6 +258,41 @@ teardown() {
   [ "$status" -eq 1 ]
 }
 
+@test "invoking update command without argument fails" {
+  run sdd update
+  assert_failure 1
+  assert_output 'Specify at least one app to update.'
+}
+
+@test "invoking update command with non-existing app fails" {
+  run sdd update non_existing_app
+  assert_failure 2
+  assert_output 'App "non_existing_app" could not be found.'
+}
+
+@test "invoking update command with existing app succeeds" {
+  # Assume app is already installed
+  cp framework/fixtures/valid_app $validappfilepath
+  sdd install valid_app
+
+  # Bump version number
+  sed -i 's/1.0/1.1/' $validappfilepath
+
+  run sdd update valid_app
+  assert_success
+  assert_line -n 0 'Uninstalled "valid_app".'
+  assert_line -n 1 'Latest version available: 1.1'
+  assert_line -n 2 'Installed "valid_app".'
+  assert_line -n 3 'Updated "valid_app".'
+
+  # Execute the app
+  run valid_app
+  assert_success
+
+  # The installed app version is recorded
+  [ "$(tail -n1 $appsrecordfilepath)" = "valid_app=1.1" ]
+}
+
 @test "invoking list with --installed option displays installed apps including versions" {
   cp framework/fixtures/valid_app $validappfilepath
   sdd install valid_app

@@ -50,6 +50,10 @@ By default, `sdd` installs the latest version of the app available. You can spec
 
     sdd install <app>=<version>
 
+To update an app, run
+
+    sdd update <app>
+
 To uninstall an app, run
 
     sdd uninstall <app>

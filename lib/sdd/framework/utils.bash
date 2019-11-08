@@ -177,47 +177,54 @@ utils_uninstall() {
     apps=($(_validate_apps "$@"))
     return_code=$?
 
-    local appfilepath
     for app in "${apps[@]}"; do
-        if [ -f "$HOME/.config/sdd/apps/$app" ]; then
-            printf 'Custom uninstallation for "%s" found.\n' "$app"
+        return_code=$?
+    done
+
+    return $return_code
+}
+
+_utils_uninstall_one() {
+    local app=$1
+    if [ -f "$HOME/.config/sdd/apps/$app" ]; then
+        printf 'Custom uninstallation for "%s" found.\n' "$app"
+    fi
+
+    local stdoutlog=/tmp/sdd-uninstall-$app.stdout
+    local stderrlog=/tmp/sdd-uninstall-$app.stderr
+    local success=False
+
+    local appfilepath
+    for dir in "$FRAMEWORKDIR/../apps/user" "$HOME/.config/sdd/apps"; do
+        appfilepath="$dir/$app"
+
+        if [ ! -f "$appfilepath" ]; then
+            continue
         fi
 
-        local stdoutlog=/tmp/sdd-uninstall-$app.stdout
-        local stderrlog=/tmp/sdd-uninstall-$app.stderr
-        local success=False
+        # Cleanup current scope
+        unset -f sdd_uninstall 2> /dev/null || true
+        # Source app management file
+        source "$appfilepath"
+        # Execute uninstallation; tee stdout/stderr to files, see
+        # https://stackoverflow.com/a/53051506
+        { sdd_uninstall > >(tee $stdoutlog ); } 2> >(tee $stderrlog >&2 )
 
-        for dir in "$FRAMEWORKDIR/../apps/user" "$HOME/.config/sdd/apps"; do
-            appfilepath="$dir/$app"
+        if [ $? -eq 0 ] && [ $success = False ]; then
+            printf 'Uninstalled "%s".\n' "$app"
+            success=True
 
-            if [ ! -f "$appfilepath" ]; then
-                continue
+            if [ -f "$SDD_DATA_DIR"/apps/installed ]; then
+                # Remove app install records
+                sed -i "/^$app/d" "$SDD_DATA_DIR"/apps/installed
             fi
-
-            # Cleanup current scope
-            unset -f sdd_uninstall 2> /dev/null || true
-            # Source app management file
-            source "$appfilepath"
-            # Execute uninstallation; tee stdout/stderr to files, see
-            # https://stackoverflow.com/a/53051506
-            { sdd_uninstall > >(tee $stdoutlog ); } 2> >(tee $stderrlog >&2 )
-
-            if [ $? -eq 0 ] && [ $success = False ]; then
-                printf 'Uninstalled "%s".\n' "$app"
-                success=True
-
-                if [ -f "$SDD_DATA_DIR"/apps/installed ]; then
-                    # Remove app install records
-                    sed -i "/^$app/d" "$SDD_DATA_DIR"/apps/installed
-                fi
-            fi
-        done
-
-        if [ $success = False ]; then
-            printf 'Error uninstalling "%s". See above and %s.\n' "$app" "$stderrlog" >&2
-            return_code=4
         fi
     done
+
+    if [ $success = False ]; then
+        printf 'Error uninstalling "%s". See above and %s.\n' "$app" "$stderrlog" >&2
+        return_code=4
+    fi
 
     return $return_code
 }

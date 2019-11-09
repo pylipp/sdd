@@ -15,7 +15,7 @@ APP is the name of the application to manage.
 
 Commands:
     install
-    update
+    upgrade
     uninstall
     list
 
@@ -256,7 +256,7 @@ _utils_uninstall_one() {
     return $return_code
 }
 
-_utils_update_one() {
+_utils_upgrade_one() {
     local app="$1"
     local return_code
 
@@ -269,17 +269,17 @@ _utils_update_one() {
     fi
 
     if [ $return_code -eq 0 ]; then
-        printf 'Updated "%s".\n' "$app"
+        printf 'Upgraded "%s".\n' "$app"
     fi
 
     return $return_code
 }
 
-utils_update() {
+utils_upgrade() {
     local return_code=0
 
     if [ $# -eq 0 ]; then
-        printf 'Specify at least one app to update.\n' >&2
+        printf 'Specify at least one app to upgrade.\n' >&2
         return 1
     fi
 
@@ -288,15 +288,15 @@ utils_update() {
     return_code=$?
 
     for app in "${apps[@]}"; do
-        local stdoutlog=/tmp/sdd-update-$app.stdout
-        local stderrlog=/tmp/sdd-update-$app.stderr
+        local stdoutlog=/tmp/sdd-upgrade-$app.stdout
+        local stderrlog=/tmp/sdd-upgrade-$app.stderr
 
         local rc
-        { _utils_update_one "$app" > >(tee $stdoutlog ); } 2> >(tee $stderrlog >&2 )
+        { _utils_upgrade_one "$app" > >(tee $stdoutlog ); } 2> >(tee $stderrlog >&2 )
         rc=$?
 
         if [ $rc -ne 0 ]; then
-            printf 'Error updating "%s". See above and %s.\n' "$app" "$stderrlog" > >(tee -a $stderrlog >&2 )
+            printf 'Error upgrading "%s". See above and %s.\n' "$app" "$stderrlog" > >(tee -a $stderrlog >&2 )
 
             ((return_code+=rc))
         fi

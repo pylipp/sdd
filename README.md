@@ -28,9 +28,9 @@ For enabling `zsh` completion functions (`oh-my-zsh` users: put this before the 
     
     fpath=(~/.local/share/zsh/site-functions $fpath)
 
-## Updating
+## Upgrading
 
-Once the program is bootstrapped, update to the latest version (GitHub master) by
+Once the program is bootstrapped, upgrade to the latest version (GitHub master) by
 
     sdd install sdd
 
@@ -50,9 +50,9 @@ By default, `sdd` installs the latest version of the app available. You can spec
 
     sdd install <app>=<version>
 
-To update an app, run
+To upgrade an app, run
 
-    sdd update <app>
+    sdd upgrade <app>
 
 To uninstall an app, run
 
@@ -101,7 +101,7 @@ It is distinguished between
 ### Description
 
 1. Framework files contain the logic to run the program. They provide generic utility methods (generating symlinks, reading environment variables, etc.). Examples are: program executable, library files.
-1. App management files contain instructions to manage specific apps. For each app, at least one management file exists. A management file contains at least methods for installing, updating, and uninstalling an app. Management files are organized in directories indicating their level (user or root).
+1. App management files contain instructions to manage specific apps. For each app, at least one management file exists. A management file contains at least methods for installing, upgrading, and uninstalling an app. Management files are organized in directories indicating their level (user or root).
 1. Testing files cover the functionality of both the framework and the app management files. They are executed in an isolated environment.
 1. Project meta-files comprise documentation files, configuration files for development tools, an installation script, among others.
 
@@ -138,7 +138,7 @@ You're looking for managing an app but it's not included in `sdd` yet? Here's ho
 1. In your fork, create a feature branch.
 1. Create an empty bash file named after the app in `lib/sdd/apps/user`.
 1. Add a test in `test/apps/<app>.bats`, e.g. verifying the version of the app to be installed.
-1. Add three functions `sdd_install`, `sdd_update`, `sdd_uninstall` with respective functionality.
+1. Add three functions `sdd_install`, `sdd_upgrade`, `sdd_uninstall` with respective functionality.
 1. Add the new files, commit, and push.
 1. Open a PR!
 

@@ -23,9 +23,9 @@ main() {
         shift
         utils_install "$@"
         exit_code=$?
-    elif [ "$command" = "update" ]; then
+    elif [ "$command" = "upgrade" ]; then
         shift
-        utils_update "$@"
+        utils_upgrade "$@"
         exit_code=$?
     elif [ "$command" = "uninstall" ]; then
         shift

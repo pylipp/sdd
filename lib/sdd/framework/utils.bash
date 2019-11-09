@@ -258,6 +258,10 @@ _utils_uninstall_one() {
 
 _utils_upgrade_one() {
     local app="$1"
+    # The remaining arguments apps to be installed, as passed into utils_upgrade,
+    # i.e. possibly with versions specified
+    shift
+
     local return_code
 
     _utils_uninstall_one "$app"
@@ -283,16 +287,25 @@ utils_upgrade() {
         return 1
     fi
 
+    # Extract only app names from arguments for validation
+    local all_apps=()
+    for arg in "$@"; do
+        all_apps+=($(echo $arg | cut -d"=" -f1))
+    done
+
     local apps=()
-    apps=($(_validate_apps "$@"))
+    apps=($(_validate_apps "${all_apps[@]}"))
     return_code=$?
 
-    for app in "${apps[@]}"; do
+    local app
+    for arg in "$@"; do
+        app=$(echo $arg | cut -d"=" -f1)
+
         local stdoutlog=/tmp/sdd-upgrade-$app.stdout
         local stderrlog=/tmp/sdd-upgrade-$app.stderr
 
         local rc
-        { _utils_upgrade_one "$app" > >(tee $stdoutlog ); } 2> >(tee $stderrlog >&2 )
+        { _utils_upgrade_one "$app" "$@" > >(tee $stdoutlog ); } 2> >(tee $stderrlog >&2 )
         rc=$?
 
         if [ $rc -ne 0 ]; then

@@ -266,8 +266,9 @@ teardown() {
 
 @test "invoking upgrade command with non-existing app fails" {
   run sdd upgrade non_existing_app
-  assert_failure 2
-  assert_output 'App "non_existing_app" could not be found.'
+  assert_failure 6
+  assert_line -n 0 'App "non_existing_app" could not be found.'
+  assert_line -n 1 'Error upgrading "non_existing_app". See above and /tmp/sdd-upgrade-non_existing_app.stderr.'
 }
 
 @test "invoking upgrade command with existing app succeeds" {
@@ -290,6 +291,24 @@ teardown() {
   assert_success
 
   # The installed app version is recorded
+  [ "$(tail -n1 $appsrecordfilepath)" = "valid_app=1.1" ]
+}
+
+@test "invoking upgrade command with valid app and version succeeds" {
+  cp framework/fixtures/valid_app $validappfilepath
+  sdd install valid_app
+
+  # Bump version number
+  sed -i 's/1.0/1.1/' $validappfilepath
+
+  run sdd upgrade valid_app=1.1
+  assert_success
+  assert_line -n 0 'Uninstalled "valid_app".'
+  assert_line -n 1 'Specified version: 1.1'
+  assert_line -n 2 'Installed "valid_app".'
+  assert_line -n 3 'Upgraded "valid_app".'
+
+  # The upgraded app version is recorded
   [ "$(tail -n1 $appsrecordfilepath)" = "valid_app=1.1" ]
 }
 

@@ -50,9 +50,13 @@ By default, `sdd` installs the latest version of the app available. You can spec
 
     sdd install <app>=<version>
 
-To upgrade an app, run
+To upgrade an app to the latest version available, run
 
     sdd upgrade <app>
+
+If you want to upgrade to a specific version, run
+
+    sdd upgrade <app>=<version>
 
 To uninstall an app, run
 

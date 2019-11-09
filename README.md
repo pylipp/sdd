@@ -138,7 +138,7 @@ You're looking for managing an app but it's not included in `sdd` yet? Here's ho
 1. In your fork, create a feature branch.
 1. Create an empty bash file named after the app in `lib/sdd/apps/user`.
 1. Add a test in `test/apps/<app>.bats`, e.g. verifying the version of the app to be installed.
-1. Add three functions `sdd_install`, `sdd_upgrade`, `sdd_uninstall` with respective functionality.
+1. Add the functions `sdd_install` and `sdd_uninstall` with respective functionality.
 1. Add the new files, commit, and push.
 1. Open a PR!
 

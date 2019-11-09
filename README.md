@@ -4,6 +4,18 @@
 
 > A framework to manage installation of apps from web sources for non-root users on Linux systems
 
+## Motivation
+
+During occasional strolls on reddit or github, my attention is often drawn towards programs that increase productivity or provide an enhancement over others. (As a somewhat irrelevant side note - these programs mostly work in the command line.) Usually these programs are available for download as binary or script, meaning that naturally, the management (installation, upgrade, removal) of those programs has to be performed manually. At this point `sdd` comes into play: It provides a framework to automatize the tasks of managing the programs (or, in `sdd` terminology, 'apps'). The procedures to manage specific apps are defined within scripts in this repository (at `lib/sdd/apps/user/`).
+
+`sdd` enables me to keep track of my favorite programs, on different machines. I'm working towards having systems set up in a reproducible way on my machines. `sdd` helps me, since I might have different Linux distributions installed on these machine, with different package manager providing different versions of required programs (or none at all). I can freeze the versions of all apps managed by sdd with `sdd list --installed > sdd_freeze.txt`, and re-create them with `sdd install <(sdd_freeze.txt)`.
+
+## WARNINGS
+
+`sdd` is a simple collection of bash scripts, not a mature package manager (neither do I aim to turn it into one...). Using it might break things on your system (e.g. overwrite existing program files).
+
+When using `sdd`, you execute functionality to manipulate your system. Especially, you download programs from third parties, and install them on your system. Most sources are provided by GitHub releases pages. Keep in mind that repositories can be compromised, and malicious code placed inside; and `sdd` will still happily download it. (If you have an idea how to mitigate this security flaw, please open an issue.)
+
 ## Installation
 
 Clone the directory and run the bootstrap script to install `sdd` to `~/.local`:
@@ -36,6 +48,8 @@ Once the program is bootstrapped, upgrade to the latest version (GitHub master) 
 
 ## Usage
 
+### Installing an app
+
 Install an app to `SDD_INSTALL_PREFIX` (defaults to `~/.local`) with
 
     sdd install <app>
@@ -50,6 +64,10 @@ By default, `sdd` installs the latest version of the app available. You can spec
 
     sdd install <app>=<version>
 
+Note that an existing installation of the app will be overwritten.
+
+### Upgrading an app
+
 To upgrade an app to the latest version available, run
 
     sdd upgrade <app>
@@ -58,11 +76,24 @@ If you want to upgrade to a specific version, run
 
     sdd upgrade <app>=<version>
 
+Internally, `sdd` executes un- and re-installation of the app for upgrading.
+The usage of `SDD_INSTALL_PREFIX` is the same as for the `install` command.
+
+### Uninstalling an app
+
 To uninstall an app, run
 
     sdd uninstall <app>
 
 The usage of `SDD_INSTALL_PREFIX` is the same as for the `install` command.
+
+### Batch commands
+
+The commands `install`, `upgrade`, and `uninstall` can take multiple arguments to manage apps, e.g.
+
+    sdd install <app1> <app2>=<version> <app3>
+
+### Listing app management information
 
 List installed apps by running
 
@@ -76,11 +107,30 @@ List all installed apps that can be upgraded to a more recent version with
 
     sdd list --upgradable
 
+### General help
+
 `sdd` is verbose. Any program output during management is forwarded to the terminal, and to respective `stdout`/`stderr` log files in `/tmp`.
 
 You can always consult
 
     sdd --help
+
+## Apps available
+
+In alphabetical order:
+
+Name | Description
+:--- | :---
+[bat](https://github.com/sharkdp/bat) | A cat(1) clone with syntax highlighting and Git integration
+[diff-so-fancy](https://github.com/so-fancy/diff-so-fancy) | Human readable diffs
+[direnv](https://github.com/direnv/direnv) | Handle environment variables depending on current directory
+[fd](https://github.com/sharkdp/fd) | A simple, fast and user-friendly alternative to 'find'
+[hub](https://github.com/github/hub) | Command line tool to interact with GitHub
+[jq](https://github.com/stedolan/jq) | Command line JSON processor
+[oh-my-zsh](https://github.com/robbyrussell/oh-my-zsh) | Framework for managing zsh configuration
+[pip](https://pypi.org/project/pip/) | Python package manager
+[ripgrep](https://github.com/BurntSushi/ripgrep) | line-oriented text search tool
+sdd | Thanks for being here :)
 
 ## Customization
 
@@ -147,6 +197,7 @@ You're looking for managing an app but it's not included in `sdd` yet? Here's ho
 1. Create an empty bash file named after the app in `lib/sdd/apps/user`.
 1. Add a test in `test/apps/<app>.bats`, e.g. verifying the version of the app to be installed.
 1. Add the functions `sdd_install` and `sdd_uninstall` with respective functionality.
+1. Add app name, link, and description to the table of available apps in the README file.
 1. Add the new files, commit, and push.
 1. Open a PR!
 

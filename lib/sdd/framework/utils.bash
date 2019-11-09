@@ -20,12 +20,12 @@ Commands:
     list
 
 General options:
-    --help      Display help message
-    --version   Display version information
+    --help          Display help message
+    --version       Display version information
 
 Options for list command:
-    --installed List installed apps
-    --available List apps available for installation
+    --installed     List installed apps
+    --available     List apps available for installation
 
 END_OF_HELP_TEXT
 }

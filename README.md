@@ -2,8 +2,7 @@
 
 [![Build Status](https://travis-ci.org/pylipp/sdd.svg?branch=master)](https://travis-ci.org/pylipp/sdd)
 
-> A framework to manage installation of apps from web sources for non-root users on Linux systems
-
+> A framework to manage installation of programs from web sources for non-root users on Linux systems
 ## Motivation
 
 During occasional strolls on reddit or github, my attention is often drawn towards programs that increase productivity or provide an enhancement over others. (As a somewhat irrelevant side note - these programs mostly work in the command line.) Usually these programs are available for download as binary or script, meaning that naturally, the management (installation, upgrade, removal) of those programs has to be performed manually. At this point `sdd` comes into play: It provides a framework to automatize the tasks of managing the programs (or, in `sdd` terminology, 'apps'). The procedures to manage specific apps are defined within scripts in this repository (at `lib/sdd/apps/user/`).
@@ -41,6 +40,8 @@ Same applies for the `MANPATH`:
 For enabling `zsh` completion functions (`oh-my-zsh` users: put this before the line that sources `oh-my-zsh.sh` since it calls `compinit` for setting up completions):
     
     fpath=(~/.local/share/zsh/site-functions $fpath)
+
+`sdd` is tested with `bash` 4.4.12.
 
 ## Upgrading
 

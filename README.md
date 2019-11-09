@@ -17,6 +17,12 @@ When using `sdd`, you execute functionality to manipulate your system. Especiall
 
 `sdd` is targeted to 64bit Linux systems. Some apps might not work when installed to different architectures. If available, `zsh` shell completion and `man` pages are set up when installing an app.
 
+## Demo
+
+The following screencast demonstrates how `sdd` is used to install and uninstalled the [`fd`](https://github.com/sharkdp/fd) utility.
+
+![Demo](./demo.svg)
+
 ## Installation
 
 Clone the directory and run the bootstrap script to install `sdd` to `~/.local`:

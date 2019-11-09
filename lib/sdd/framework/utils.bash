@@ -159,26 +159,9 @@ _utils_install_one() {
         fi
     done
 
-    local appfilepath
-    # If version not specified, try to read it from the app management
-    # files. The custom definition takes precedence over the built-in one.
+    # If version not specified, try to read it from the app management files.
     if [ -z $version ]; then
-        for dir in "$FRAMEWORKDIR/../apps/user" "$HOME/.config/sdd/apps"; do
-            appfilepath="$dir/$app"
-
-            if [ ! -f "$appfilepath" ]; then
-                continue
-            fi
-
-            unset -f sdd_fetch_latest_version 2> /dev/null || true
-            source "$appfilepath"
-
-            local version_from_file
-            version_from_file=$(sdd_fetch_latest_version 2>/dev/null)
-            if [ $? -eq 0 ]; then
-                version=$version_from_file
-            fi
-        done
+        version=$(_utils_app_version_from_files "$app")
 
         if [[ -n $version ]]; then
             printf 'Latest version available: %s\n' $version
@@ -316,6 +299,34 @@ utils_upgrade() {
     done
 
     return $return_code
+}
+
+_utils_app_version_from_files() {
+    # Determine relevant version of app from app management files by executing
+    # the sdd_fetch_latest_version() functions.
+    # The custom definition takes precedence over the built-in one.
+    local app="$1"
+    local appfilepath
+    local version
+
+    for dir in "$FRAMEWORKDIR/../apps/user" "$HOME/.config/sdd/apps"; do
+        appfilepath="$dir/$app"
+
+        if [ ! -f "$appfilepath" ]; then
+            continue
+        fi
+
+        unset -f sdd_fetch_latest_version 2> /dev/null || true
+        source "$appfilepath"
+
+        local version_from_file
+        version_from_file=$(sdd_fetch_latest_version 2>/dev/null)
+        if [ $? -eq 0 ]; then
+            version=$version_from_file
+        fi
+    done
+
+    echo "$version"
 }
 
 utils_list() {

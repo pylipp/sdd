@@ -16,6 +16,8 @@ During occasional strolls on reddit or github, my attention is often drawn towar
 
 When using `sdd`, you execute functionality to manipulate your system. Especially, you download programs from third parties, and install them on your system. Most sources are provided by GitHub releases pages. Keep in mind that repositories can be compromised, and malicious code placed inside; and `sdd` will still happily download it. (If you have an idea how to mitigate this security flaw, please open an issue.)
 
+`sdd` is targeted to 64bit Linux systems. Some apps might not work when installed to different architectures. If available, `zsh` shell completion and `man` pages are set up when installing an app.
+
 ## Installation
 
 Clone the directory and run the bootstrap script to install `sdd` to `~/.local`:

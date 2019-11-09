@@ -11,8 +11,8 @@ mkdir -p "$prefix"/{bin,lib}
 cp "$SCRIPTDIR"/bin/sdd "$prefix"/bin
 cp -r "$SCRIPTDIR"/lib/sdd "$prefix"/lib
 
-if [[ ! "$PATH" == *"$PREFIX/bin"* ]]; then
-    export PATH="$PREFIX/bin:$PATH"
+if [[ ! "$PATH" == *"$prefix/bin"* ]]; then
+    export PATH="$prefix/bin:$PATH"
 fi
 
 # Record installed version

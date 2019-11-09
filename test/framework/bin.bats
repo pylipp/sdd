@@ -2,12 +2,14 @@ load '/usr/local/libexec/bats-support/load.bash'
 load '/usr/local/libexec/bats-assert/load.bash'
 
 validappfilepath=../lib/sdd/apps/user/valid_app
+superappfilepath=../lib/sdd/apps/user/super_app
 validcustomappfilepath=$HOME/.config/sdd/apps/valid_app
 invalidappfilepath=../lib/sdd/apps/user/invalid_app
 appsrecordfilepath=$HOME/.local/share/sdd/apps/installed
 
 teardown() {
   rm -f "$validappfilepath"
+  rm -f "$superappfilepath"
   rm -f "$invalidappfilepath"
   rm -f ${SDD_INSTALL_PREFIX:-$HOME/.local}/bin/valid_app
   rm -f "$appsrecordfilepath"
@@ -366,4 +368,22 @@ FILE
 
   run grep -q valid_app <<<"$output"
   [ $status -eq 0 ]
+}
+
+@test "invoking list with --upgradable option displays upgradable apps" {
+  # Install two apps
+  cp framework/fixtures/valid_app $validappfilepath
+  cp framework/fixtures/valid_app $superappfilepath
+  sed 's/valid/super/g' $superappfilepath
+
+  sdd install valid_app super_app
+
+  # Bump version numbers
+  sed -i 's/1.0/2.0/' $validappfilepath
+  sed -i 's/1.0/1.5/' $superappfilepath
+
+  run sdd list --upgradable
+  assert_success
+  assert_line -n 0 'super_app (1.0 -> 1.5)'
+  assert_line -n 1 'valid_app (1.0 -> 2.0)'
 }

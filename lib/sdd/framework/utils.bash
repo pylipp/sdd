@@ -26,6 +26,7 @@ General options:
 Options for list command:
     --installed     List installed apps
     --available     List apps available for installation
+    --upgradable    List apps that can be upgraded
 
 END_OF_HELP_TEXT
 }
@@ -341,6 +342,20 @@ utils_list() {
         fi
     elif [ "$option" = "--available" ]; then
         ls -1 "$FRAMEWORKDIR/../apps/user"
+    elif [ "$option" = "--upgradable" ]; then
+        local name
+        local installed_version
+        local newest_version
+
+        for name_version in $(utils_list --installed | xargs); do
+            name=$(echo "$name_version" | cut -d"=" -f1)
+            installed_version=$(echo "$name_version" | cut -d"=" -f2)
+            newest_version=$(_utils_app_version_from_files "$name")
+
+            if [[ "$installed_version" != "$newest_version" ]]; then
+                printf '%s (%s -> %s)\n' "$name" "$installed_version" "$newest_version"
+            fi
+        done
     else
         printf 'Unknown option "%s".\n' "$option" >&2
         return 1

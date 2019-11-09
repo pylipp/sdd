@@ -72,6 +72,10 @@ List all apps available for management in `sdd` with
 
     sdd list --available
 
+List all installed apps that can be upgraded to a more recent version with
+
+    sdd list --upgradable
+
 `sdd` is verbose. Any program output during management is forwarded to the terminal, and to respective `stdout`/`stderr` log files in `/tmp`.
 
 You can always consult

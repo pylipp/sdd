@@ -9,6 +9,13 @@
 # Environment variables:
 #   NO_APP_TESTS    If non-empty, run only framework tests
 
+if ! command -v docker &>/dev/null; then
+    # Assume container environment; e.g. in the context of DockerHub Autobuild/test
+    cd /opt/sdd/test  # workaround for relative framework/ paths in tests
+    bats -r framework
+    exit $?
+fi
+
 container_id=$(docker run -d -it --rm --volume "$(pwd)":/opt/sdd --workdir /opt/sdd/test pylipp/sdd:latest)
 
 if [ "$1" = "--open" ]; then

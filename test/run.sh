@@ -12,7 +12,7 @@
 if ! command -v docker &>/dev/null; then
     # Assume container environment; e.g. in the context of DockerHub Autobuild/test
     cd /opt/sdd/test  # workaround for relative framework/ paths in tests
-    bats -r framework
+    bats -r .
     exit $?
 fi
 

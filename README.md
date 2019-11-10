@@ -178,6 +178,7 @@ It is distinguished between
 
 - `git`
 - `docker`
+- optionally: `docker-compose`
 
 ### Testing
 
@@ -188,14 +189,28 @@ Clone this repository and pull the Docker image to run tests.
     docker pull pylipp/sdd
     cd sdd
     test/run.sh
-    # For skipping tests of apps
+
+You might want to skip app tests since they require an internet connection
+
     NO_APP_TESTS=1 test/run.sh
-    # For attaching to the test container after the tests have completed
+
+For attaching to the test container after the tests have completed, do
+
     test/run.sh --debug
+
+For creating a Docker container and attaching it to the terminal, do
+
+    test/run.sh --open
 
 For building the image, run
 
     docker build test/setup -t sdd:latest
+
+You can also build and test the image in a single command by
+
+    docker-compose -f test/setup/docker-compose.test.yml up
+
+Note that DockerHub automatically builds the image when source code is pushed to GitHub, and pushes it the DockerHub repository if the tests succeeded. The tests are defined in `test/setup/docker-compose.test.yml`.
 
 ### Extending
 

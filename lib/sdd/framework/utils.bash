@@ -32,6 +32,7 @@ END_OF_HELP_TEXT
 }
 
 utils_version() {
+    # Publish version of present sdd installation to stdout
     if [ ! -e "$SDD_DATA_DIR"/apps/installed ]; then
         printf 'Cannot find %s.\n' "$SDD_DATA_DIR"/apps/installed >&2
         return 1;
@@ -69,9 +70,10 @@ _validate_apps() {
 }
 
 utils_install() {
+    # Install one or more apps
+    # Args: APP[=VERSION] [APP[=VERSION]] ...
     local return_code=0
 
-    # Install one or more apps
     if [ $# -eq 0 ]; then
         printf 'Specify at least one app to install.\n' >&2
         return 1
@@ -108,9 +110,10 @@ utils_install() {
 }
 
 utils_uninstall() {
+    # Uninstall one or more apps
+    # Args: APP [APP] ...
     local return_code=0
 
-    # Uninstall one or more apps
     if [ $# -eq 0 ]; then
         printf 'Specify at least one app to uninstall.\n' >&2
         return 1
@@ -141,6 +144,9 @@ utils_uninstall() {
 }
 
 _utils_install_one() {
+    # Install single, valid app
+    # Args: APP[=VERSION] APPS
+
     local app="$1"
     # The remaining arguments apps to be installed, as passed into utils_install,
     # i.e. possibly with versions specified
@@ -201,6 +207,9 @@ _utils_install_one() {
 }
 
 _utils_uninstall_one() {
+    # Uninstall single, valid app
+    # Args: APP
+
     local app=$1
     if [ -f "$HOME/.config/sdd/apps/$app" ]; then
         printf 'Custom uninstallation for "%s" found.\n' "$app"
@@ -241,6 +250,9 @@ _utils_uninstall_one() {
 }
 
 _utils_upgrade_one() {
+    # Upgrade single, valid app
+    # Args: APP[=VERSION] APPS
+
     local app="$1"
     # The remaining arguments apps to be installed, as passed into utils_upgrade,
     # i.e. possibly with versions specified
@@ -264,6 +276,8 @@ _utils_upgrade_one() {
 }
 
 utils_upgrade() {
+    # Upgrade one or more apps
+    # Args: APP[=VERSION] [APP[=VERSION]] ...
     local return_code=0
 
     if [ $# -eq 0 ]; then
@@ -331,6 +345,8 @@ _utils_app_version_from_files() {
 }
 
 utils_list() {
+    # List apps of various kinds
+    # ARGS: OPTION
     local option=$1
 
     if [ "$option" = "--installed" ]; then

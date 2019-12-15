@@ -51,7 +51,7 @@ _validate_apps() {
     local valid_appvers=()
 
     for appver in "$@"; do
-        app=$(echo "$appver" | cut -d"=" -f1)
+        app=$(_get_app_name "$appver")
 
         nr_misses=0
 
@@ -91,7 +91,7 @@ utils_install() {
 
     local app stdoutlog stderrlog rc
     for appver in "${appvers[@]}"; do
-        app=$(echo "$appver" | cut -d"=" -f1)
+        app=$(_get_app_name "$appver")
 
         stdoutlog=/tmp/sdd-install-$app.stdout
         stderrlog=/tmp/sdd-install-$app.stderr
@@ -151,7 +151,7 @@ _utils_install_one() {
 
     local appver="$1"
     local app
-    app=$(echo "$appver" | cut -d"=" -f1)
+    app=$(_get_app_name "$appver")
 
     if [ -f "$HOME/.config/sdd/apps/$app" ]; then
         printf 'Custom installation for "%s" found.\n' "$app"
@@ -160,7 +160,7 @@ _utils_install_one() {
     local version
     # Try to parse version from arguments
     if [[ $appver = $app=* ]]; then
-        version=$(echo $appver | cut -d"=" -f2)
+        version=$(_get_app_version "$appver")
         printf 'Specified version: %s\n' $version
     fi
 
@@ -254,7 +254,7 @@ _utils_upgrade_one() {
 
     local appver="$1"
     local app return_code
-    app=$(echo "$appver" | cut -d"=" -f1)
+    app=$(_get_app_name "$appver")
 
     _utils_uninstall_one "$app"
     return_code=$?
@@ -287,7 +287,7 @@ utils_upgrade() {
 
     local app stdoutlog stderrlog rc
     for appver in "$@"; do
-        app=$(echo $appver | cut -d"=" -f1)
+        app=$(_get_app_name "$appver")
 
         stdoutlog=/tmp/sdd-upgrade-$app.stdout
         stderrlog=/tmp/sdd-upgrade-$app.stderr
@@ -349,8 +349,8 @@ utils_list() {
         local name installed_version newest_version
 
         for name_version in $(utils_list --installed | xargs); do
-            name=$(echo "$name_version" | cut -d"=" -f1)
-            installed_version=$(echo "$name_version" | cut -d"=" -f2)
+            name=$(_get_app_name "$name_version")
+            installed_version=$(_get_app_version "$name_version")
             newest_version=$(_utils_app_version_from_files "$name")
 
             if [[ "$installed_version" != "$newest_version" ]]; then
@@ -361,6 +361,18 @@ utils_list() {
         printf 'Unknown option "%s".\n' "$option" >&2
         return 1
     fi
+}
+
+_get_app_name() {
+    # Separate app name from an app=version tuple
+    # E.g. with input 'foo=1.0.0' the function publishes 'foo'
+    echo "$1" | cut -d"=" -f1
+}
+
+_get_app_version() {
+    # Separate app version from an app=version tuple
+    # E.g. with input 'foo=1.0.0' the function publishes '1.0.0'
+    echo "$1" | cut -d"=" -f2
 }
 
 _tag_name_of_latest_github_release() {

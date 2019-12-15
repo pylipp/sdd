@@ -47,14 +47,13 @@ _validate_apps() {
     # Args: APP[=VERSION] [APP[=VERSION]] ...
 
     local return_code=0
-    local appfilepath
+    local appfilepath app nr_misses
     local valid_appvers=()
 
-    local app
     for appver in "$@"; do
         app=$(echo "$appver" | cut -d"=" -f1)
 
-        local nr_misses=0
+        nr_misses=0
 
         for dir in "$FRAMEWORKDIR/../apps/user" "$HOME/.config/sdd/apps"; do
             appfilepath="$dir/$app"
@@ -90,16 +89,15 @@ utils_install() {
     appvers=($(_validate_apps "$@"))
     return_code=$?
 
-    local app
+    local app stdoutlog stderrlog rc
     for appver in "${appvers[@]}"; do
         app=$(echo "$appver" | cut -d"=" -f1)
 
-        local stdoutlog=/tmp/sdd-install-$app.stdout
-        local stderrlog=/tmp/sdd-install-$app.stderr
+        stdoutlog=/tmp/sdd-install-$app.stdout
+        stderrlog=/tmp/sdd-install-$app.stderr
 
         # Execute installation; tee stdout/stderr to files, see
         # https://stackoverflow.com/a/53051506
-        local rc
         { _utils_install_one "$appver" > >(tee $stdoutlog ); } 2> >(tee $stderrlog >&2 )
         rc=$?
 
@@ -127,13 +125,13 @@ utils_uninstall() {
     apps=($(_validate_apps "$@"))
     return_code=$?
 
+    local stdoutlog stderrlog rc
     for app in "${apps[@]}"; do
-        local stdoutlog=/tmp/sdd-uninstall-$app.stdout
-        local stderrlog=/tmp/sdd-uninstall-$app.stderr
+        stdoutlog=/tmp/sdd-uninstall-$app.stdout
+        stderrlog=/tmp/sdd-uninstall-$app.stderr
 
         # Execute uninstallation; tee stdout/stderr to files, see
         # https://stackoverflow.com/a/53051506
-        local rc
         { _utils_uninstall_one "$app" > >(tee $stdoutlog ); } 2> >(tee $stderrlog >&2 )
         rc=$?
 
@@ -177,6 +175,7 @@ _utils_install_one() {
 
     local success=False
 
+    local appfilepath
     for dir in "$FRAMEWORKDIR/../apps/user" "$HOME/.config/sdd/apps"; do
         appfilepath="$dir/$app"
 
@@ -254,10 +253,8 @@ _utils_upgrade_one() {
     # Args: APP[=VERSION]
 
     local appver="$1"
-    local app
+    local app return_code
     app=$(echo "$appver" | cut -d"=" -f1)
-
-    local return_code
 
     _utils_uninstall_one "$app"
     return_code=$?
@@ -288,14 +285,13 @@ utils_upgrade() {
     appvers=($(_validate_apps "$@"))
     return_code=$?
 
-    local app
+    local app stdoutlog stderrlog rc
     for appver in "$@"; do
         app=$(echo $appver | cut -d"=" -f1)
 
-        local stdoutlog=/tmp/sdd-upgrade-$app.stdout
-        local stderrlog=/tmp/sdd-upgrade-$app.stderr
+        stdoutlog=/tmp/sdd-upgrade-$app.stdout
+        stderrlog=/tmp/sdd-upgrade-$app.stderr
 
-        local rc
         { _utils_upgrade_one "$appver" > >(tee $stdoutlog ); } 2> >(tee $stderrlog >&2 )
         rc=$?
 
@@ -314,8 +310,7 @@ _utils_app_version_from_files() {
     # the sdd_fetch_latest_version() functions.
     # The custom definition takes precedence over the built-in one.
     local app="$1"
-    local appfilepath
-    local version
+    local appfilepath version version_from_file
 
     for dir in "$FRAMEWORKDIR/../apps/user" "$HOME/.config/sdd/apps"; do
         appfilepath="$dir/$app"
@@ -327,7 +322,6 @@ _utils_app_version_from_files() {
         unset -f sdd_fetch_latest_version 2> /dev/null || true
         source "$appfilepath"
 
-        local version_from_file
         version_from_file=$(sdd_fetch_latest_version 2>/dev/null)
         if [ $? -eq 0 ]; then
             version=$version_from_file
@@ -352,9 +346,7 @@ utils_list() {
     elif [ "$option" = "--available" ]; then
         ls -1 "$FRAMEWORKDIR/../apps/user"
     elif [ "$option" = "--upgradable" ]; then
-        local name
-        local installed_version
-        local newest_version
+        local name installed_version newest_version
 
         for name_version in $(utils_list --installed | xargs); do
             name=$(echo "$name_version" | cut -d"=" -f1)

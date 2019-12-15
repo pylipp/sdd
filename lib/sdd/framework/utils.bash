@@ -42,16 +42,23 @@ utils_version() {
 }
 
 _validate_apps() {
+    # Check whether management files for specified apps are available
+    # Publish valid apps/appvers to stdout
+    # Args: APP[=VERSION] [APP[=VERSION]] ...
+
     local return_code=0
     local appfilepath
-    local apps=()
-    for app in "$@"; do
+    local valid_appvers=()
+
+    local app
+    for appver in "$@"; do
+        app=$(echo "$appver" | cut -d"=" -f1)
+
         local nr_misses=0
 
         for dir in "$FRAMEWORKDIR/../apps/user" "$HOME/.config/sdd/apps"; do
             appfilepath="$dir/$app"
 
-            # Check whether app available
             if [ ! -f "$appfilepath" ]; then
                 ((nr_misses++))
             fi
@@ -61,11 +68,11 @@ _validate_apps() {
             printf 'App "%s" could not be found.\n' "$app" >&2
             return_code=2
         else
-            apps+=($app)
+            valid_appvers+=($appver)
         fi
     done
 
-    echo ${apps[@]}
+    echo ${valid_appvers[@]}
     return $return_code
 }
 
@@ -79,24 +86,21 @@ utils_install() {
         return 1
     fi
 
-    # Extract only app names from arguments for validation
-    local all_apps=()
-    for arg in "$@"; do
-        all_apps+=($(echo $arg | cut -d"=" -f1))
-    done
-
-    local apps=()
-    apps=($(_validate_apps "${all_apps[@]}"))
+    local appvers=()
+    appvers=($(_validate_apps "$@"))
     return_code=$?
 
-    for app in "${apps[@]}"; do
+    local app
+    for appver in "${appvers[@]}"; do
+        app=$(echo "$appver" | cut -d"=" -f1)
+
         local stdoutlog=/tmp/sdd-install-$app.stdout
         local stderrlog=/tmp/sdd-install-$app.stderr
 
         # Execute installation; tee stdout/stderr to files, see
         # https://stackoverflow.com/a/53051506
         local rc
-        { _utils_install_one "$app" "$@"> >(tee $stdoutlog ); } 2> >(tee $stderrlog >&2 )
+        { _utils_install_one "$appver" > >(tee $stdoutlog ); } 2> >(tee $stderrlog >&2 )
         rc=$?
 
         if [ $rc -ne 0 ]; then
@@ -145,12 +149,11 @@ utils_uninstall() {
 
 _utils_install_one() {
     # Install single, valid app
-    # Args: APP[=VERSION] APPS
+    # Args: APP[=VERSION]
 
-    local app="$1"
-    # The remaining arguments apps to be installed, as passed into utils_install,
-    # i.e. possibly with versions specified
-    shift
+    local appver="$1"
+    local app
+    app=$(echo "$appver" | cut -d"=" -f1)
 
     if [ -f "$HOME/.config/sdd/apps/$app" ]; then
         printf 'Custom installation for "%s" found.\n' "$app"
@@ -158,13 +161,10 @@ _utils_install_one() {
 
     local version
     # Try to parse version from arguments
-    for arg in "$@"; do
-        if [[ $arg = $app=* ]]; then
-            version=$(echo $arg | cut -d"=" -f2)
-            printf 'Specified version: %s\n' $version
-            break
-        fi
-    done
+    if [[ $appver = $app=* ]]; then
+        version=$(echo $appver | cut -d"=" -f2)
+        printf 'Specified version: %s\n' $version
+    fi
 
     # If version not specified, try to read it from the app management files.
     if [ -z $version ]; then
@@ -251,12 +251,11 @@ _utils_uninstall_one() {
 
 _utils_upgrade_one() {
     # Upgrade single, valid app
-    # Args: APP[=VERSION] APPS
+    # Args: APP[=VERSION]
 
-    local app="$1"
-    # The remaining arguments apps to be installed, as passed into utils_upgrade,
-    # i.e. possibly with versions specified
-    shift
+    local appver="$1"
+    local app
+    app=$(echo "$appver" | cut -d"=" -f1)
 
     local return_code
 
@@ -264,7 +263,7 @@ _utils_upgrade_one() {
     return_code=$?
 
     if [ $return_code -eq 0 ]; then
-        _utils_install_one "$app" "$@"
+        _utils_install_one "$appver"
         return_code=$?
     fi
 
@@ -285,25 +284,19 @@ utils_upgrade() {
         return 1
     fi
 
-    # Extract only app names from arguments for validation
-    local all_apps=()
-    for arg in "$@"; do
-        all_apps+=($(echo $arg | cut -d"=" -f1))
-    done
-
-    local apps=()
-    apps=($(_validate_apps "${all_apps[@]}"))
+    local appvers=()
+    appvers=($(_validate_apps "$@"))
     return_code=$?
 
     local app
-    for arg in "$@"; do
-        app=$(echo $arg | cut -d"=" -f1)
+    for appver in "$@"; do
+        app=$(echo $appver | cut -d"=" -f1)
 
         local stdoutlog=/tmp/sdd-upgrade-$app.stdout
         local stderrlog=/tmp/sdd-upgrade-$app.stderr
 
         local rc
-        { _utils_upgrade_one "$app" "$@" > >(tee $stdoutlog ); } 2> >(tee $stderrlog >&2 )
+        { _utils_upgrade_one "$appver" > >(tee $stdoutlog ); } 2> >(tee $stderrlog >&2 )
         rc=$?
 
         if [ $rc -ne 0 ]; then

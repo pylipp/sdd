@@ -96,14 +96,13 @@ utils_install() {
         stdoutlog=/tmp/sdd-install-$app.stdout
         stderrlog=/tmp/sdd-install-$app.stderr
 
-        # Execute installation; tee stdout/stderr to files, see
-        # https://stackoverflow.com/a/53051506
-        { _utils_install_one "$appver" > >(tee $stdoutlog ); } 2> >(tee $stderrlog >&2 )
-        rc=$?
+        rm -f /tmp/failed
+        { { _utils_install_one "$appver" || echo $? > /tmp/failed;} 3>&1 1>&2 2>&3- | tee "$stderrlog";} 3>&1 1>&2 2>&3- | tee "$stdoutlog"
 
-        if [ $rc -ne 0 ]; then
+        if [ -e /tmp/failed ]; then
             printf 'Error installing "%s". See above and %s.\n' "$app" "$stderrlog" > >(tee -a $stderrlog >&2 )
 
+            rc=$(cat /tmp/failed)
             ((return_code+=rc))
         fi
     done
@@ -130,14 +129,13 @@ utils_uninstall() {
         stdoutlog=/tmp/sdd-uninstall-$app.stdout
         stderrlog=/tmp/sdd-uninstall-$app.stderr
 
-        # Execute uninstallation; tee stdout/stderr to files, see
-        # https://stackoverflow.com/a/53051506
-        { _utils_uninstall_one "$app" > >(tee $stdoutlog ); } 2> >(tee $stderrlog >&2 )
-        rc=$?
+        rm -f /tmp/failed
+        { { _utils_uninstall_one "$app" || echo $? > /tmp/failed;} 3>&1 1>&2 2>&3- | tee "$stderrlog";} 3>&1 1>&2 2>&3- | tee "$stdoutlog"
 
-        if [ $rc -ne 0 ]; then
+        if [ -e /tmp/failed ]; then
             printf 'Error uninstalling "%s". See above and %s.\n' "$app" "$stderrlog" > >(tee -a $stderrlog >&2 )
 
+            rc=$(cat /tmp/failed)
             ((return_code+=rc))
         fi
     done
@@ -294,12 +292,13 @@ utils_upgrade() {
         stdoutlog=/tmp/sdd-upgrade-$app.stdout
         stderrlog=/tmp/sdd-upgrade-$app.stderr
 
-        { _utils_upgrade_one "$appver" > >(tee $stdoutlog ); } 2> >(tee $stderrlog >&2 )
-        rc=$?
+        rm -f /tmp/failed
+        { { _utils_upgrade_one "$appver" || echo $? > /tmp/failed;} 3>&1 1>&2 2>&3- | tee "$stderrlog";} 3>&1 1>&2 2>&3- | tee "$stdoutlog"
 
-        if [ $rc -ne 0 ]; then
+        if [ -e /tmp/failed ]; then
             printf 'Error upgrading "%s". See above and %s.\n' "$app" "$stderrlog" > >(tee -a $stderrlog >&2 )
 
+            rc=$(cat /tmp/failed)
             ((return_code+=rc))
         fi
     done

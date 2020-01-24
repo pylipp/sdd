@@ -268,9 +268,8 @@ teardown() {
 
 @test "invoking upgrade command with non-existing app fails" {
   run sdd upgrade non_existing_app
-  assert_failure 10
+  assert_failure 2
   assert_line -n 0 'App "non_existing_app" could not be found.'
-  assert_line -n 1 'Error upgrading "non_existing_app". See above and /tmp/sdd-upgrade-non_existing_app.stderr.'
 }
 
 @test "invoking upgrade command with existing app succeeds" {
@@ -336,6 +335,20 @@ FILE
   assert_line -n 1 -p 'sdd_install: command not found'
   assert_line -n 2 'Error upgrading "invalid_app". See above and /tmp/sdd-upgrade-invalid_app.stderr.'
   assert_equal ${#lines[@]} 3
+}
+
+@test "invoking upgrade command with valid and non-existing app upgrades only valid one" {
+  cp framework/fixtures/valid_app $validappfilepath
+
+  run sdd upgrade valid_app non_existing_app
+  assert_failure 2
+  [ "${lines[0]}" = 'App "non_existing_app" could not be found.' ]
+
+  run valid_app
+  [ "$status" -eq 0 ]
+
+  run which invalid_app
+  [ "$status" -eq 1 ]
 }
 
 @test "invoking list with --installed option displays installed apps including versions" {

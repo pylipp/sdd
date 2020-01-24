@@ -286,7 +286,7 @@ utils_upgrade() {
     return_code=$?
 
     local app stdoutlog stderrlog rc
-    for appver in "$@"; do
+    for appver in "${appvers[@]}"; do
         app=$(_get_app_name "$appver")
 
         stdoutlog=/tmp/sdd-upgrade-$app.stdout

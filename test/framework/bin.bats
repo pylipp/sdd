@@ -50,7 +50,7 @@ teardown() {
   touch $invalidappfilepath
 
   run sdd install invalid_app
-  assert_failure 8
+  assert_failure 4
   assert_output -e 'Error installing "invalid_app". See above and /tmp/sdd-install-invalid_app.stderr.\n*'
   assert_output -p 'sdd_install: command not found'
 }
@@ -137,7 +137,7 @@ teardown() {
   cp framework/fixtures/valid_app $validappfilepath
 
   run sdd install valid_app non_existing_app
-  assert_failure 4
+  assert_failure 2
   [ "${lines[0]}" = 'App "non_existing_app" could not be found.' ]
 
   run valid_app
@@ -152,7 +152,7 @@ teardown() {
   touch $invalidappfilepath
 
   run sdd install valid_app invalid_app
-  assert_failure 8
+  assert_failure 4
   [ "${lines[0]}" = 'Latest version available: 1.0' ]
   [ "${lines[1]}" = 'Installed "valid_app".' ]
   assert_output -e 'Error installing "invalid_app". See above and /tmp/sdd-install-invalid_app.stderr.\n*'
@@ -170,7 +170,7 @@ teardown() {
   cp framework/fixtures/valid_app $validcustomappfilepath
 
   run sdd install valid_app non_existing_app
-  assert_failure 4
+  assert_failure 2
   [ "${lines[0]}" = 'App "non_existing_app" could not be found.' ]
   [ "${lines[1]}" = 'Custom installation for "valid_app" found.' ]
   [ "${lines[2]}" = 'Latest version available: 1.0' ]
@@ -268,7 +268,7 @@ teardown() {
 
 @test "invoking upgrade command with non-existing app fails" {
   run sdd upgrade non_existing_app
-  assert_failure 6
+  assert_failure 10
   assert_line -n 0 'App "non_existing_app" could not be found.'
   assert_line -n 1 'Error upgrading "non_existing_app". See above and /tmp/sdd-upgrade-non_existing_app.stderr.'
 }
@@ -318,7 +318,7 @@ teardown() {
   touch $invalidappfilepath
 
   run sdd upgrade invalid_app
-  assert_failure 4
+  assert_failure 8
   assert_line -n 0 -p 'sdd_uninstall: command not found'
   assert_line -n 1 'Error upgrading "invalid_app". See above and /tmp/sdd-upgrade-invalid_app.stderr.'
   assert_equal ${#lines[@]} 2

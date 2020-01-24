@@ -148,6 +148,7 @@ utils_uninstall() {
 _utils_install_one() {
     # Install single, valid app
     # Args: APP[=VERSION]
+    local return_code=0
 
     local appver="$1"
     local app
@@ -208,6 +209,7 @@ _utils_install_one() {
 _utils_uninstall_one() {
     # Uninstall single, valid app
     # Args: APP
+    local return_code=0
 
     local app=$1
     if [ -f "$HOME/.config/sdd/apps/$app" ]; then
@@ -242,7 +244,7 @@ _utils_uninstall_one() {
     done
 
     if [ $success = False ]; then
-        return_code=4
+        return_code=8
     fi
 
     return $return_code

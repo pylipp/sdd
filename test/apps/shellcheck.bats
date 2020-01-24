@@ -1,11 +1,8 @@
-load '/usr/local/libexec/bats-support/load.bash'
-load '/usr/local/libexec/bats-assert/load.bash'
-
 @test "shellcheck of recent version can be installed and uninstalled" {
   run sdd install shellcheck
-  assert_success
-  assert_line -n 0 -p 'Latest version available: '
-  assert_output -p 'Installed "shellcheck".'
+  [ $status -eq 0 ]
+  [[ "${lines[0]}" = 'Latest version available: '* ]]
+  [ "${lines[-1]}" = 'Installed "shellcheck".' ]
 
   run shellcheck --version
   [ $status -eq 0 ]

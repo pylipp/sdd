@@ -1,6 +1,3 @@
-load '/usr/local/libexec/bats-support/load.bash'
-load '/usr/local/libexec/bats-assert/load.bash'
-
 @test "diff-so-fancy of recent version can be installed and uninstalled" {
   run sdd install diff-so-fancy
   [ $status -eq 0 ]
@@ -8,7 +5,7 @@ load '/usr/local/libexec/bats-assert/load.bash'
   [ "${lines[-1]}" = 'Installed "diff-so-fancy".' ]
 
   run diff-so-fancy --colors
-  assert_success
+  [ $status -eq 0 ]
 
   run sdd uninstall diff-so-fancy
   [ $status -eq 0 ]

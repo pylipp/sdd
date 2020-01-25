@@ -78,45 +78,38 @@ _validate_apps() {
 utils_install() {
     # Install one or more apps
     # Args: APP[=VERSION] [APP[=VERSION]] ...
-    local return_code=0
-
-    if [ $# -eq 0 ]; then
-        printf 'Specify at least one app to install.\n' >&2
-        return 1
-    fi
-
-    local appvers=()
-    appvers=($(_validate_apps "$@"))
-    return_code=$?
-
-    local app stdoutlog stderrlog rc
-    for appver in "${appvers[@]}"; do
-        app=$(_get_app_name "$appver")
-
-        stdoutlog=/tmp/sdd-install-$app.stdout
-        stderrlog=/tmp/sdd-install-$app.stderr
-
-        rm -f /tmp/failed
-        { { _utils_install_one "$appver" || echo $? > /tmp/failed;} 3>&1 1>&2 2>&3- | tee "$stderrlog";} 3>&1 1>&2 2>&3- | tee "$stdoutlog"
-
-        if [ -e /tmp/failed ]; then
-            printf 'Error installing "%s". See above and %s.\n' "$app" "$stderrlog" > >(tee -a $stderrlog >&2 )
-
-            rc=$(cat /tmp/failed)
-            ((return_code+=rc))
-        fi
-    done
-
-    return $return_code
+    _utils_manage install "$@"
 }
 
 utils_uninstall() {
     # Uninstall one or more apps
     # Args: APP[=VERSION] [APP[=VERSION]] ...
+    _utils_manage uninstall "$@"
+}
+
+utils_upgrade() {
+    # Upgrade one or more apps
+    # Args: APP[=VERSION] [APP[=VERSION]] ...
+    _utils_manage upgrade "$@"
+}
+
+_utils_manage() {
+    # Manage one or more apps
+    # Args: METHOD APP[=VERSION] [APP[=VERSION]] ...
     local return_code=0
 
+    local manage managing
+    manage="$1"
+    shift
+
+    managing="$manage"ing
+    if [ "$manage" = upgrade ]; then
+        managing=upgrading
+    fi
+
+
     if [ $# -eq 0 ]; then
-        printf 'Specify at least one app to uninstall.\n' >&2
+        printf 'Specify at least one app to %s.\n' "$manage" >&2
         return 1
     fi
 
@@ -124,21 +117,25 @@ utils_uninstall() {
     appvers=($(_validate_apps "$@"))
     return_code=$?
 
-    local app stdoutlog stderrlog rc
+    local app stdoutlog stderrlog rclog
+    rclog=/tmp/sdd-manage.rc
+
     for appver in "${appvers[@]}"; do
         app=$(_get_app_name "$appver")
 
-        stdoutlog=/tmp/sdd-uninstall-$app.stdout
-        stderrlog=/tmp/sdd-uninstall-$app.stderr
+        stdoutlog=/tmp/sdd-$manage-$app.stdout
+        stderrlog=/tmp/sdd-$manage-$app.stderr
 
-        rm -f /tmp/failed
-        { { _utils_uninstall_one "$appver" || echo $? > /tmp/failed;} 3>&1 1>&2 2>&3- | tee "$stderrlog";} 3>&1 1>&2 2>&3- | tee "$stdoutlog"
+        # Invoke management function. If failed, track return code in file.
+        # Redirect both stderr and stdout to log files (from
+        # https://stackoverflow.com/a/59435204/3865876)
+        rm -f $rclog
+        { { _utils_"$manage"_one "$appver" || echo $? > $rclog;} 3>&1 1>&2 2>&3- | tee "$stderrlog";} 3>&1 1>&2 2>&3- | tee "$stdoutlog"
 
-        if [ -e /tmp/failed ]; then
-            printf 'Error uninstalling "%s". See above and %s.\n' "$app" "$stderrlog" > >(tee -a $stderrlog >&2 )
+        if [ -e $rclog ]; then
+            printf 'Error %s "%s". See above and %s.\n' "$managing" "$app" "$stderrlog" > >(tee -a "$stderrlog" >&2 )
 
-            rc=$(cat /tmp/failed)
-            ((return_code+=rc))
+            ((return_code+=$(cat $rclog)))
         fi
     done
 
@@ -272,41 +269,6 @@ _utils_upgrade_one() {
     if [ $return_code -eq 0 ]; then
         printf 'Upgraded "%s".\n' "$app"
     fi
-
-    return $return_code
-}
-
-utils_upgrade() {
-    # Upgrade one or more apps
-    # Args: APP[=VERSION] [APP[=VERSION]] ...
-    local return_code=0
-
-    if [ $# -eq 0 ]; then
-        printf 'Specify at least one app to upgrade.\n' >&2
-        return 1
-    fi
-
-    local appvers=()
-    appvers=($(_validate_apps "$@"))
-    return_code=$?
-
-    local app stdoutlog stderrlog rc
-    for appver in "${appvers[@]}"; do
-        app=$(_get_app_name "$appver")
-
-        stdoutlog=/tmp/sdd-upgrade-$app.stdout
-        stderrlog=/tmp/sdd-upgrade-$app.stderr
-
-        rm -f /tmp/failed
-        { { _utils_upgrade_one "$appver" || echo $? > /tmp/failed;} 3>&1 1>&2 2>&3- | tee "$stderrlog";} 3>&1 1>&2 2>&3- | tee "$stdoutlog"
-
-        if [ -e /tmp/failed ]; then
-            printf 'Error upgrading "%s". See above and %s.\n' "$app" "$stderrlog" > >(tee -a $stderrlog >&2 )
-
-            rc=$(cat /tmp/failed)
-            ((return_code+=rc))
-        fi
-    done
 
     return $return_code
 }

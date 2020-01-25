@@ -64,6 +64,7 @@ teardown() {
   [ "$status" -eq 0 ]
   assert_line -n 0 'Latest version available: 1.0'
   assert_line -n 1 'Installed "valid_app".'
+  assert_equal ${#lines[@]} 2
 
   # Execute the app
   run valid_app
@@ -84,6 +85,7 @@ teardown() {
   [ "${lines[0]}" = 'Custom installation for "valid_app" found.' ]
   [ "${lines[1]}" = 'Latest version available: 1.0' ]
   [ "${lines[2]}" = 'Installed "valid_app".' ]
+  assert_equal ${#lines[@]} 3
 
   # Execute the app
   run valid_app
@@ -105,6 +107,7 @@ teardown() {
   [ "${lines[0]}" = 'Custom installation for "valid_app" found.' ]
   [ "${lines[1]}" = 'Latest version available: 1.1' ]
   [ "${lines[2]}" = 'Installed "valid_app".' ]
+  assert_equal ${#lines[@]} 3
 
   # Execute the app
   run valid_app
@@ -124,6 +127,7 @@ teardown() {
   [ "${lines[0]}" = 'Custom installation for "valid_app" found.' ]
   [ "${lines[1]}" = 'Latest version available: 1.0' ]
   [ "${lines[2]}" = 'Installed "valid_app".' ]
+  assert_equal ${#lines[@]} 3
 
   # Execute the app
   run valid_app
@@ -139,6 +143,8 @@ teardown() {
   run sdd install valid_app non_existing_app
   assert_failure 2
   [ "${lines[0]}" = 'App "non_existing_app" could not be found.' ]
+  # Two more lines about installing valid_app
+  assert_equal ${#lines[@]} 3
 
   run valid_app
   [ "$status" -eq 0 ]
@@ -175,6 +181,7 @@ teardown() {
   [ "${lines[1]}" = 'Custom installation for "valid_app" found.' ]
   [ "${lines[2]}" = 'Latest version available: 1.0' ]
   [ "${lines[3]}" = 'Installed "valid_app".' ]
+  assert_equal ${#lines[@]} 4
 
   run valid_app
   [ "$status" -eq 0 ]
@@ -190,6 +197,7 @@ teardown() {
   [ "$status" -eq 0 ]
   assert_line -n 0 'Specified version: 1.1'
   assert_line -n 1 'Installed "valid_app".'
+  assert_equal ${#lines[@]} 2
 
   # The installed app version is recorded
   [ "$(tail -n1 $appsrecordfilepath)" = "valid_app=1.1" ]
@@ -229,6 +237,7 @@ teardown() {
   run sdd uninstall valid_app
   [ "$status" -eq 0 ]
   [ "${lines[0]}" = 'Uninstalled "valid_app".' ]
+  assert_equal ${#lines[@]} 1
 
   # Check log file content
   run cat /tmp/sdd-uninstall-valid_app.stdout
@@ -252,6 +261,7 @@ teardown() {
   [ "$status" -eq 0 ]
   [ "${lines[0]}" = 'Custom uninstallation for "valid_app" found.' ]
   [ "${lines[1]}" = 'Uninstalled "valid_app".' ]
+  assert_equal ${#lines[@]} 2
 
   # This file is expected to have been created by the custom sdd_uninstall
   [ -f /tmp/uninstalled ]
@@ -264,12 +274,14 @@ teardown() {
   run sdd upgrade
   assert_failure 1
   assert_output 'Specify at least one app to upgrade.'
+  assert_equal ${#lines[@]} 1
 }
 
 @test "invoking upgrade command with non-existing app fails" {
   run sdd upgrade non_existing_app
   assert_failure 2
   assert_line -n 0 'App "non_existing_app" could not be found.'
+  assert_equal ${#lines[@]} 1
 }
 
 @test "invoking upgrade command with existing app succeeds" {
@@ -286,6 +298,7 @@ teardown() {
   assert_line -n 1 'Latest version available: 1.1'
   assert_line -n 2 'Installed "valid_app".'
   assert_line -n 3 'Upgraded "valid_app".'
+  assert_equal ${#lines[@]} 4
 
   # Execute the app
   run valid_app
@@ -308,6 +321,7 @@ teardown() {
   assert_line -n 1 'Specified version: 1.1'
   assert_line -n 2 'Installed "valid_app".'
   assert_line -n 3 'Upgraded "valid_app".'
+  assert_equal ${#lines[@]} 4
 
   # The upgraded app version is recorded
   [ "$(tail -n1 $appsrecordfilepath)" = "valid_app=1.1" ]
@@ -343,6 +357,8 @@ FILE
   run sdd upgrade valid_app non_existing_app
   assert_failure 2
   [ "${lines[0]}" = 'App "non_existing_app" could not be found.' ]
+  # Two more lines about both uninstalling and installing valid_app
+  assert_equal ${#lines[@]} 5
 
   run valid_app
   [ "$status" -eq 0 ]
@@ -358,6 +374,7 @@ FILE
   run sdd list --installed
   [ $status -eq 0 ]
   [ "${lines[0]}" = "valid_app=1.0" ]
+  assert_equal ${#lines[@]} 1
 
   # Bump version number
   sed -i 's/1.0/1.1/' $validappfilepath
@@ -366,6 +383,7 @@ FILE
   run sdd list --installed
   [ $status -eq 0 ]
   [ "${lines[0]}" = "valid_app=1.1" ]
+  assert_equal ${#lines[@]} 1
 
   sdd uninstall valid_app
   run sdd list --installed
@@ -399,4 +417,5 @@ FILE
   assert_success
   assert_line -n 0 'super_app (1.0 -> 1.5)'
   assert_line -n 1 'valid_app (1.0 -> 2.0)'
+  assert_equal ${#lines[@]} 2
 }

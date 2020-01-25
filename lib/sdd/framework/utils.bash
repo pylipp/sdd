@@ -78,22 +78,22 @@ _validate_apps() {
 utils_install() {
     # Install one or more apps
     # Args: APP[=VERSION] [APP[=VERSION]] ...
-    _utils_manage install "$@"
+    _manage_apps install "$@"
 }
 
 utils_uninstall() {
     # Uninstall one or more apps
     # Args: APP[=VERSION] [APP[=VERSION]] ...
-    _utils_manage uninstall "$@"
+    _manage_apps uninstall "$@"
 }
 
 utils_upgrade() {
     # Upgrade one or more apps
     # Args: APP[=VERSION] [APP[=VERSION]] ...
-    _utils_manage upgrade "$@"
+    _manage_apps upgrade "$@"
 }
 
-_utils_manage() {
+_manage_apps() {
     # Manage one or more apps
     # Args: METHOD APP[=VERSION] [APP[=VERSION]] ...
     local return_code=0
@@ -124,7 +124,7 @@ _utils_manage() {
         # Redirect both stderr and stdout to log files (from
         # https://stackoverflow.com/a/59435204/3865876)
         rm -f $rclog
-        { { _utils_"$manage"_one "$appver" || echo $? > $rclog;} 3>&1 1>&2 2>&3- | tee "$stderrlog";} 3>&1 1>&2 2>&3- | tee "$stdoutlog"
+        { { _"$manage"_single_app "$appver" || echo $? > $rclog;} 3>&1 1>&2 2>&3- | tee "$stderrlog";} 3>&1 1>&2 2>&3- | tee "$stdoutlog"
 
         if [ -e $rclog ]; then
             printf 'Failed to %s "%s". See above and %s.\n' "$manage" "$app" "$stderrlog" > >(tee -a "$stderrlog" >&2 )
@@ -136,7 +136,7 @@ _utils_manage() {
     return $return_code
 }
 
-_utils_install_one() {
+_install_single_app() {
     # Install single, valid app
     # Args: APP[=VERSION]
     local return_code=0
@@ -152,13 +152,13 @@ _utils_install_one() {
     local version
     # Try to parse version from arguments
     if [[ $appver = $app=* ]]; then
-        version=$(_get_app_version "$appver")
+        version=$(_get_app_version_from_appver "$appver")
         printf 'Specified version: %s\n' $version >&2
     fi
 
     # If version not specified, try to read it from the app management files.
     if [ -z $version ]; then
-        version=$(_utils_app_version_from_files "$app")
+        version=$(_get_app_version_from_files "$app")
 
         if [[ -n $version ]]; then
             printf 'Latest version available: %s\n' $version >&2
@@ -197,7 +197,7 @@ _utils_install_one() {
     return $return_code
 }
 
-_utils_uninstall_one() {
+_uninstall_single_app() {
     # Uninstall single, valid app
     # Args: APP[=VERSION]
     local return_code=0
@@ -244,7 +244,7 @@ _utils_uninstall_one() {
     return $return_code
 }
 
-_utils_upgrade_one() {
+_upgrade_single_app() {
     # Upgrade single, valid app
     # Args: APP[=VERSION]
 
@@ -252,11 +252,11 @@ _utils_upgrade_one() {
     local app return_code
     app=$(_get_app_name "$appver")
 
-    _utils_uninstall_one "$app"
+    _uninstall_single_app "$app"
     return_code=$?
 
     if [ $return_code -eq 0 ]; then
-        _utils_install_one "$appver"
+        _install_single_app "$appver"
         return_code=$?
     fi
 
@@ -267,7 +267,7 @@ _utils_upgrade_one() {
     return $return_code
 }
 
-_utils_app_version_from_files() {
+_get_app_version_from_files() {
     # Determine relevant version of app from app management files by executing
     # the sdd_fetch_latest_version() functions.
     # The custom definition takes precedence over the built-in one.
@@ -312,8 +312,8 @@ utils_list() {
 
         for name_version in $(utils_list --installed | xargs); do
             name=$(_get_app_name "$name_version")
-            installed_version=$(_get_app_version "$name_version")
-            newest_version=$(_utils_app_version_from_files "$name")
+            installed_version=$(_get_app_version_from_appver "$name_version")
+            newest_version=$(_get_app_version_from_files "$name")
 
             if [[ "$installed_version" != "$newest_version" ]]; then
                 printf '%s (%s -> %s)\n' "$name" "$installed_version" "$newest_version"
@@ -331,7 +331,7 @@ _get_app_name() {
     echo "$1" | cut -d"=" -f1
 }
 
-_get_app_version() {
+_get_app_version_from_appver() {
     # Separate app version from an app=version tuple
     # E.g. with input 'foo=1.0.0' the function publishes '1.0.0'
     echo "$1" | cut -d"=" -f2

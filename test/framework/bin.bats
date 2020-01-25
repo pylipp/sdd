@@ -389,6 +389,18 @@ FILE
   assert_equal ${#lines[@]} 1
 }
 
+@test "invoking upgrade command with valid custom app succeeds" {
+  mkdir -p $(dirname $validcustomappfilepath)
+  echo 'sdd_upgrade() { echo Upgrading...; }' > $validcustomappfilepath
+
+  run sdd upgrade valid_app
+  assert_success
+  assert_line -n 0 'Custom upgrade for "valid_app" found.'
+  assert_line -n 1 'Upgrading...'
+  assert_line -n 2 'Succeeded to upgrade "valid_app".'
+  assert_equal ${#lines[@]} 3
+}
+
 @test "invoking list with --installed option displays installed apps including versions" {
   cp framework/fixtures/valid_app $validappfilepath
   sdd install valid_app

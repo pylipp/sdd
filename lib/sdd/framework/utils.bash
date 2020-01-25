@@ -240,6 +240,10 @@ _upgrade_single_app() {
     local app sdd_upgrade_defined version success
     app=$(_get_app_name "$appver")
 
+    if [ -f "$HOME/.config/sdd/apps/$app" ]; then
+        printf 'Custom upgrade for "%s" found.\n' "$app" >&2
+    fi
+
     # Evaluate whether any app management file defines sdd_upgrade
     sdd_upgrade_defined=False
     local appfilepath

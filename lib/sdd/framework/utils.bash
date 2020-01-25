@@ -150,20 +150,7 @@ _install_single_app() {
     fi
 
     local version
-    # Try to parse version from arguments
-    if [[ $appver = $app=* ]]; then
-        version=$(_get_app_version_from_appver "$appver")
-        printf 'Specified version: %s\n' $version >&2
-    fi
-
-    # If version not specified, try to read it from the app management files.
-    if [ -z $version ]; then
-        version=$(_get_app_version_from_files "$app")
-
-        if [[ -n $version ]]; then
-            printf 'Latest version available: %s\n' $version >&2
-        fi
-    fi
+    version=$(_get_app_version "$appver")
 
     local success=False
 
@@ -265,6 +252,30 @@ _upgrade_single_app() {
     fi
 
     return $return_code
+}
+
+_get_app_version() {
+    # Obtain app version. Try to parse app=ver argument, and if no version
+    # specified there, try to read it from app management files
+    # Args: APP[=VERSION]
+    local version appver app
+    appver="$1"
+    app=$(_get_app_name "$appver")
+
+    if [[ $appver = $app=* ]]; then
+        version=$(_get_app_version_from_appver "$appver")
+        printf 'Specified version: %s\n' "$version" >&2
+    fi
+
+    if [ -z "$version" ]; then
+        version=$(_get_app_version_from_files "$app")
+
+        if [[ -n "$version" ]]; then
+            printf 'Latest version available: %s\n' "$version" >&2
+        fi
+    fi
+
+    echo "$version"
 }
 
 _get_app_version_from_files() {

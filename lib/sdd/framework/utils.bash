@@ -146,14 +146,14 @@ _utils_install_one() {
     app=$(_get_app_name "$appver")
 
     if [ -f "$HOME/.config/sdd/apps/$app" ]; then
-        printf 'Custom installation for "%s" found.\n' "$app"
+        printf 'Custom installation for "%s" found.\n' "$app" >&2
     fi
 
     local version
     # Try to parse version from arguments
     if [[ $appver = $app=* ]]; then
         version=$(_get_app_version "$appver")
-        printf 'Specified version: %s\n' $version
+        printf 'Specified version: %s\n' $version >&2
     fi
 
     # If version not specified, try to read it from the app management files.
@@ -161,7 +161,7 @@ _utils_install_one() {
         version=$(_utils_app_version_from_files "$app")
 
         if [[ -n $version ]]; then
-            printf 'Latest version available: %s\n' $version
+            printf 'Latest version available: %s\n' $version >&2
         fi
     fi
 
@@ -182,7 +182,7 @@ _utils_install_one() {
         sdd_install $version
 
         if [ $? -eq 0 ] && [ $success = False ]; then
-            printf 'Installed "%s".\n' "$app"
+            printf 'Installed "%s".\n' "$app" >&2
             success=True
 
             # Record installed app and version (can be empty)
@@ -207,7 +207,7 @@ _utils_uninstall_one() {
     app=$(_get_app_name "$appver")
 
     if [ -f "$HOME/.config/sdd/apps/$app" ]; then
-        printf 'Custom uninstallation for "%s" found.\n' "$app"
+        printf 'Custom uninstallation for "%s" found.\n' "$app" >&2
     fi
 
     local success=False
@@ -227,7 +227,7 @@ _utils_uninstall_one() {
         sdd_uninstall
 
         if [ $? -eq 0 ] && [ $success = False ]; then
-            printf 'Uninstalled "%s".\n' "$app"
+            printf 'Uninstalled "%s".\n' "$app" >&2
             success=True
 
             if [ -f "$SDD_DATA_DIR"/apps/installed ]; then
@@ -261,7 +261,7 @@ _utils_upgrade_one() {
     fi
 
     if [ $return_code -eq 0 ]; then
-        printf 'Upgraded "%s".\n' "$app"
+        printf 'Upgraded "%s".\n' "$app" >&2
     fi
 
     return $return_code

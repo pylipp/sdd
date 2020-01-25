@@ -241,9 +241,9 @@ teardown() {
 
   # Check log file content
   run cat /tmp/sdd-uninstall-valid_app.stdout
-  assert_output 'Uninstalled "valid_app".'
-  run cat /tmp/sdd-uninstall-valid_app.stderr
   assert_output ''
+  run cat /tmp/sdd-uninstall-valid_app.stderr
+  assert_output 'Uninstalled "valid_app".'
 
   run which valid_app
   [ "$status" -eq 1 ]

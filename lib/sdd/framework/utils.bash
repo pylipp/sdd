@@ -117,6 +117,10 @@ _manage_apps() {
     for appver in "${appvers[@]}"; do
         app=$(_get_app_name "$appver")
 
+        if [ -f "$HOME/.config/sdd/apps/$app" ]; then
+            printf 'Custom %s function for "%s" found.\n' "$manage" "$app" >&2
+        fi
+
         stdoutlog=/tmp/sdd-$manage-$app.stdout
         stderrlog=/tmp/sdd-$manage-$app.stderr
 
@@ -146,10 +150,6 @@ _install_single_app() {
     local appver="$1"
     local app
     app=$(_get_app_name "$appver")
-
-    if [ -f "$HOME/.config/sdd/apps/$app" ]; then
-        printf 'Custom installation for "%s" found.\n' "$app" >&2
-    fi
 
     local version
     version=$(_get_app_version "$appver")
@@ -194,10 +194,6 @@ _uninstall_single_app() {
     local app
     app=$(_get_app_name "$appver")
 
-    if [ -f "$HOME/.config/sdd/apps/$app" ]; then
-        printf 'Custom uninstallation for "%s" found.\n' "$app" >&2
-    fi
-
     local success=False
 
     local appfilepath
@@ -239,10 +235,6 @@ _upgrade_single_app() {
     local appver="$1"
     local app sdd_upgrade_defined version success
     app=$(_get_app_name "$appver")
-
-    if [ -f "$HOME/.config/sdd/apps/$app" ]; then
-        printf 'Custom upgrade for "%s" found.\n' "$app" >&2
-    fi
 
     # Evaluate whether any app management file defines sdd_upgrade
     sdd_upgrade_defined=False

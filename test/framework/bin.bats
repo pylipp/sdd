@@ -85,7 +85,7 @@ teardown() {
 
   run sdd install valid_app
   [ "$status" -eq 0 ]
-  [ "${lines[0]}" = 'Custom installation for "valid_app" found.' ]
+  [ "${lines[0]}" = 'Custom install function for "valid_app" found.' ]
   [ "${lines[1]}" = 'Latest version available: 1.0' ]
   [ "${lines[2]}" = 'Succeeded to install "valid_app".' ]
   assert_equal ${#lines[@]} 3
@@ -106,7 +106,7 @@ teardown() {
 
   run sdd install valid_app
   [ "$status" -eq 0 ]
-  [ "${lines[0]}" = 'Custom installation for "valid_app" found.' ]
+  [ "${lines[0]}" = 'Custom install function for "valid_app" found.' ]
   [ "${lines[1]}" = 'Latest version available: 1.1' ]
   [ "${lines[2]}" = 'Succeeded to install "valid_app".' ]
   assert_equal ${#lines[@]} 3
@@ -125,7 +125,7 @@ teardown() {
 
   run sdd install valid_app
   [ "$status" -eq 0 ]
-  [ "${lines[0]}" = 'Custom installation for "valid_app" found.' ]
+  [ "${lines[0]}" = 'Custom install function for "valid_app" found.' ]
   [ "${lines[1]}" = 'Latest version available: 1.0' ]
   [ "${lines[2]}" = 'Succeeded to install "valid_app".' ]
   assert_equal ${#lines[@]} 3
@@ -178,7 +178,7 @@ teardown() {
   run sdd install valid_app non_existing_app
   assert_failure 2
   [ "${lines[0]}" = 'App "non_existing_app" could not be found.' ]
-  [ "${lines[1]}" = 'Custom installation for "valid_app" found.' ]
+  [ "${lines[1]}" = 'Custom install function for "valid_app" found.' ]
   [ "${lines[2]}" = 'Latest version available: 1.0' ]
   [ "${lines[3]}" = 'Succeeded to install "valid_app".' ]
   assert_equal ${#lines[@]} 4
@@ -258,7 +258,7 @@ teardown() {
 
   run sdd uninstall valid_app
   [ "$status" -eq 0 ]
-  [ "${lines[0]}" = 'Custom uninstallation for "valid_app" found.' ]
+  [ "${lines[0]}" = 'Custom uninstall function for "valid_app" found.' ]
   [ "${lines[1]}" = 'Succeeded to uninstall "valid_app".' ]
   assert_equal ${#lines[@]} 2
 
@@ -393,7 +393,7 @@ FILE
 
   run sdd upgrade valid_app
   assert_success
-  assert_line -n 0 'Custom upgrade for "valid_app" found.'
+  assert_line -n 0 'Custom upgrade function for "valid_app" found.'
   assert_line -n 1 'Upgrading...'
   assert_line -n 2 'Succeeded to upgrade "valid_app".'
   assert_equal ${#lines[@]} 3

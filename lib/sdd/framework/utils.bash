@@ -112,7 +112,7 @@ utils_install() {
 
 utils_uninstall() {
     # Uninstall one or more apps
-    # Args: APP [APP] ...
+    # Args: APP[=VERSION] [APP[=VERSION]] ...
     local return_code=0
 
     if [ $# -eq 0 ]; then
@@ -120,17 +120,19 @@ utils_uninstall() {
         return 1
     fi
 
-    local apps=()
-    apps=($(_validate_apps "$@"))
+    local appvers=()
+    appvers=($(_validate_apps "$@"))
     return_code=$?
 
-    local stdoutlog stderrlog rc
-    for app in "${apps[@]}"; do
+    local app stdoutlog stderrlog rc
+    for appver in "${appvers[@]}"; do
+        app=$(_get_app_name "$appver")
+
         stdoutlog=/tmp/sdd-uninstall-$app.stdout
         stderrlog=/tmp/sdd-uninstall-$app.stderr
 
         rm -f /tmp/failed
-        { { _utils_uninstall_one "$app" || echo $? > /tmp/failed;} 3>&1 1>&2 2>&3- | tee "$stderrlog";} 3>&1 1>&2 2>&3- | tee "$stdoutlog"
+        { { _utils_uninstall_one "$appver" || echo $? > /tmp/failed;} 3>&1 1>&2 2>&3- | tee "$stderrlog";} 3>&1 1>&2 2>&3- | tee "$stdoutlog"
 
         if [ -e /tmp/failed ]; then
             printf 'Error uninstalling "%s". See above and %s.\n' "$app" "$stderrlog" > >(tee -a $stderrlog >&2 )
@@ -206,10 +208,13 @@ _utils_install_one() {
 
 _utils_uninstall_one() {
     # Uninstall single, valid app
-    # Args: APP
+    # Args: APP[=VERSION]
     local return_code=0
 
-    local app=$1
+    local appver="$1"
+    local app
+    app=$(_get_app_name "$appver")
+
     if [ -f "$HOME/.config/sdd/apps/$app" ]; then
         printf 'Custom uninstallation for "%s" found.\n' "$app"
     fi

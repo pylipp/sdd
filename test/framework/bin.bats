@@ -51,7 +51,7 @@ teardown() {
 
   run sdd install invalid_app
   assert_failure 4
-  assert_output -e 'Error installing "invalid_app". See above and /tmp/sdd-install-invalid_app.stderr.\n*'
+  assert_output -e 'Failed to install "invalid_app". See above and /tmp/sdd-install-invalid_app.stderr.\n*'
   assert_output -p 'sdd_install: command not found'
 }
 
@@ -161,7 +161,7 @@ teardown() {
   assert_failure 4
   [ "${lines[0]}" = 'Latest version available: 1.0' ]
   [ "${lines[1]}" = 'Installed "valid_app".' ]
-  assert_output -e 'Error installing "invalid_app". See above and /tmp/sdd-install-invalid_app.stderr.\n*'
+  assert_output -e 'Failed to install "invalid_app". See above and /tmp/sdd-install-invalid_app.stderr.\n*'
   assert_output -p 'sdd_install: command not found'
 
   run valid_app
@@ -220,7 +220,7 @@ teardown() {
 
   run sdd uninstall invalid_app
   assert_failure 8
-  assert_output -e 'Error uninstalling "invalid_app". See above and /tmp/sdd-uninstall-invalid_app.stderr.\n*'
+  assert_output -e 'Failed to uninstall "invalid_app". See above and /tmp/sdd-uninstall-invalid_app.stderr.\n*'
   assert_output -p 'sdd_uninstall: command not found'
 }
 
@@ -333,7 +333,7 @@ teardown() {
   run sdd upgrade invalid_app
   assert_failure 8
   assert_line -n 0 -p 'sdd_uninstall: command not found'
-  assert_line -n 1 'Error upgrading "invalid_app". See above and /tmp/sdd-upgrade-invalid_app.stderr.'
+  assert_line -n 1 'Failed to upgrade "invalid_app". See above and /tmp/sdd-upgrade-invalid_app.stderr.'
   assert_equal ${#lines[@]} 2
 }
 
@@ -347,7 +347,7 @@ FILE
   assert_failure 4
   assert_line -n 0 'Uninstalled "invalid_app".'
   assert_line -n 1 -p 'sdd_install: command not found'
-  assert_line -n 2 'Error upgrading "invalid_app". See above and /tmp/sdd-upgrade-invalid_app.stderr.'
+  assert_line -n 2 'Failed to upgrade "invalid_app". See above and /tmp/sdd-upgrade-invalid_app.stderr.'
   assert_equal ${#lines[@]} 3
 }
 

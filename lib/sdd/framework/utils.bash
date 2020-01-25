@@ -98,15 +98,9 @@ _utils_manage() {
     # Args: METHOD APP[=VERSION] [APP[=VERSION]] ...
     local return_code=0
 
-    local manage managing
+    local manage
     manage="$1"
     shift
-
-    managing="$manage"ing
-    if [ "$manage" = upgrade ]; then
-        managing=upgrading
-    fi
-
 
     if [ $# -eq 0 ]; then
         printf 'Specify at least one app to %s.\n' "$manage" >&2
@@ -133,7 +127,7 @@ _utils_manage() {
         { { _utils_"$manage"_one "$appver" || echo $? > $rclog;} 3>&1 1>&2 2>&3- | tee "$stderrlog";} 3>&1 1>&2 2>&3- | tee "$stdoutlog"
 
         if [ -e $rclog ]; then
-            printf 'Error %s "%s". See above and %s.\n' "$managing" "$app" "$stderrlog" > >(tee -a "$stderrlog" >&2 )
+            printf 'Failed to %s "%s". See above and %s.\n' "$manage" "$app" "$stderrlog" > >(tee -a "$stderrlog" >&2 )
 
             ((return_code+=$(cat $rclog)))
         fi

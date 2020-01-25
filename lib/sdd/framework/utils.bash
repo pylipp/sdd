@@ -234,17 +234,71 @@ _uninstall_single_app() {
 _upgrade_single_app() {
     # Upgrade single, valid app
     # Args: APP[=VERSION]
+    local return_code=0
 
     local appver="$1"
-    local app return_code
+    local app sdd_upgrade_defined version success
     app=$(_get_app_name "$appver")
 
-    _uninstall_single_app "$app"
-    return_code=$?
+    # Evaluate whether any app management file defines sdd_upgrade
+    sdd_upgrade_defined=False
+    local appfilepath
+    for dir in "$FRAMEWORKDIR/../apps/user" "$HOME/.config/sdd/apps"; do
+        appfilepath="$dir/$app"
 
-    if [ $return_code -eq 0 ]; then
-        _install_single_app "$appver"
+        if [ ! -f "$appfilepath" ]; then
+            continue
+        fi
+
+        # Cleanup current scope
+        unset -f sdd_upgrade 2> /dev/null || true
+        # Source app management file
+        source "$appfilepath"
+
+        if type -t sdd_upgrade >/dev/null; then
+            sdd_upgrade_defined=True
+            break
+        fi
+    done
+
+    if [ $sdd_upgrade_defined = True ]; then
+        version=$(_get_app_version "$appver")
+        success=False
+
+        for dir in "$FRAMEWORKDIR/../apps/user" "$HOME/.config/sdd/apps"; do
+            appfilepath="$dir/$app"
+
+            if [ ! -f "$appfilepath" ]; then
+                continue
+            fi
+
+            # Cleanup current scope
+            unset -f sdd_upgrade 2> /dev/null || true
+            # Source app management file
+            source "$appfilepath"
+            sdd_upgrade "$version"
+
+            if [ $? -eq 0 ] && [ $success = False ]; then
+                success=True
+
+                # Record upgraded app and version (can be empty)
+                echo "$app=$version" >> "$SDD_DATA_DIR"/apps/installed
+            fi
+        done
+
+        if [ $success = False ]; then
+            return_code=16
+        fi
+
+    else
+        # Fall back to uninstalling, and re-installing app
+        _uninstall_single_app "$app"
         return_code=$?
+
+        if [ $return_code -eq 0 ]; then
+            _install_single_app "$appver"
+            return_code=$?
+        fi
     fi
 
     if [ $return_code -eq 0 ]; then

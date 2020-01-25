@@ -367,6 +367,33 @@ FILE
   [ "$status" -eq 1 ]
 }
 
+@test "invoking upgrade command with existing app and sdd_upgrade succeeds" {
+  cp framework/fixtures/valid_app $validappfilepath
+  echo 'sdd_upgrade() { sdd_install >/dev/null; echo Upgrading to $1...; }' >> $validappfilepath
+
+  run sdd upgrade valid_app
+  assert_success
+  assert_line -n 0 'Latest version available: 1.0'
+  assert_line -n 1 'Upgrading to 1.0...'
+  assert_line -n 2 'Upgraded "valid_app".'
+  assert_equal ${#lines[@]} 3
+
+  run valid_app
+  assert_success
+
+  # The upgraded app version is recorded
+  [ "$(tail -n1 $appsrecordfilepath)" = "valid_app=1.0" ]
+}
+
+@test "invoking upgrade command with existing app and invalid sdd_upgrade fails" {
+  echo 'sdd_upgrade() { return 1; }' > $invalidappfilepath
+
+  run sdd upgrade invalid_app
+  assert_failure 16
+  assert_line -n 0 'Failed to upgrade "invalid_app". See above and /tmp/sdd-upgrade-invalid_app.stderr.'
+  assert_equal ${#lines[@]} 1
+}
+
 @test "invoking list with --installed option displays installed apps including versions" {
   cp framework/fixtures/valid_app $validappfilepath
   sdd install valid_app

@@ -87,7 +87,7 @@ If you want to upgrade to a specific version, run
 
     sdd upgrade <app>=<version>
 
-Internally, `sdd` executes un- and re-installation of the app for upgrading.
+Internally, `sdd` executes un- and re-installation of the app for upgrading unless a specific upgrade routine has been defined.
 The usage of `SDD_INSTALL_PREFIX` is the same as for the `install` command.
 
 ### Uninstalling an app
@@ -156,6 +156,7 @@ The procedure in either case is:
 
 1. Create an empty bash file named after the app in `~/.config/sdd/apps` (without `.bash` extension).
 1. Add the functions `sdd_install` and `sdd_uninstall` with respective functionality. It's mandatory to add a function, even if without functionality (define `sdd_uninstall() { return; }`).
+1. Optionally, you can add an `sdd_upgrade` function. It will be executed for upgrading, instead of `sdd_uninstall` followed by `sdd_install`.
 1. You're able to manage the app as described in the 'Usage' section. `sdd` tells you when it found a customization for the app specified on the command line.
 
 For exemplary files, see my personal definitions and extensions [here](https://github.com/pylipp/dotfiles/tree/master/sdd_apps).

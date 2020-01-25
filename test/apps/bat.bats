@@ -2,14 +2,14 @@
   run sdd install bat
   [ $status -eq 0 ]
   [[ "${lines[0]}" = 'Latest version available: '* ]]
-  [ "${lines[-1]}" = 'Installed "bat".' ]
+  [ "${lines[-1]}" = 'Succeeded to install "bat".' ]
 
   run bat --version
   [ $status -eq 0 ]
 
   run sdd uninstall bat
   [ $status -eq 0 ]
-  [ "$output" = 'Uninstalled "bat".' ]
+  [ "$output" = 'Succeeded to uninstall "bat".' ]
 
   run which bat
   [ $status -eq 1 ]

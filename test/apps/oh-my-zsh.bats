@@ -14,11 +14,11 @@ teardown() {
   run sdd install oh-my-zsh
   [ $status -eq 0 ]
   [[ "${lines[0]}" = 'Latest version available: '* ]]
-  [ "${lines[-1]}" = 'Installed "oh-my-zsh".' ]
+  [ "${lines[-1]}" = 'Succeeded to install "oh-my-zsh".' ]
 
   [ -d ~/.oh-my-zsh ]
 
   run sdd uninstall oh-my-zsh
   [ $status -eq 0 ]
-  [ "$output" = 'Uninstalled "oh-my-zsh".' ]
+  [ "$output" = 'Succeeded to uninstall "oh-my-zsh".' ]
 }

@@ -2,7 +2,7 @@
   run sdd install sdd
   [ $status -eq 0 ]
   [[ "${lines[0]}" = 'Latest version available: '* ]]
-  [ "${lines[-1]}" = 'Installed "sdd".' ]
+  [ "${lines[-1]}" = 'Succeeded to install "sdd".' ]
 
   # Installed sdd should be first in PATH
   run which sdd
@@ -14,7 +14,7 @@
   # explicitely use the 'test' binary
   run /opt/sdd/bin/sdd uninstall sdd
   [ $status -eq 0 ]
-  [ "$output" = 'Uninstalled "sdd".' ]
+  [ "$output" = 'Succeeded to uninstall "sdd".' ]
 
   # The binary under test is still in the path
   run which sdd

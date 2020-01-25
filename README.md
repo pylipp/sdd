@@ -55,6 +55,8 @@ Once the program is bootstrapped, upgrade to the latest version (GitHub master) 
 
     sdd install sdd
 
+> NOTE: `sdd upgrade sdd` does not work since it removes its source code before trying re-install.
+
 ## Usage
 
 ### Installing an app
@@ -131,6 +133,7 @@ In alphabetical order:
 Name | Description
 :--- | :---
 [bat](https://github.com/sharkdp/bat) | A cat(1) clone with syntax highlighting and Git integration
+[broot](https://github.com/Canop/broot) | A new way to see and navigate directory trees
 [diff-so-fancy](https://github.com/so-fancy/diff-so-fancy) | Human readable diffs
 [direnv](https://github.com/direnv/direnv) | Handle environment variables depending on current directory
 [fd](https://github.com/sharkdp/fd) | A simple, fast and user-friendly alternative to 'find'
@@ -138,8 +141,9 @@ Name | Description
 [jq](https://github.com/stedolan/jq) | Command line JSON processor
 [oh-my-zsh](https://github.com/robbyrussell/oh-my-zsh) | Framework for managing zsh configuration
 [pip](https://pypi.org/project/pip/) | Python package manager
-[ripgrep](https://github.com/BurntSushi/ripgrep) | line-oriented text search tool
+[ripgrep](https://github.com/BurntSushi/ripgrep) | Line-oriented text search tool
 sdd | Thanks for being here :)
+[ShellCheck](https://github.com/koalaman/shellcheck) | A static analysis tool for shell scripts
 
 ## Customization
 
@@ -151,7 +155,7 @@ You can both
 The procedure in either case is:
 
 1. Create an empty bash file named after the app in `~/.config/sdd/apps` (without `.bash` extension).
-1. Add the functions `sdd_install` and/or `sdd_uninstall` with respective functionality.
+1. Add the functions `sdd_install` and `sdd_uninstall` with respective functionality. It's mandatory to add a function, even if without functionality (define `sdd_uninstall() { return; }`).
 1. You're able to manage the app as described in the 'Usage' section. `sdd` tells you when it found a customization for the app specified on the command line.
 
 For exemplary files, see my personal definitions and extensions [here](https://github.com/pylipp/dotfiles/tree/master/sdd_apps).

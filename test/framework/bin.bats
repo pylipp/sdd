@@ -425,12 +425,19 @@ FILE
 
 @test "invoking list with --available option displays available apps" {
   cp framework/fixtures/valid_app $validappfilepath
+  touch $(dirname $validcustomappfilepath)/custom_app
 
   run sdd list --available
-  [ $status -eq 0 ]
+  assert_success
+  assert_line -n 0 "Built-in:"
+  assert_output -p "- valid_app"
+  [ "${lines[-2]}" = "Custom:" ]
+  [ "${lines[-1]}" = "- custom_app" ]
 
-  run grep -q valid_app <<<"$output"
-  [ $status -eq 0 ]
+  # Two lines for categories, one for 'custom_app'. Empty line not counted by bats
+  expected_nr_lines=3
+  ((expected_nr_lines+=$(find ../lib/sdd/apps/user -type f | wc -l)))
+  assert_equal ${#lines[@]} $expected_nr_lines
 }
 
 @test "invoking list with --upgradable option displays upgradable apps" {

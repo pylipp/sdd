@@ -339,7 +339,11 @@ utils_list() {
             done
         fi
     elif [ "$option" = "--available" ]; then
-        ls -1 "$FRAMEWORKDIR/../apps/user"
+        printf 'Built-in:\n'
+        find "$FRAMEWORKDIR/../apps/user" -type f -exec basename {} \; | sort | sed 's/^/- /'
+
+        printf '\nCustom:\n'
+        find "$HOME/.config/sdd/apps" -type f -exec basename {} \; | sort | sed 's/^/- /'
     elif [ "$option" = "--upgradable" ]; then
         local name installed_version newest_version
 

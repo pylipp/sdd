@@ -130,6 +130,8 @@ _manage_apps() {
             printf 'Failed to %s "%s". See above and %s.\n' "$manage" "$app" "$stderrlog" > >(tee -a "$stderrlog" >&2 )
 
             ((return_code+=$(cat $rclog)))
+        else
+            printf 'Succeeded to %s "%s".\n' "$manage" "$app" > >(tee -a "$stderrlog" >&2 )
         fi
     done
 
@@ -169,7 +171,6 @@ _install_single_app() {
         sdd_install $version
 
         if [ $? -eq 0 ] && [ $success = False ]; then
-            printf 'Installed "%s".\n' "$app" >&2
             success=True
 
             # Record installed app and version (can be empty)
@@ -214,7 +215,6 @@ _uninstall_single_app() {
         sdd_uninstall
 
         if [ $? -eq 0 ] && [ $success = False ]; then
-            printf 'Uninstalled "%s".\n' "$app" >&2
             success=True
 
             if [ -f "$SDD_DATA_DIR"/apps/installed ]; then
@@ -299,10 +299,6 @@ _upgrade_single_app() {
             _install_single_app "$appver"
             return_code=$?
         fi
-    fi
-
-    if [ $return_code -eq 0 ]; then
-        printf 'Upgraded "%s".\n' "$app" >&2
     fi
 
     return $return_code

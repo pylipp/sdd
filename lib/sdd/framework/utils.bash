@@ -148,33 +148,25 @@ _install_single_app() {
     local return_code=0
 
     local appver="$1"
-    local app
+    local app version
     app=$(_get_app_name "$appver")
-
-    local version
     version=$(_get_app_version "$appver")
 
     local success=False
-
     local appfilepath
     for dir in "$FRAMEWORKDIR/../apps/user" "$HOME/.config/sdd/apps"; do
         appfilepath="$dir/$app"
 
-        if [ ! -f "$appfilepath" ]; then
-            continue
-        fi
+        if [ ! -f "$appfilepath" ]; then continue; fi
 
-        # Cleanup current scope
         unset -f sdd_install 2> /dev/null || true
-        # Source app management file
         source "$appfilepath"
-        sdd_install $version
 
-        if [ $? -eq 0 ] && [ $success = False ]; then
+        if sdd_install "$version" && [ $success = False ]; then
             success=True
 
             # Record installed app and version (can be empty)
-            echo $app=$version >> "$SDD_DATA_DIR"/apps/installed
+            echo "$app=$version" >> "$SDD_DATA_DIR"/apps/installed
         fi
     done
 
@@ -195,22 +187,16 @@ _uninstall_single_app() {
     app=$(_get_app_name "$appver")
 
     local success=False
-
     local appfilepath
     for dir in "$FRAMEWORKDIR/../apps/user" "$HOME/.config/sdd/apps"; do
         appfilepath="$dir/$app"
 
-        if [ ! -f "$appfilepath" ]; then
-            continue
-        fi
+        if [ ! -f "$appfilepath" ]; then continue; fi
 
-        # Cleanup current scope
         unset -f sdd_uninstall 2> /dev/null || true
-        # Source app management file
         source "$appfilepath"
-        sdd_uninstall
 
-        if [ $? -eq 0 ] && [ $success = False ]; then
+        if sdd_uninstall && [ $success = False ]; then
             success=True
 
             if [ -f "$SDD_DATA_DIR"/apps/installed ]; then
@@ -233,22 +219,18 @@ _upgrade_single_app() {
     local return_code=0
 
     local appver="$1"
-    local app sdd_upgrade_defined version success
+    local app sdd_upgrade_defined
     app=$(_get_app_name "$appver")
+    sdd_upgrade_defined=False
 
     # Evaluate whether any app management file defines sdd_upgrade
-    sdd_upgrade_defined=False
     local appfilepath
     for dir in "$FRAMEWORKDIR/../apps/user" "$HOME/.config/sdd/apps"; do
         appfilepath="$dir/$app"
 
-        if [ ! -f "$appfilepath" ]; then
-            continue
-        fi
+        if [ ! -f "$appfilepath" ]; then continue; fi
 
-        # Cleanup current scope
         unset -f sdd_upgrade 2> /dev/null || true
-        # Source app management file
         source "$appfilepath"
 
         if type -t sdd_upgrade >/dev/null; then
@@ -258,23 +240,19 @@ _upgrade_single_app() {
     done
 
     if [ $sdd_upgrade_defined = True ]; then
+        local version success
         version=$(_get_app_version "$appver")
         success=False
 
         for dir in "$FRAMEWORKDIR/../apps/user" "$HOME/.config/sdd/apps"; do
             appfilepath="$dir/$app"
 
-            if [ ! -f "$appfilepath" ]; then
-                continue
-            fi
+            if [ ! -f "$appfilepath" ]; then continue; fi
 
-            # Cleanup current scope
             unset -f sdd_upgrade 2> /dev/null || true
-            # Source app management file
             source "$appfilepath"
-            sdd_upgrade "$version"
 
-            if [ $? -eq 0 ] && [ $success = False ]; then
+            if sdd_upgrade "$version" && [ $success = False ]; then
                 success=True
 
                 # Record upgraded app and version (can be empty)
@@ -334,9 +312,7 @@ _get_app_version_from_files() {
     for dir in "$FRAMEWORKDIR/../apps/user" "$HOME/.config/sdd/apps"; do
         appfilepath="$dir/$app"
 
-        if [ ! -f "$appfilepath" ]; then
-            continue
-        fi
+        if [ ! -f "$appfilepath" ]; then continue; fi
 
         unset -f sdd_fetch_latest_version 2> /dev/null || true
         source "$appfilepath"

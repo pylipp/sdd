@@ -7,6 +7,10 @@ validcustomappfilepath=$HOME/.config/sdd/apps/valid_app
 invalidappfilepath=../lib/sdd/apps/user/invalid_app
 appsrecordfilepath=$HOME/.local/share/sdd/apps/installed
 
+setup() {
+  mkdir -p $(dirname $validcustomappfilepath)
+}
+
 teardown() {
   rm -f "$validappfilepath"
   rm -f "$superappfilepath"
@@ -77,7 +81,6 @@ teardown() {
 @test "invoking install command with valid custom app succeeds" {
   # Create app management file for 'valid_app' containing an sdd_install
   # function that creates an executable 'valid_app'
-  mkdir -p $(dirname $validcustomappfilepath)
   cp framework/fixtures/valid_app $validcustomappfilepath
 
   run sdd install valid_app
@@ -97,7 +100,6 @@ teardown() {
 
 @test "invoking install command with valid customized app succeeds" {
   # Custom app management file specifies newer version
-  mkdir -p $(dirname $validcustomappfilepath)
   cp framework/fixtures/valid_app $validcustomappfilepath
   sed -i 's/1.0/1.1/' $validcustomappfilepath
   cp framework/fixtures/valid_app $validappfilepath
@@ -118,7 +120,6 @@ teardown() {
 }
 
 @test "invoking install command with valid customized app without sdd_fetch_latest_version succeeds" {
-  mkdir -p $(dirname $validcustomappfilepath)
   echo "sdd_install() { return 0; }" > $validcustomappfilepath
   cp framework/fixtures/valid_app $validappfilepath
 
@@ -172,7 +173,6 @@ teardown() {
 }
 
 @test "invoking install command with valid custom and non-existing app installs only custom one" {
-  mkdir -p $(dirname $validcustomappfilepath)
   cp framework/fixtures/valid_app $validcustomappfilepath
 
   run sdd install valid_app non_existing_app
@@ -250,7 +250,6 @@ teardown() {
 }
 
 @test "invoking uninstall command with valid customized app succeeds" {
-  mkdir -p $(dirname $validcustomappfilepath)
   echo "sdd_uninstall() { touch /tmp/uninstalled; }" > $validcustomappfilepath
   cp framework/fixtures/valid_app $validappfilepath
 
@@ -390,7 +389,6 @@ FILE
 }
 
 @test "invoking upgrade command with valid custom app succeeds" {
-  mkdir -p $(dirname $validcustomappfilepath)
   echo 'sdd_upgrade() { echo Upgrading...; }' > $validcustomappfilepath
 
   run sdd upgrade valid_app

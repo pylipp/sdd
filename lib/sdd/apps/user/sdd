@@ -10,6 +10,10 @@ sdd_install() {
     rm -rf sdd
 }
 
+sdd_upgrade() {
+    sdd_install "$1"
+}
+
 sdd_uninstall() {
     rm -f "$SDD_INSTALL_PREFIX/bin/sdd"
     rm -rf "$SDD_INSTALL_PREFIX/lib/sdd"

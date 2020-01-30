@@ -53,9 +53,7 @@ For enabling `zsh` completion functions (`oh-my-zsh` users: put this before the 
 
 Once the program is bootstrapped, upgrade to the latest version (GitHub master) by
 
-    sdd install sdd
-
-> NOTE: `sdd upgrade sdd` does not work since it removes its source code before trying re-install.
+    sdd upgrade sdd
 
 ## Usage
 

@@ -16,6 +16,18 @@ if [[ ! "$PATH" == *"$prefix/bin"* ]]; then
 fi
 
 # Record installed version
+latest_tag="$(git tag --list --sort -refname | grep -m1 -E 'v0.[0-9]+.[0-9]+.[0-9]+')"
+[ $? -ne 0 ] && exit 1
+
+head_sha="$(git rev-parse HEAD)"
+if [[ "$(git rev-parse "$latest_tag")" != "$head_sha" ]]; then
+    # construct version identifier of form 'v0.X.Y.Z (+N @d34dc0ffee)'
+    nr_commits_since_latest_tag="$(git rev-list "$latest_tag".. --count)"
+    latest_tag="$latest_tag (+$nr_commits_since_latest_tag @$head_sha)"
+fi
+
+echo "$latest_tag" > "$prefix"/lib/sdd/version
+
 SDD_APPS_DIR=${XDG_DATA_DIR:-$HOME/.local/share}/sdd/apps
 mkdir -p "$SDD_APPS_DIR"
-echo sdd="$(git rev-parse HEAD)" >> "$SDD_APPS_DIR"/installed
+echo sdd="$head_sha" >> "$SDD_APPS_DIR"/installed

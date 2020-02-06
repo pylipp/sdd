@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+if [ $# -ne 1 ]; then
+    printf "Usage: %s VERSION\n" "$0" >&2
+    exit 1
+fi
+
+version="$1"
+if ! echo "$version" | grep -m1 -E 'v0.[0-9]+.[0-9]+.[0-9]+' >/dev/null 2>&1; then
+    printf "Version '%s' not in format v0.X.Y.Z\n" "$version" >&2
+    exit 1
+fi
+
+set -e
+git tag "$version"
+git push --tags origin master
+hub release create -m "$version" -m "$(awk -v RS='' "/\[$version\]/" Changelog.md | tail -n+2)" -e -o "$version"

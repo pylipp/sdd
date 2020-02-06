@@ -228,6 +228,11 @@ You're looking for managing an app but it's not included in `sdd` yet? Here's ho
 1. Add the new files, commit, and push.
 1. Open a PR!
 
+### Releasing
+
+1. Update Changelog.
+1. Run `./release VERSION`
+
 ## Python apps
 
 Consider using [`pipx`](https://pipxproject.github.io/pipx/) for installing Python applications (in isolated environments).

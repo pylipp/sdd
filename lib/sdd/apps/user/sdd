@@ -20,5 +20,5 @@ sdd_uninstall() {
 }
 
 sdd_fetch_latest_version() {
-    _sha_of_github_master pylipp sdd
+    _tag_name_of_latest_github_release pylipp sdd
 }

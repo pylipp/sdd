@@ -33,12 +33,14 @@ END_OF_HELP_TEXT
 
 utils_version() {
     # Publish version of present sdd installation to stdout
-    if [ ! -e "$SDD_DATA_DIR"/apps/installed ]; then
-        printf 'Cannot find %s.\n' "$SDD_DATA_DIR"/apps/installed >&2
-        return 1;
+    local version_filepath
+    version_filepath="$FRAMEWORKDIR"/../version
+    if [ ! -e "$version_filepath" ]; then
+        printf 'Cannot find %s.\n' "$version_filepath" >&2
+        return 1
     fi
 
-    tac "$SDD_DATA_DIR"/apps/installed | grep -m 1 '^sdd=' | cut -d '=' -f2
+    cat "$version_filepath"
 }
 
 _validate_apps() {

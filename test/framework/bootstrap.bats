@@ -16,6 +16,9 @@ teardown() {
   
   run "$HOME/.local/bin/sdd"
   [ "$status" -eq 0 ]
+
+  run grep '^v' <("$HOME/.local/bin/sdd" --version)
+  [ "$status" -eq 0 ]
 }
 
 @test "Custom sdd installation succeeds" {

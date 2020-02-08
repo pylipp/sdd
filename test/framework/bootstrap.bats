@@ -13,7 +13,7 @@ teardown() {
 
   run grep '^sdd=' "$HOME/.local/share/sdd/apps/installed"
   [ $status -eq 0 ]
-  
+
   run "$HOME/.local/bin/sdd"
   [ "$status" -eq 0 ]
 
@@ -27,7 +27,7 @@ teardown() {
   [ $status -eq 0 ]
 
   [ -e /usr/bin/sdd ]
-  
+
   run /usr/bin/sdd
   [ "$status" -eq 0 ]
 }

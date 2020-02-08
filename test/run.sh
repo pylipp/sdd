@@ -6,8 +6,14 @@
 # Options:
 #   --debug         Attach to container after running tests
 #   --open          Attach to container instead of running tests
+#   --style         Run style check (linting and formatting)
 # Environment variables:
 #   NO_APP_TESTS    If non-empty, run only framework tests
+
+if [ "$1" = "--style" ]; then
+    ~/.virtualenvs/sdd/bin/pre-commit run --all-files
+    exit $?
+fi
 
 if ! command -v docker &>/dev/null; then
     # Assume container environment; e.g. in the context of DockerHub Autobuild/test

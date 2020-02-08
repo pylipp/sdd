@@ -8,4 +8,9 @@ before_install:
   - docker pull pylipp/sdd
 
 script:
+  - ./test/run.sh --style
   - ./test/run.sh
+
+cache:
+    directories:
+        - $HOME/.cache/pre-commit

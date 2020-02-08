@@ -44,7 +44,7 @@ Same applies for the `MANPATH`:
     export MANPATH="~/.local/share/man:$MANPATH"
 
 For enabling `zsh` completion functions (`oh-my-zsh` users: put this before the line that sources `oh-my-zsh.sh` since it calls `compinit` for setting up completions):
-    
+
     fpath=(~/.local/share/zsh/site-functions $fpath)
 
 `sdd` is tested with `bash` 4.4.12.
@@ -182,16 +182,27 @@ It is distinguished between
 
 - `git`
 - `docker`
+- `python3`
 - optionally: `docker-compose`
+
+### Development environment
+
+Clone this repository and pull the Docker image to enable testing and style-checking.
+
+    git clone https://github.com/pylipp/sdd
+    docker pull pylipp/sdd
+
+Set up the local environment for style-checking using the [pre-commit](https://pre-commit.com/) framework.
+
+    python3 -m venv ~/.virtualenvs/sdd
+    source ~/.virtualenvs/sdd/bin/activate
+    pip install -U -r sdd/test/setup/requirements.txt
+    pre-commit install -f
 
 ### Testing
 
 The program is tested in a container environment using the `bats` framework.
-Clone this repository and pull the Docker image to run tests.
 
-    git clone https://github.com/pylipp/sdd
-    docker pull pylipp/sdd
-    cd sdd
     test/run.sh
 
 You might want to skip app tests since they require an internet connection
@@ -205,6 +216,10 @@ For attaching to the test container after the tests have completed, do
 For creating a Docker container and attaching it to the terminal, do
 
     test/run.sh --open
+
+For style checking, run
+
+    test/run.sh --style
 
 For building the image, run
 

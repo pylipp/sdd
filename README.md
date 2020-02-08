@@ -142,6 +142,7 @@ Name | Description
 [ripgrep](https://github.com/BurntSushi/ripgrep) | Line-oriented text search tool
 sdd | Thanks for being here :)
 [ShellCheck](https://github.com/koalaman/shellcheck) | A static analysis tool for shell scripts
+[shfmt](https://github.com/mvdan/sh) | A shell parser, formatter, and interpreter (sh/bash/mksh)
 
 ## Customization
 

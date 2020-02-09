@@ -1,11 +1,17 @@
 language: minimal
 dist: xenial
 
+addons:
+  apt:
+    packages:
+    - python3-venv
+
 services:
   - docker
 
 before_install:
   - docker pull pylipp/sdd
+  - ./test/setup/venv
 
 script:
   - ./test/run.sh --style
@@ -14,3 +20,4 @@ script:
 cache:
     directories:
         - $HOME/.cache/pre-commit
+        - $HOME/.cache/pip

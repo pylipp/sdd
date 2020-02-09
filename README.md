@@ -194,10 +194,7 @@ Clone this repository and pull the Docker image to enable testing and style-chec
 
 Set up the local environment for style-checking using the [pre-commit](https://pre-commit.com/) framework.
 
-    python3 -m venv ~/.virtualenvs/sdd
-    source ~/.virtualenvs/sdd/bin/activate
-    pip install -U -r sdd/test/setup/requirements.txt
-    pre-commit install -f
+    test/setup/venv
 
 ### Testing
 

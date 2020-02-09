@@ -23,12 +23,6 @@ RUN git clone https://github.com/jasonkarns/bats-assert-1 /usr/local/libexec/bat
   cd /usr/local/libexec/bats-assert && \
   git checkout v2.0.0
 
-COPY ./requirements.txt /tmp
-RUN python3 -m venv ~/.virtualenvs/sdd && \
-  . ~/.virtualenvs/sdd/bin/activate && \
-  pip install -U -r /tmp/requirements.txt && \
-  rm -r /tmp/requirements.txt ~/.cache/pip
-
 RUN package=shellcheck-v0.7.0 && \
   archive=$package.linux.x86_64.tar.xz && \
   wget -P /tmp https://shellcheck.storage.googleapis.com/$archive && \

@@ -1,3 +1,4 @@
 pip==20.0.2
+setuptools
 wheel
 pre-commit==1.21.0

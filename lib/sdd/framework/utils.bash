@@ -1,5 +1,9 @@
 # Utility functions for sdd framework
 
+# Disable "Can't follow non-constant source" warning for this file
+# shellcheck disable=SC1090
+true
+
 FRAMEWORKDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
 utils_usage() {
@@ -69,11 +73,11 @@ _validate_apps() {
             printf 'App "%s" could not be found.\n' "$app" >&2
             return_code=2
         else
-            valid_appvers+=($appver)
+            valid_appvers+=("$appver")
         fi
     done
 
-    echo ${valid_appvers[@]}
+    echo "${valid_appvers[@]}"
     return $return_code
 }
 
@@ -110,6 +114,7 @@ _manage_apps() {
     fi
 
     local appvers=()
+    # shellcheck disable=SC2207
     appvers=($(_validate_apps "$@"))
     return_code=$?
 
@@ -319,8 +324,7 @@ _get_app_version_from_files() {
         unset -f sdd_fetch_latest_version 2> /dev/null || true
         source "$appfilepath"
 
-        version_from_file=$(sdd_fetch_latest_version 2>/dev/null)
-        if [ $? -eq 0 ]; then
+        if version_from_file=$(sdd_fetch_latest_version 2>/dev/null); then
             version=$version_from_file
         fi
     done
@@ -380,18 +384,18 @@ _tag_name_of_latest_github_release() {
     # Fetch tag name of latest release on GitHub
     local github_user=$1
     local repo_name=$2
-    wget -qO- https://api.github.com/repos/$github_user/$repo_name/releases/latest | grep tag_name | awk '{ print $2; }' | sed 's/[",]//g'
+    wget -qO- https://api.github.com/repos/"$github_user"/"$repo_name"/releases/latest | grep tag_name | awk '{ print $2; }' | sed 's/[",]//g'
 }
 
 _sha_of_github_master() {
     # Fetch SHA of latest commit on GitHub master branch
     local github_user=$1
     local repo_name=$2
-    wget -qO- https://api.github.com/repos/$github_user/$repo_name/commits/master | grep -m1 sha | awk '{ print $2; }' | sed 's/[",]//g'
+    wget -qO- https://api.github.com/repos/"$github_user"/"$repo_name"/commits/master | grep -m1 sha | awk '{ print $2; }' | sed 's/[",]//g'
 }
 
 _name_of_latest_github_tag() {
     local github_user=$1
     local repo_name=$2
-    wget -qO- https://api.github.com/repos/$github_user/$repo_name/tags | grep -m1 name | awk '{ print $2; }' | sed 's/[",]//g'
+    wget -qO- https://api.github.com/repos/"$github_user"/"$repo_name"/tags | grep -m1 name | awk '{ print $2; }' | sed 's/[",]//g'
 }

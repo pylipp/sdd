@@ -3,7 +3,7 @@
 sdd_install() {
     command -v python3 || return 1
 
-    cd /tmp
+    cd /tmp || return 1
     wget https://bootstrap.pypa.io/get-pip.py
 
     python3 get-pip.py --user

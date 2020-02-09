@@ -16,8 +16,10 @@ if [[ ! "$PATH" == *"$prefix/bin"* ]]; then
 fi
 
 # Record installed version
-latest_tag="$(git tag --list --sort -refname | grep -m1 -E 'v0.[0-9]+.[0-9]+.[0-9]+')"
-[ $? -ne 0 ] && exit 1
+if ! latest_tag="$(git tag --list --sort -refname | grep -m1 -E 'v0.[0-9]+.[0-9]+.[0-9]+')"; then
+    echo "Failed to find latest tag!" >&2
+    exit 1
+fi
 
 head_sha="$(git rev-parse HEAD)"
 if [[ "$(git rev-parse "$latest_tag")" != "$head_sha" ]]; then

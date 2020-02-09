@@ -4,7 +4,7 @@
 
 SCRIPTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
-# shellcheck source=../lib/sdd/framework/utils.bash
+# shellcheck source=lib/sdd/framework/utils.bash
 source "$SCRIPTDIR"/../lib/sdd/framework/utils.bash
 
 SDD_INSTALL_PREFIX=${SDD_INSTALL_PREFIX:-$HOME/.local}
@@ -40,7 +40,7 @@ main() {
     elif [ "$command" = "--version" ]; then
         utils_version
         exit_code=$?
-    elif [ ! -z "$command" ]; then
+    elif [ -n "$command" ]; then
         printf 'Unknown command "%s"\n' "$command" >&2
         exit_code=127
     else

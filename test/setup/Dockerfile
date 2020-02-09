@@ -29,6 +29,14 @@ RUN python3 -m venv ~/.virtualenvs/sdd && \
   pip install -U -r /tmp/requirements.txt && \
   rm -r /tmp/requirements.txt ~/.cache/pip
 
+RUN package=shellcheck-v0.7.0 && \
+  archive=$package.linux.x86_64.tar.xz && \
+  wget -P /tmp https://shellcheck.storage.googleapis.com/$archive && \
+  cd /tmp && \
+  tar xf $archive && \
+  mv $package/shellcheck /usr/local/bin && \
+  rm -rf $archive $package
+
 ENV PATH=/root/.local/bin:/opt/sdd/bin:$PATH
 
 RUN echo 'set -o vi' >> /root/.bashrc

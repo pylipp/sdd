@@ -6,5 +6,6 @@ VENV_DIR=~/.virtualenvs/sdd
 python3 -m venv "$VENV_DIR"
 # shellcheck disable=SC1090
 source "$VENV_DIR"/bin/activate
+pip install -U -r "$SCRIPTDIR"/pre-requirements.txt
 pip install -U -r "$SCRIPTDIR"/requirements.txt
 pre-commit install -f

@@ -34,7 +34,7 @@ RUN package=shellcheck-v0.7.0 && \
   wget -P /tmp https://shellcheck.storage.googleapis.com/$archive && \
   cd /tmp && \
   tar xf $archive && \
-  mv $package/shellcheck /usr/local/bin && \
+  mv $package/shellcheck /opt && \
   rm -rf $archive $package
 
 ENV PATH=/root/.local/bin:/opt/sdd/bin:$PATH

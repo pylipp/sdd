@@ -11,6 +11,6 @@ repos:
     hooks:
     -   id: shellcheck
         name: shellcheck
-        entry: pylipp/sdd:latest shellcheck -x
+        entry: pylipp/sdd:latest /opt/shellcheck -x
         language: docker_image
         types: [shell]

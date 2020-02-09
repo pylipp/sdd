@@ -11,6 +11,25 @@ sdd_install() {
 
     mv $package/shellcheck "$SDD_INSTALL_PREFIX"/bin
 
+    # Compile manpage if pandoc available
+    if command -v pandoc >/dev/null 2>&1; then
+        wget https://raw.githubusercontent.com/koalaman/shellcheck/"$version"/shellcheck.1.md
+
+        local option=
+        if pandoc --version | grep -E '^pandoc 1\.' >/dev/null 2>&1; then
+            # pandoc v1.X requires an extra option but in 2.X it's the default for markdown
+            # https://github.com/jgm/pandoc/issues/3416
+            option=--smart
+        fi
+        pandoc -s $option -f markdown -t man shellcheck.1.md -o shellcheck.1
+
+        mkdir -p "$SDD_INSTALL_PREFIX"/share/man/man1
+        mv shellcheck.1 "$SDD_INSTALL_PREFIX"/share/man/man1
+        rm shellcheck.1.md
+    else
+        echo "pandoc not available - can't build man page" >&2
+    fi
+
     rm -rf $archive $package
 }
 

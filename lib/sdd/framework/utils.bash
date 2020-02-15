@@ -118,8 +118,9 @@ _manage_apps() {
     appvers=($(_validate_apps "$@"))
     return_code=$?
 
-    local app stderrlog rclog
+    local app stderrlog rclog tmplog
     rclog=/tmp/sdd-manage.rc
+    tmplog=/tmp/sdd-manage.tmp
 
     for appver in "${appvers[@]}"; do
         app=$(_get_app_name "$appver")
@@ -133,7 +134,15 @@ _manage_apps() {
         # Invoke management function. If failed, track return code in file.
         # Redirect stdout (=combined stdout and stderr from sdd_* functions) to log file
         rm -f $rclog
-        { _"$manage"_single_app "$appver" || echo $? > $rclog; } > "$stderrlog"
+        if [ -t 1 ]; then
+            # If stdout attached to terminal, manage in background and display spinner
+            { _"$manage"_single_app "$appver" || echo $? > $rclog; } > "$stderrlog" 2> "$tmplog" &
+            _spin $!
+            # Show additional output from e.g. _get_app_version now to not collide with spinner
+            cat "$tmplog"
+        else
+            { _"$manage"_single_app "$appver" || echo $? > $rclog; } > "$stderrlog"
+        fi
 
         if [ -e $rclog ]; then
             printf 'Failed to %s "%s". See %s.\n' "$manage" "$app" "$stderrlog" > >(tee -a "$stderrlog" >&2 )
@@ -145,6 +154,22 @@ _manage_apps() {
     done
 
     return $return_code
+}
+
+_spin() {
+    # Display spinner until process corresponding to given PID has finished
+    # Args: PID
+    # https://unix.stackexchange.com/a/225183/192726
+    local pid i spinchars
+    pid=$1
+    i=1
+    spinchars='/-\|'
+
+    while [ -d /proc/"$pid" ]; do
+        printf "\b%s" "${spinchars:i++%${#spinchars}:1}"
+        sleep 0.2
+    done
+    printf "\b"
 }
 
 _install_single_app() {

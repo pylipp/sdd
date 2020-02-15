@@ -10,6 +10,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Changed
 - Specifying a version for installing or upgrading pip is possible.
 - Upgrading oh-my-zsh now git-pulls in existing `$ZSH` repository.
+- Any output from `sdd_*` management functions is redirected to a log file.
 ### Deprecated
 ### Removed
 ### Fixed

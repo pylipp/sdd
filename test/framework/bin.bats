@@ -55,8 +55,7 @@ teardown() {
 
   run sdd install invalid_app
   assert_failure 4
-  assert_output -e 'Failed to install "invalid_app". See above and /tmp/sdd-install-invalid_app.stderr.\n*'
-  assert_output -p 'sdd_install: command not found'
+  assert_line -n 0 'Failed to install "invalid_app". See /tmp/sdd-install-invalid_app.stderr.'
 }
 
 @test "invoking install command with valid app succeeds" {
@@ -160,10 +159,10 @@ teardown() {
 
   run sdd install valid_app invalid_app
   assert_failure 4
-  [ "${lines[0]}" = 'Latest version available: 1.0' ]
-  [ "${lines[1]}" = 'Succeeded to install "valid_app".' ]
-  assert_output -e 'Failed to install "invalid_app". See above and /tmp/sdd-install-invalid_app.stderr.\n*'
-  assert_output -p 'sdd_install: command not found'
+  assert_line -n 0 'Latest version available: 1.0'
+  assert_line -n 1 'Succeeded to install "valid_app".'
+  assert_line -n 2 'Failed to install "invalid_app". See /tmp/sdd-install-invalid_app.stderr.'
+  assert_equal ${#lines[@]} 3
 
   run valid_app
   [ "$status" -eq 0 ]
@@ -220,8 +219,7 @@ teardown() {
 
   run sdd uninstall invalid_app
   assert_failure 8
-  assert_output -e 'Failed to uninstall "invalid_app". See above and /tmp/sdd-uninstall-invalid_app.stderr.\n*'
-  assert_output -p 'sdd_uninstall: command not found'
+  assert_line -n 0 'Failed to uninstall "invalid_app". See /tmp/sdd-uninstall-invalid_app.stderr.'
 }
 
 @test "invoking uninstall command with valid app succeeds" {
@@ -240,8 +238,6 @@ teardown() {
   assert_equal ${#lines[@]} 1
 
   # Check log file content
-  run cat /tmp/sdd-uninstall-valid_app.stdout
-  assert_output ''
   run cat /tmp/sdd-uninstall-valid_app.stderr
   assert_output 'Succeeded to uninstall "valid_app".'
 
@@ -327,9 +323,8 @@ teardown() {
 
   run sdd upgrade invalid_app
   assert_failure 8
-  assert_line -n 0 -p 'sdd_uninstall: command not found'
-  assert_line -n 1 'Failed to upgrade "invalid_app". See above and /tmp/sdd-upgrade-invalid_app.stderr.'
-  assert_equal ${#lines[@]} 2
+  assert_line -n 0 'Failed to upgrade "invalid_app". See /tmp/sdd-upgrade-invalid_app.stderr.'
+  assert_equal ${#lines[@]} 1
 }
 
 @test "invoking upgrade command with existing app but without sdd_install present fails" {
@@ -340,9 +335,8 @@ FILE
 
   run sdd upgrade invalid_app
   assert_failure 4
-  assert_line -n 0 -p 'sdd_install: command not found'
-  assert_line -n 1 'Failed to upgrade "invalid_app". See above and /tmp/sdd-upgrade-invalid_app.stderr.'
-  assert_equal ${#lines[@]} 2
+  assert_line -n 0 'Failed to upgrade "invalid_app". See /tmp/sdd-upgrade-invalid_app.stderr.'
+  assert_equal ${#lines[@]} 1
 }
 
 @test "invoking upgrade command with valid and non-existing app upgrades only valid one" {
@@ -368,12 +362,15 @@ FILE
   run sdd upgrade valid_app
   assert_success
   assert_line -n 0 'Latest version available: 1.0'
-  assert_line -n 1 'Upgrading to 1.0...'
-  assert_line -n 2 'Succeeded to upgrade "valid_app".'
-  assert_equal ${#lines[@]} 3
+  assert_line -n 1 'Succeeded to upgrade "valid_app".'
+  assert_equal ${#lines[@]} 2
 
   run valid_app
   assert_success
+
+  run cat /tmp/sdd-upgrade-valid_app.stderr
+  assert_line -n 0 'Upgrading to 1.0...'
+  assert_line -n 1 'Succeeded to upgrade "valid_app".'
 
   # The upgraded app version is recorded
   [ "$(tail -n1 $appsrecordfilepath)" = "valid_app=1.0" ]
@@ -384,7 +381,7 @@ FILE
 
   run sdd upgrade invalid_app
   assert_failure 16
-  assert_line -n 0 'Failed to upgrade "invalid_app". See above and /tmp/sdd-upgrade-invalid_app.stderr.'
+  assert_line -n 0 'Failed to upgrade "invalid_app". See /tmp/sdd-upgrade-invalid_app.stderr.'
   assert_equal ${#lines[@]} 1
 }
 
@@ -394,9 +391,11 @@ FILE
   run sdd upgrade valid_app
   assert_success
   assert_line -n 0 'Custom upgrade function for "valid_app" found.'
-  assert_line -n 1 'Upgrading...'
-  assert_line -n 2 'Succeeded to upgrade "valid_app".'
-  assert_equal ${#lines[@]} 3
+  assert_line -n 1 'Succeeded to upgrade "valid_app".'
+  assert_equal ${#lines[@]} 2
+
+  run cat /tmp/sdd-upgrade-valid_app.stderr
+  assert_line -n 0 'Upgrading...'
 }
 
 @test "invoking list with --installed option displays installed apps including versions" {

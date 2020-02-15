@@ -118,7 +118,7 @@ _manage_apps() {
     appvers=($(_validate_apps "$@"))
     return_code=$?
 
-    local app stdoutlog stderrlog rclog
+    local app stderrlog rclog
     rclog=/tmp/sdd-manage.rc
 
     for appver in "${appvers[@]}"; do
@@ -128,17 +128,15 @@ _manage_apps() {
             printf 'Custom %s function for "%s" found.\n' "$manage" "$app" >&2
         fi
 
-        stdoutlog=/tmp/sdd-$manage-$app.stdout
         stderrlog=/tmp/sdd-$manage-$app.stderr
 
         # Invoke management function. If failed, track return code in file.
-        # Redirect both stderr and stdout to log files (from
-        # https://stackoverflow.com/a/59435204/3865876)
+        # Redirect stdout (=combined stdout and stderr from sdd_* functions) to log file
         rm -f $rclog
-        { { _"$manage"_single_app "$appver" || echo $? > $rclog;} 3>&1 1>&2 2>&3- | tee "$stderrlog";} 3>&1 1>&2 2>&3- | tee "$stdoutlog"
+        { _"$manage"_single_app "$appver" || echo $? > $rclog; } > "$stderrlog"
 
         if [ -e $rclog ]; then
-            printf 'Failed to %s "%s". See above and %s.\n' "$manage" "$app" "$stderrlog" > >(tee -a "$stderrlog" >&2 )
+            printf 'Failed to %s "%s". See %s.\n' "$manage" "$app" "$stderrlog" > >(tee -a "$stderrlog" >&2 )
 
             ((return_code+=$(cat $rclog)))
         else
@@ -169,7 +167,7 @@ _install_single_app() {
         unset -f sdd_install 2> /dev/null || true
         source "$appfilepath"
 
-        if sdd_install "$version" && [ $success = False ]; then
+        if sdd_install "$version" 2>&1 && [ $success = False ]; then
             success=True
 
             # Record installed app and version (can be empty)
@@ -203,7 +201,7 @@ _uninstall_single_app() {
         unset -f sdd_uninstall 2> /dev/null || true
         source "$appfilepath"
 
-        if sdd_uninstall && [ $success = False ]; then
+        if sdd_uninstall 2>&1 && [ $success = False ]; then
             success=True
 
             if [ -f "$SDD_DATA_DIR"/apps/installed ]; then
@@ -259,7 +257,7 @@ _upgrade_single_app() {
             unset -f sdd_upgrade 2> /dev/null || true
             source "$appfilepath"
 
-            if sdd_upgrade "$version" && [ $success = False ]; then
+            if sdd_upgrade "$version" 2>&1 && [ $success = False ]; then
                 success=True
 
                 # Record upgraded app and version (can be empty)

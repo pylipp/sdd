@@ -118,7 +118,7 @@ List all installed apps that can be upgraded to a more recent version with
 
 ### General help
 
-`sdd` is verbose. Any program output during management is forwarded to the terminal, and to respective `stdout`/`stderr` log files in `/tmp`.
+High-level program output during management is forwarded to the terminal. Output of the `sdd_*` functions of the app management file is in `/tmp/sdd-<command>-<app>.stderr`.
 
 You can always consult
 

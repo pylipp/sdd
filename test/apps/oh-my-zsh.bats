@@ -18,6 +18,10 @@ teardown() {
 
   [ -d ~/.oh-my-zsh ]
 
+  run sdd upgrade oh-my-zsh
+  [ $status -eq 0 ]
+  [ "${lines[-1]}" = 'Succeeded to upgrade "oh-my-zsh".' ]
+
   run sdd uninstall oh-my-zsh
   [ $status -eq 0 ]
   [ "$output" = 'Succeeded to uninstall "oh-my-zsh".' ]

@@ -2,7 +2,7 @@
 
 sdd_install() {
     local version=${1:-master}
-    wget -P /tmp https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/$version/tools/install.sh
+    wget -P /tmp https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/"$version"/tools/install.sh
     local install_path=/tmp/install.sh
 
     # Don't execute zsh when installation is done
@@ -15,8 +15,17 @@ sdd_install() {
     rm $install_path
 }
 
+sdd_upgrade() {
+    local version=${1:-master}
+
+    cd "${ZSH:-$HOME/.oh-my-zsh}" || return 1
+    git checkout master
+    git pull
+    git checkout "$version"
+}
+
 sdd_uninstall() {
-    rm -rf ${ZSH:-~/.oh-my-zsh}
+    rm -rf "${ZSH:-$HOME/.oh-my-zsh}"
 }
 
 sdd_fetch_latest_version() {

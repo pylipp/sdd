@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - When installing shellcheck, the corresponding man page is installed if pandoc is available.
 ### Changed
 - Specifying a version for installing or upgrading pip is possible.
+- Upgrading oh-my-zsh now git-pulls in existing `$ZSH` repository.
 ### Deprecated
 ### Removed
 ### Fixed

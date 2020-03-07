@@ -371,8 +371,10 @@ utils_list() {
         printf 'Built-in:\n'
         find "$FRAMEWORKDIR/../apps/user" -type f -exec basename {} \; | sort | sed 's/^/- /'
 
-        printf '\nCustom:\n'
-        find "$HOME/.config/sdd/apps" -follow -type f -exec basename {} \; | sort | sed 's/^/- /'
+        if [ -d "$HOME/.config/sdd/apps" ]; then
+            printf '\nCustom:\n'
+            find "$HOME/.config/sdd/apps" -follow -type f -exec basename {} \; | sort | sed 's/^/- /'
+        fi
     elif [ "$option" = "--upgradable" ]; then
         local name installed_version newest_version
 

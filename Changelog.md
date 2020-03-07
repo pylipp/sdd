@@ -15,6 +15,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Deprecated
 ### Removed
 ### Fixed
+- Handle non-existing custom apps directory when listing available apps.
 
 ## [v0.1.0.0] - 2020-02-06
 First release.

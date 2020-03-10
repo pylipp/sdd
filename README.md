@@ -7,7 +7,7 @@
 
 During occasional strolls on reddit or github, my attention is often drawn towards programs that increase productivity or provide an enhancement over others. (As a somewhat irrelevant side note - these programs mostly work in the command line.) Usually these programs are available for download as binary or script, meaning that naturally, the management (installation, upgrade, removal) of those programs has to be performed manually. At this point `sdd` comes into play: It provides a framework to automatize the tasks of managing the programs (or, in `sdd` terminology, 'apps'). The procedures to manage specific apps are defined within scripts in this repository (at `lib/sdd/apps/user/`).
 
-`sdd` enables me to keep track of my favorite programs, on different machines. I'm working towards having systems set up in a reproducible way on my machines. `sdd` helps me, since I might have different Linux distributions installed on these machine, with different package manager providing different versions of required programs (or none at all). I can freeze the versions of all apps managed by sdd with `sdd list --installed > sdd_freeze.txt`, and re-create them with `sdd install <(sdd_freeze.txt)`.
+`sdd` enables me to keep track of my favorite programs, on different machines. I'm working towards having systems set up in a reproducible way on my machines. `sdd` helps me, since I might have different Linux distributions installed on these machine, with different package manager providing different versions of required programs (or none at all). I can freeze the versions of all apps managed by sdd with `sdd list --installed > sdd_freeze.txt`, and re-create them with `sdd install <(cat sdd_freeze.txt | xargs)`.
 
 ## WARNINGS
 
@@ -15,7 +15,7 @@ During occasional strolls on reddit or github, my attention is often drawn towar
 
 When using `sdd`, you execute functionality to manipulate your system. Especially, you download programs from third parties, and install them on your system. Most sources are provided by GitHub releases pages. Keep in mind that repositories can be compromised, and malicious code placed inside; and `sdd` will still happily download it. (If you have an idea how to mitigate this security flaw, please open an issue.)
 
-`sdd` is targeted to 64bit Linux systems. Some apps might not work when installed to different architectures. If available, `zsh` shell completion and `man` pages are set up when installing an app.
+`sdd` is targeted to 64bit Linux systems. Some apps might not work when installed to different architectures. If available, `bash` and/or `zsh` shell completion and `man` pages are set up when installing an app.
 
 ## Demo
 
@@ -73,7 +73,9 @@ By default, `sdd` installs the latest version of the app available. You can spec
 
     sdd install <app>=<version>
 
-Note that an existing installation of the app will be overwritten.
+> This command overwrites an existing installation of the app without additional conformation.
+
+> The format of the `<version>` specifier depends on the app that is managed (usually it's the tag of the release on GitHub).
 
 ### Upgrading an app
 

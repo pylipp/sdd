@@ -3,6 +3,7 @@
 SCRIPTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 VENV_DIR=~/.virtualenvs/sdd
 
+rm -rf "$VENV_DIR"
 python3 -m venv "$VENV_DIR"
 # shellcheck disable=SC1090
 source "$VENV_DIR"/bin/activate

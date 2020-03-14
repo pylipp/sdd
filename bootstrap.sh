@@ -6,6 +6,13 @@ SCRIPTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
 prefix=${PREFIX:-~/.local}
 
+for dep in wget bash; do
+    if ! command -v $dep >/dev/null 2>&1; then
+        echo "Could not find $dep." >&2
+        exit 1
+    fi
+done
+
 mkdir -p "$prefix"/{bin,lib}
 
 cp "$SCRIPTDIR"/bin/sdd "$prefix"/bin

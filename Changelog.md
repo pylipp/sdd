@@ -3,7 +3,7 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## Unreleased
+## [v0.1.1.0] - 2020-03-14
 ### Added
 - App management file for [shfmt](https://github.com/mvdan/sh)
 - When installing shellcheck, the corresponding man page is installed if pandoc is available.
@@ -13,8 +13,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Specifying a version for installing or upgrading pip is possible.
 - Upgrading oh-my-zsh now git-pulls in existing `$ZSH` repository.
 - Any output from `sdd_*` management functions is redirected to a log file.
-### Deprecated
-### Removed
 ### Fixed
 - Handle non-existing custom apps directory when listing available apps.
 

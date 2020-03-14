@@ -19,7 +19,7 @@ When using `sdd`, you execute functionality to manipulate your system. Especiall
 
 ## Demo
 
-The following screencast demonstrates how `sdd` is used to install and uninstalled the [`fd`](https://github.com/sharkdp/fd) utility.
+The following screencast demonstrates how `sdd` is used to install, upgrade and uninstalled the [`fd`](https://github.com/sharkdp/fd) utility.
 
 ![Demo](./demo.svg)
 
@@ -29,6 +29,7 @@ Clone the directory and run the bootstrap script to install `sdd` to `~/.local`:
 
     git clone https://github.com/pylipp/sdd
     cd sdd
+    git checkout v0.1.1.0  # or any other revision
     ./bootstrap.sh
 
 You can specify the installation directory with the `PREFIX` environment variable:
@@ -51,7 +52,7 @@ For enabling `zsh` completion functions (`oh-my-zsh` users: put this before the 
 
 ## Upgrading
 
-Once the program is bootstrapped, upgrade to the latest version (GitHub master) by
+Once the program is bootstrapped, upgrade to the latest version by
 
     sdd upgrade sdd
 

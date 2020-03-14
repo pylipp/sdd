@@ -32,6 +32,9 @@ Options for list command:
     --available     List apps available for installation
     --upgradable    List apps that can be upgraded
 
+Environment variables:
+    SDD_VERBOSE     If set, sdd is more verbose about internal processes
+
 END_OF_HELP_TEXT
 }
 
@@ -135,11 +138,19 @@ _manage_apps() {
         # Redirect stdout (=combined stdout and stderr from sdd_* functions) to log file
         rm -f $rclog
         if [ -t 1 ]; then
-            # If stdout attached to terminal, manage in background and display spinner
-            { _"$manage"_single_app "$appver" || echo $? > $rclog; } > "$stderrlog" 2> "$tmplog" &
-            _spin $!
-            # Show additional output from e.g. _get_app_version now to not collide with spinner
-            cat "$tmplog"
+            # stdout attached to terminal
+
+            if [ -n "$SDD_VERBOSE" ]; then
+                # Run manage and forward any output additionally to terminal
+                { _"$manage"_single_app "$appver" || echo $? > $rclog; } | tee -a "$stderrlog"
+
+            else
+                # Run manage in background and display spinner
+                { _"$manage"_single_app "$appver" || echo $? > $rclog; } > "$stderrlog" 2> "$tmplog" &
+                _spin $!
+                # Show additional output from e.g. _get_app_version now to not collide with spinner
+                cat "$tmplog"
+            fi
         else
             { _"$manage"_single_app "$appver" || echo $? > $rclog; } > "$stderrlog"
         fi

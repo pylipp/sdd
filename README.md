@@ -120,7 +120,9 @@ List all installed apps that can be upgraded to a more recent version with
 
 ### General help
 
-High-level program output during management is forwarded to the terminal. Output of the `sdd_*` functions of the app management file is in `/tmp/sdd-<command>-<app>.stderr`.
+High-level program output during management is forwarded to the terminal. Output of the `sdd_*` functions of the app management file is in `/tmp/sdd-<command>-<app>.stderr`. For increased verbosity when running `sdd`, set the respective environment variable before invoking the program
+
+    SDD_VERBOSE=1 sdd install <app>
 
 You can always consult
 

@@ -11,6 +11,6 @@
   [ $status -eq 0 ]
   [ "$output" = 'Succeeded to uninstall "hub".' ]
 
-  run which rg
+  run which hub
   [ $status -eq 1 ]
 }

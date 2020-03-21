@@ -222,6 +222,10 @@ For attaching to the test container after the tests have completed, do
 
     test/run.sh --debug
 
+For running specific tests
+
+    test/run.sh apps/fd.bats apps/sdd.bats
+
 For creating a Docker container and attaching it to the terminal, do
 
     test/run.sh --open

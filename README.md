@@ -210,7 +210,7 @@ Set up the local environment for style-checking using the [pre-commit](https://p
 
 ### Testing
 
-The program is tested in a container environment using the `bats` framework.
+The program is tested in a container environment using the `bats` framework. The test runner must be invoked from the repository root (i.e. the same directory that this README resides in):
 
     test/run.sh
 

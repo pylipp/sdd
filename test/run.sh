@@ -28,7 +28,15 @@ if ! command -v docker &>/dev/null; then
     exit $?
 fi
 
-container_id=$(docker run -d -it --rm --volume "$(pwd)":/opt/sdd --workdir /opt/sdd/test pylipp/sdd:latest)
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+ROOT_DIR="$( cd "$SCRIPT_DIR"/.. && pwd )"
+
+if [ "$(pwd)" != "$ROOT_DIR" ]; then
+    echo "Script must be invoked from repository root." >&2
+    exit 1
+fi
+
+container_id=$(docker run -d -it --rm --volume "$ROOT_DIR":/opt/sdd --workdir /opt/sdd/test pylipp/sdd:latest)
 
 if [ "$1" = "--open" ]; then
     docker attach "$container_id"

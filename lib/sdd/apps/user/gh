@@ -1,0 +1,32 @@
+sdd_install() {
+    local version=$1
+    local arch=amd64
+    if [[ $(arch) = armv7l ]]; then
+        arch=arm64
+    fi
+
+    local package_dir archive
+    # Strip prefixed v from version number for package name
+    package_dir=gh_$(echo "$version" | tr -d v)_linux_$arch
+    archive="$package_dir".tar.gz
+
+    wget -P /tmp https://github.com/cli/cli/releases/download/"$version"/"$archive"
+    cd /tmp
+    tar xfv "$archive"
+
+    mv -v "$package_dir"/bin/gh "$SDD_INSTALL_PREFIX"/bin
+
+    mkdir -p "$SDD_INSTALL_PREFIX"/share/{bash_completion,zsh/site-functions}
+    "$SDD_INSTALL_PREFIX"/gh completion --shell bash > "$SDD_INSTALL_PREFIX"/share/bash_completion/gh
+    "$SDD_INSTALL_PREFIX"/gh completion --shell zsh > "$SDD_INSTALL_PREFIX"/share/zsh/site-functions/_gh
+
+    rm -rfv "$package_dir" "$archive"
+}
+
+sdd_uninstall() {
+    rm -rfv "$SDD_INSTALL_PREFIX"/bin/gh "$SDD_INSTALL_PREFIX"/share/zsh/site-functions/_gh "$SDD_INSTALL_PREFIX"/share/bash_completion/gh
+}
+
+sdd_fetch_latest_version() {
+    _tag_name_of_latest_github_release cli cli
+}

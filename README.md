@@ -146,6 +146,7 @@ Name | Description
 [diff-so-fancy](https://github.com/so-fancy/diff-so-fancy) | Human readable diffs
 [direnv](https://github.com/direnv/direnv) | Handle environment variables depending on current directory
 [fd](https://github.com/sharkdp/fd) | A simple, fast and user-friendly alternative to 'find'
+[gh](https://github.com/cli/cli) | GitHub's official command line tool
 [hub](https://github.com/github/hub) | Command line tool to interact with GitHub
 [jq](https://github.com/stedolan/jq) | Command line JSON processor
 [oh-my-zsh](https://github.com/robbyrussell/oh-my-zsh) | Framework for managing zsh configuration

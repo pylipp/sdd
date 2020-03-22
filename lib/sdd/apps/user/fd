@@ -14,17 +14,19 @@ sdd_install() {
     mkdir -p "$SDD_INSTALL_PREFIX"/share/man/man1
     mv $package/fd.1 "$SDD_INSTALL_PREFIX"/share/man/man1
 
-    # Install zsh completion
-    mkdir -p "$SDD_INSTALL_PREFIX"/share/zsh/site-functions
-    cp $package/autocomplete/_fd "$SDD_INSTALL_PREFIX"/share/zsh/site-functions/_fd
+    # Install shell completion
+    mkdir -p "$SDD_INSTALL_PREFIX"/share/{bash_completion,zsh/site-functions}
+    cp "$package"/autocomplete/_fd "$SDD_INSTALL_PREFIX"/share/zsh/site-functions/_fd
+    cp "$package"/autocomplete/fd.bash-completion "$SDD_INSTALL_PREFIX"/share/bash_completion/fd
 
     rm -rf $package.tar.gz $package
 }
 
 sdd_uninstall() {
-    rm -v "$SDD_INSTALL_PREFIX"/bin/fd
-    rm -v "$SDD_INSTALL_PREFIX"/share/man/man1/fd.1
-    rm -v "$SDD_INSTALL_PREFIX"/share/zsh/site-functions/_fd
+    rm -fv "$SDD_INSTALL_PREFIX"/bin/fd
+    rm -fv "$SDD_INSTALL_PREFIX"/share/man/man1/fd.1
+    rm -fv "$SDD_INSTALL_PREFIX"/share/zsh/site-functions/_fd
+    rm -fv "$SDD_INSTALL_PREFIX"/share/bash_completion/fd
 }
 
 sdd_fetch_latest_version() {

@@ -148,6 +148,7 @@ Name | Description
 [fd](https://github.com/sharkdp/fd) | A simple, fast and user-friendly alternative to 'find'
 [gh](https://github.com/cli/cli) | GitHub's official command line tool
 [hub](https://github.com/github/hub) | Command line tool to interact with GitHub
+[jira](https://github.com/go-jira/jira) | Simple JIRA command line client in Go
 [jq](https://github.com/stedolan/jq) | Command line JSON processor
 [oh-my-zsh](https://github.com/robbyrussell/oh-my-zsh) | Framework for managing zsh configuration
 [pip](https://pypi.org/project/pip/) | Python package manager

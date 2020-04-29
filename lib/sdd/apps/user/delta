@@ -1,0 +1,28 @@
+#! /bin/bash
+
+sdd_install() {
+    local version=$1
+    local package=delta-$version-x86_64-unknown-linux-musl
+
+    wget -P /tmp https://github.com/dandavison/delta/releases/download/$version/$package.tar.gz
+    cd /tmp
+    tar xf $package.tar.gz
+
+    mv $package/delta "$SDD_INSTALL_PREFIX"/bin
+
+    # Install shell completion
+    mkdir -p "$SDD_INSTALL_PREFIX"/share/bash_completion
+    wget -O "$SDD_INSTALL_PREFIX"/share/bash_completion/delta \
+        https://raw.githubusercontent.com/dandavison/delta/$version/completion/bash/completion.sh
+
+    rm -rf $package.tar.gz $package
+}
+
+sdd_uninstall() {
+    rm -fv "$SDD_INSTALL_PREFIX"/bin/delta
+    rm -fv "$SDD_INSTALL_PREFIX"/share/bash_completion/delta
+}
+
+sdd_fetch_latest_version() {
+    _tag_name_of_latest_github_release dandavison delta
+}

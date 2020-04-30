@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - App management file for [gh](https://github.com/cli/cli)
 - App management file for [jira](https://github.com/go-jira/jira)
 - App management file for [delta](https://github.com/dandavison/delta)
+- App management file for [qrcp](https://github.com/claudiodangelis/qrcp)
 - The corresponding bash completion is installed with `fd`.
 
 ## [v0.1.1.0] - 2020-03-14

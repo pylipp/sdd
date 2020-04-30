@@ -1,0 +1,22 @@
+#! /bin/bash
+
+sdd_install() {
+    local version=$1
+    local package=qrcp_"$version"_linux_x86_64
+
+    wget -P /tmp https://github.com/claudiodangelis/qrcp/releases/download/$version/$package.tar.gz
+    cd /tmp
+    tar vxf $package.tar.gz
+
+    mv qrcp "$SDD_INSTALL_PREFIX"/bin
+
+    rm -rf $package.tar.gz
+}
+
+sdd_uninstall() {
+    rm -fv "$SDD_INSTALL_PREFIX"/bin/qrcp
+}
+
+sdd_fetch_latest_version() {
+    _tag_name_of_latest_github_release claudiodangelis qrcp
+}

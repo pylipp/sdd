@@ -153,6 +153,7 @@ Name | Description
 [jq](https://github.com/stedolan/jq) | Command line JSON processor
 [oh-my-zsh](https://github.com/robbyrussell/oh-my-zsh) | Framework for managing zsh configuration
 [pip](https://pypi.org/project/pip/) | Python package manager
+[qrcp](https://github.com/claudiodangelis/qrcp) | Transfer files over wifi from your computer to your mobile device by scanning a QR code
 [ripgrep](https://github.com/BurntSushi/ripgrep) | Line-oriented text search tool
 sdd | Thanks for being here :)
 [ShellCheck](https://github.com/koalaman/shellcheck) | A static analysis tool for shell scripts

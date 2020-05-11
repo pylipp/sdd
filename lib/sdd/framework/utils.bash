@@ -22,13 +22,13 @@ Commands:
     list
 
 General options:
-    --help          Display help message
-    --version       Display version information
+    -h --help          Display help message
+    -V --version       Display version information
 
 Options for list command:
-    --installed     List installed apps
-    --available     List apps available for installation
-    --upgradable    List apps that can be upgraded
+    -i --installed     List installed apps
+    -a --available     List apps available for installation
+    -u --upgradable    List apps that can be upgraded
 
 Environment variables:
     SDD_VERBOSE     If set, sdd is more verbose about internal processes
@@ -369,12 +369,14 @@ utils_list() {
     # ARGS: OPTION
     local option=$1
 
-    if [ "$option" = "--installed" ]; then
+    case "$option" in
+    -i | --installed)
         if [ -f "$SDD_DATA_DIR"/apps/installed ]; then
             # List apps installed most recently by filtering unique app names first
             tac "$SDD_DATA_DIR"/apps/installed | sort -t= -k1,1 -u
         fi
-    elif [ "$option" = "--available" ]; then
+        ;;
+    -a | --available)
         printf 'Built-in:\n'
         find "$FRAMEWORKDIR/../apps/user" -type f -printf '- %f\n' | sort
 
@@ -382,7 +384,8 @@ utils_list() {
             printf '\nCustom:\n'
             find "$HOME/.config/sdd/apps" -follow -type f -printf '- %f\n' | sort
         fi
-    elif [ "$option" = "--upgradable" ]; then
+        ;;
+    -u | --upgradable)
         local name installed_version newest_version
 
         utils_list --installed | while IFS='=' read -r name installed_version; do
@@ -392,10 +395,12 @@ utils_list() {
                 printf '%s (%s -> %s)\n' "$name" "$installed_version" "$newest_version"
             fi
         done
-    else
+        ;;
+    *)
         printf 'Unknown option "%s".\n' "$option" >&2
         return 1
-    fi
+        ;;
+    esac
 }
 
 _get_app_name() {

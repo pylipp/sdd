@@ -19,33 +19,42 @@ main() {
     local command=$1
     local exit_code=0
 
-    if [ "$command" = "install" ]; then
+    case "$command" in
+    install)
         shift
         utils_install "$@"
         exit_code=$?
-    elif [ "$command" = "upgrade" ]; then
+        ;;
+    upgrade)
         shift
         utils_upgrade "$@"
         exit_code=$?
-    elif [ "$command" = "uninstall" ]; then
+        ;;
+    uninstall)
         shift
         utils_uninstall "$@"
         exit_code=$?
-    elif [ "$command" = "list" ]; then
+        ;;
+    list)
         shift
         utils_list "$@"
         exit_code=$?
-    elif [ "$command" = "--help" ]; then
+        ;;
+    -h | --help)
         utils_usage
-    elif [ "$command" = "--version" ]; then
+        ;;
+    -V | --version)
         utils_version
         exit_code=$?
-    elif [ -n "$command" ]; then
+        ;;
+    ?*)
         printf 'Unknown command "%s"\n' "$command" >&2
         exit_code=127
-    else
+        ;;
+    *)
         utils_usage
-    fi
+        ;;
+    esac
 
     exit $exit_code
 }

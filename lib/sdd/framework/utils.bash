@@ -7,9 +7,7 @@ true
 FRAMEWORKDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
 utils_usage() {
-    while IFS= read -r line; do
-        printf '%s\n' "$line"
-    done <<END_OF_HELP_TEXT
+    cat <<END_OF_HELP_TEXT
 Usage: sdd [OPTIONS] COMMAND [APP [APP...]]
 
 A framework to manage installation of apps from web sources for non-root users
@@ -374,24 +372,20 @@ utils_list() {
     if [ "$option" = "--installed" ]; then
         if [ -f "$SDD_DATA_DIR"/apps/installed ]; then
             # List apps installed most recently by filtering unique app names first
-            for app in $(cut -d"=" -f1 "$SDD_DATA_DIR"/apps/installed | sort | uniq | xargs); do
-                grep "^$app=" "$SDD_DATA_DIR"/apps/installed | tail -n1
-            done
+            tac "$SDD_DATA_DIR"/apps/installed | sort -t= -k1,1 -u
         fi
     elif [ "$option" = "--available" ]; then
         printf 'Built-in:\n'
-        find "$FRAMEWORKDIR/../apps/user" -type f -exec basename {} \; | sort | sed 's/^/- /'
+        find "$FRAMEWORKDIR/../apps/user" -type f -printf '- %f\n' | sort
 
         if [ -d "$HOME/.config/sdd/apps" ]; then
             printf '\nCustom:\n'
-            find "$HOME/.config/sdd/apps" -follow -type f -exec basename {} \; | sort | sed 's/^/- /'
+            find "$HOME/.config/sdd/apps" -follow -type f -printf '- %f\n' | sort
         fi
     elif [ "$option" = "--upgradable" ]; then
         local name installed_version newest_version
 
-        for name_version in $(utils_list --installed | xargs); do
-            name=$(_get_app_name "$name_version")
-            installed_version=$(_get_app_version_from_appver "$name_version")
+        utils_list --installed | while IFS='=' read -r name installed_version; do
             newest_version=$(_get_app_version_from_files "$name")
 
             if [[ "$installed_version" != "$newest_version" ]]; then

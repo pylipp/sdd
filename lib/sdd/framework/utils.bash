@@ -240,7 +240,7 @@ _uninstall_single_app() {
 
             if [ -f "$SDD_DATA_DIR"/apps/installed ]; then
                 # Remove app install records
-                sed -i "/^$app/d" "$SDD_DATA_DIR"/apps/installed
+                sed -i "/^$app=/d" "$SDD_DATA_DIR"/apps/installed
             fi
         fi
     done

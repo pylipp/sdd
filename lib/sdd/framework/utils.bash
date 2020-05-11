@@ -26,7 +26,7 @@ General options:
     -V --version       Display version information
 
 Options for list command:
-    -i --installed     List installed apps
+    -i --installed     List installed apps (this is the default behavior)
     -a --available     List apps available for installation
     -u --upgradable    List apps that can be upgraded
 
@@ -370,7 +370,7 @@ utils_list() {
     local option=$1
 
     case "$option" in
-    -i | --installed)
+    -i | --installed | "")
         if [ -f "$SDD_DATA_DIR"/apps/installed ]; then
             # List apps installed most recently by filtering unique app names first
             tac "$SDD_DATA_DIR"/apps/installed | sort -t= -k1,1 -u

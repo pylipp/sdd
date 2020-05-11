@@ -420,18 +420,30 @@ _tag_name_of_latest_github_release() {
     # Fetch tag name of latest release on GitHub
     local github_user=$1
     local repo_name=$2
-    wget -qO- https://api.github.com/repos/"$github_user"/"$repo_name"/releases/latest | grep tag_name | awk '{ print $2; }' | sed 's/[",]//g'
+
+    # Get tag name from URL redirection to avoid GitHub API limits
+    awk -F'[ /]' -v e=1 '/Location:/ {e=0; print $(NF-1);} END {exit(e);}' < <(
+        wget -o- --max-redirect 0 "https://github.com/$github_user/$repo_name/releases/latest"
+    )
 }
 
 _sha_of_github_master() {
     # Fetch SHA of latest commit on GitHub master branch
     local github_user=$1
     local repo_name=$2
-    wget -qO- https://api.github.com/repos/"$github_user"/"$repo_name"/commits/master | grep -m1 sha | awk '{ print $2; }' | sed 's/[",]//g'
+
+    # Get latest commit hash from atom feed to avoid GitHub API limits
+    wget -qO- "https://github.com/$github_user/$repo_name/commits/master.atom" |
+        awk -F'[/<>]' '/<id>tag:github.com,2008:Grit::Commit/ {i[n++] = $(NF-3);}
+        END {print i[0];}'
 }
 
 _name_of_latest_github_tag() {
     local github_user=$1
     local repo_name=$2
-    wget -qO- https://api.github.com/repos/"$github_user"/"$repo_name"/tags | grep -m1 name | awk '{ print $2; }' | sed 's/[",]//g'
+
+    # Get latest tag from atom feed to avoid GitHub API limits
+    wget -qO- "https://github.com/$github_user/$repo_name/tags.atom" |
+        awk -F'[/<>]' '/<id>tag:github.com,2008:Repository/ {i[n++] = $(NF-3);}
+            END {print i[0];}'
 }

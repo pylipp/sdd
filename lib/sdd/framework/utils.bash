@@ -7,9 +7,7 @@ true
 FRAMEWORKDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
 utils_usage() {
-    while IFS= read -r line; do
-        printf '%s\n' "$line"
-    done <<END_OF_HELP_TEXT
+    cat <<END_OF_HELP_TEXT
 Usage: sdd [OPTIONS] COMMAND [APP [APP...]]
 
 A framework to manage installation of apps from web sources for non-root users
@@ -24,13 +22,13 @@ Commands:
     list
 
 General options:
-    --help          Display help message
-    --version       Display version information
+    -h --help          Display help message
+    -V --version       Display version information
 
 Options for list command:
-    --installed     List installed apps
-    --available     List apps available for installation
-    --upgradable    List apps that can be upgraded
+    -i --installed     List installed apps (this is the default behavior)
+    -a --available     List apps available for installation
+    -u --upgradable    List apps that can be upgraded
 
 Environment variables:
     SDD_VERBOSE     If set, sdd is more verbose about internal processes
@@ -242,7 +240,7 @@ _uninstall_single_app() {
 
             if [ -f "$SDD_DATA_DIR"/apps/installed ]; then
                 # Remove app install records
-                sed -i "/^$app/d" "$SDD_DATA_DIR"/apps/installed
+                sed -i "/^$app=/d" "$SDD_DATA_DIR"/apps/installed
             fi
         fi
     done
@@ -371,37 +369,38 @@ utils_list() {
     # ARGS: OPTION
     local option=$1
 
-    if [ "$option" = "--installed" ]; then
+    case "$option" in
+    -i | --installed | "")
         if [ -f "$SDD_DATA_DIR"/apps/installed ]; then
             # List apps installed most recently by filtering unique app names first
-            for app in $(cut -d"=" -f1 "$SDD_DATA_DIR"/apps/installed | sort | uniq | xargs); do
-                grep "^$app=" "$SDD_DATA_DIR"/apps/installed | tail -n1
-            done
+            tac "$SDD_DATA_DIR"/apps/installed | sort -t= -k1,1 -u
         fi
-    elif [ "$option" = "--available" ]; then
+        ;;
+    -a | --available)
         printf 'Built-in:\n'
-        find "$FRAMEWORKDIR/../apps/user" -type f -exec basename {} \; | sort | sed 's/^/- /'
+        find "$FRAMEWORKDIR/../apps/user" -type f -printf '- %f\n' | sort
 
         if [ -d "$HOME/.config/sdd/apps" ]; then
             printf '\nCustom:\n'
-            find "$HOME/.config/sdd/apps" -follow -type f -exec basename {} \; | sort | sed 's/^/- /'
+            find "$HOME/.config/sdd/apps" -follow -type f -printf '- %f\n' | sort
         fi
-    elif [ "$option" = "--upgradable" ]; then
+        ;;
+    -u | --upgradable)
         local name installed_version newest_version
 
-        for name_version in $(utils_list --installed | xargs); do
-            name=$(_get_app_name "$name_version")
-            installed_version=$(_get_app_version_from_appver "$name_version")
+        utils_list --installed | while IFS='=' read -r name installed_version; do
             newest_version=$(_get_app_version_from_files "$name")
 
             if [[ "$installed_version" != "$newest_version" ]]; then
                 printf '%s (%s -> %s)\n' "$name" "$installed_version" "$newest_version"
             fi
         done
-    else
+        ;;
+    *)
         printf 'Unknown option "%s".\n' "$option" >&2
         return 1
-    fi
+        ;;
+    esac
 }
 
 _get_app_name() {
@@ -420,18 +419,30 @@ _tag_name_of_latest_github_release() {
     # Fetch tag name of latest release on GitHub
     local github_user=$1
     local repo_name=$2
-    wget -qO- https://api.github.com/repos/"$github_user"/"$repo_name"/releases/latest | grep tag_name | awk '{ print $2; }' | sed 's/[",]//g'
+
+    # Get tag name from URL redirection to avoid GitHub API limits
+    awk -F'[ /]' -v e=1 '/Location:/ {e=0; print $(NF-1);} END {exit(e);}' < <(
+        wget -o- --max-redirect 0 "https://github.com/$github_user/$repo_name/releases/latest"
+    )
 }
 
 _sha_of_github_master() {
     # Fetch SHA of latest commit on GitHub master branch
     local github_user=$1
     local repo_name=$2
-    wget -qO- https://api.github.com/repos/"$github_user"/"$repo_name"/commits/master | grep -m1 sha | awk '{ print $2; }' | sed 's/[",]//g'
+
+    # Get latest commit hash from atom feed to avoid GitHub API limits
+    wget -qO- "https://github.com/$github_user/$repo_name/commits/master.atom" |
+        awk -F'[/<>]' '/<id>tag:github.com,2008:Grit::Commit/ {i[n++] = $(NF-3);}
+        END {print i[0];}'
 }
 
 _name_of_latest_github_tag() {
     local github_user=$1
     local repo_name=$2
-    wget -qO- https://api.github.com/repos/"$github_user"/"$repo_name"/tags | grep -m1 name | awk '{ print $2; }' | sed 's/[",]//g'
+
+    # Get latest tag from atom feed to avoid GitHub API limits
+    wget -qO- "https://github.com/$github_user/$repo_name/tags.atom" |
+        awk -F'[/<>]' '/<id>tag:github.com,2008:Repository/ {i[n++] = $(NF-3);}
+            END {print i[0];}'
 }

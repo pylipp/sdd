@@ -10,6 +10,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - App management file for [delta](https://github.com/dandavison/delta)
 - App management file for [qrcp](https://github.com/claudiodangelis/qrcp)
 - The corresponding bash completion is installed with `fd`.
+- Added short forms for all provided options
+### Changes
+- Avoided using GitHub API calls
+- Changed list command to show installed packages when no extra option specified
+### Fixed
+- Fixed sed expression to avoid false matching by part of package names
 
 ## [v0.1.1.0] - 2020-03-14
 ### Added

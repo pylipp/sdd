@@ -159,6 +159,7 @@ Name | Description
 [qrcp](https://github.com/claudiodangelis/qrcp) | Transfer files over wifi from your computer to your mobile device by scanning a QR code
 [ripgrep](https://github.com/BurntSushi/ripgrep) | Line-oriented text search tool
 sdd | Thanks for being here :)
+[slack-term](https://github.com/erroneousboat/slack-term) | Slack client for your terminal
 [ShellCheck](https://github.com/koalaman/shellcheck) | A static analysis tool for shell scripts
 [shfmt](https://github.com/mvdan/sh) | A shell parser, formatter, and interpreter (sh/bash/mksh)
 

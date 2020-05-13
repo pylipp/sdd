@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+sdd_install() {
+    local version=$1
+    wget -O "$SDD_INSTALL_PREFIX/bin/slack-term" https://github.com/erroneousboat/slack-term/releases/download/$version/slack-term-linux-amd64
+    chmod u+x "$SDD_INSTALL_PREFIX/bin/slack-term"
+}
+
+sdd_uninstall() {
+    rm -f "$SDD_INSTALL_PREFIX/bin/slack-term"
+}
+
+sdd_fetch_latest_version() {
+    _tag_name_of_latest_github_release erroneousboat slack-term
+}

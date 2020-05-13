@@ -115,6 +115,7 @@ The commands `install`, `upgrade`, and `uninstall` can take multiple arguments t
 
 List installed apps by running
 
+    sdd list
     sdd list --installed
 
 List all apps available for management in `sdd` with
@@ -124,6 +125,8 @@ List all apps available for management in `sdd` with
 List all installed apps that can be upgraded to a more recent version with
 
     sdd list --upgradable
+
+The `list` command options come in short forms, too: `-i`, `-a`, `-u`
 
 ### General help
 

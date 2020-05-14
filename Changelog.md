@@ -12,6 +12,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - App management file for [slack-term](https://github.com/erroneousboat/slack-term)
 - The corresponding bash completion is installed with `fd`.
 - Short forms for all provided options, see #11
+- Bash and zsh completion scripts
 ### Changes
 - Avoid using GitHub API calls, see #11
 - `list` command without further option defaults to show installed packages, see #11

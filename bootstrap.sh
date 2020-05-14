@@ -22,6 +22,11 @@ if [[ ! "$PATH" == *"$prefix/bin"* ]]; then
     export PATH="$prefix/bin:$PATH"
 fi
 
+# Install shell completions
+mkdir -p "$prefix"/share/{bash_completion,zsh/site-functions}
+cp "$SCRIPTDIR"/completion/sdd "$prefix"/share/bash_completion/sdd
+cp "$SCRIPTDIR"/completion/_sdd "$prefix"/share/zsh/site-functions/_sdd
+
 # Record installed version
 if ! latest_tag="$(git tag --list --sort -refname | grep -m1 -E 'v0.[0-9]+.[0-9]+.[0-9]+')"; then
     echo "Failed to find latest tag!" >&2

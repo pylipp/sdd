@@ -1,0 +1,87 @@
+# sdd completion
+#
+# @author: Sergei Eremenko (https://github.com/SmartFinn)
+# @license: MIT license (MIT)
+# @link: https://github.com/pylipp/sdd
+
+_sdd_list_available() {
+    local app_name
+
+    command -v sdd >/dev/null || return 1
+
+    while read -r _ app_name; do
+        [ -n "$app_name" ] || continue
+        printf '%s\n' "$app_name"
+    done < <(sdd list --available)
+
+    return 0
+}
+
+_sdd_list_installed() {
+    local app_name
+
+    command -v sdd >/dev/null || return 1
+
+    while IFS='=' read -r app_name _; do
+        [ -n "$app_name" ] || continue
+        printf '%s\n' "$app_name"
+    done < <(sdd list --installed)
+
+    return 0
+}
+
+_sdd_completion() {
+    local cur prev word cword
+    local -a words=()
+    local -a opts=(
+        install
+        list
+        uninstall
+        upgrade
+        -h --help
+        -V --version
+    )
+    local -a list_opts=(
+        -a --available
+        -i --installed
+        -u --upgradable
+    )
+
+    _init_completion || return
+
+    for word in "${words[@]}"; do
+        case "$word" in
+        install)
+            COMPREPLY=( $(compgen -W "$(_sdd_list_available)" -- "$cur") )
+            return 0
+            ;;
+        uninstall|upgrade)
+            COMPREPLY=( $(compgen -W "$(_sdd_list_installed)" -- "$cur") )
+            return 0
+            ;;
+        esac
+    done
+
+    case "$prev" in
+    list)
+        COMPREPLY=($(compgen -W "${list_opts[*]}" -- "$cur"))
+        return 0
+        ;;
+    -h | --help      | \
+    -V | --version   | \
+    -a | --available | \
+    -i | --installed | \
+    -u | --upgradable)
+        # stop completion if one of these option already specified
+        return 0
+        ;;
+    *)
+        COMPREPLY=($(compgen -W "${opts[*]}" -- "$cur"))
+        return 0
+        ;;
+    esac
+}
+
+complete -F _sdd_completion sdd
+
+# vim: filetype=sh sw=4 ts=4 et

@@ -23,9 +23,9 @@ if [[ ! "$PATH" == *"$prefix/bin"* ]]; then
 fi
 
 # Install shell completions
-mkdir -p "$prefix"/share/{bash_completion,zsh/site-functions}
-cp "$SCRIPTDIR"/completion/sdd "$prefix"/share/bash-completion/completions/sdd
-cp "$SCRIPTDIR"/completion/_sdd "$prefix"/share/zsh/site-functions/_sdd
+mkdir -p "${XDG_DATA_HOME:-$HOME/.local/share}"/{bash-completion/completions,zsh/site-functions}
+cp "$SCRIPTDIR"/completion/sdd "${XDG_DATA_HOME:-$HOME/.local/share}"/bash-completion/completions/sdd
+cp "$SCRIPTDIR"/completion/_sdd "${XDG_DATA_HOME:-$HOME/.local/share}"/zsh/site-functions/_sdd
 
 # Record installed version
 if ! latest_tag="$(git tag --list --sort -refname | grep -m1 -E 'v0.[0-9]+.[0-9]+.[0-9]+')"; then
@@ -42,6 +42,6 @@ fi
 
 echo "$latest_tag" > "$prefix"/lib/sdd/version
 
-SDD_APPS_DIR=${XDG_DATA_DIR:-$HOME/.local/share}/sdd/apps
+SDD_APPS_DIR=${XDG_DATA_HOME:-$HOME/.local/share}/sdd/apps
 mkdir -p "$SDD_APPS_DIR"
 echo sdd="$head_sha" >> "$SDD_APPS_DIR"/installed

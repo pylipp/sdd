@@ -24,7 +24,7 @@ fi
 
 # Install shell completions
 mkdir -p "$prefix"/share/{bash_completion,zsh/site-functions}
-cp "$SCRIPTDIR"/completion/sdd "$prefix"/share/bash_completion/sdd
+cp "$SCRIPTDIR"/completion/sdd "$prefix"/share/bash-completion/completions/sdd
 cp "$SCRIPTDIR"/completion/_sdd "$prefix"/share/zsh/site-functions/_sdd
 
 # Record installed version

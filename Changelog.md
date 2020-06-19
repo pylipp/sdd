@@ -11,6 +11,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - App management file for [qrcp](https://github.com/claudiodangelis/qrcp)
 - App management file for [slack-term](https://github.com/erroneousboat/slack-term)
 - The corresponding bash completion is installed with `fd`.
+- man pages are installed with `gh` (available since v0.9.0)
 - Short forms for all provided options, see #11
 ### Changes
 - Avoid using GitHub API calls, see #11

@@ -9,6 +9,7 @@
 
   [ -f ~/.local/share/bash_completion/gh ]
   [ -f ~/.local/share/zsh/site-functions/_gh ]
+  [ -f ~/.local/share/man/man1/gh.1 ]
 
   run sdd uninstall gh
   [ $status -eq 0 ]

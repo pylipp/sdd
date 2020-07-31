@@ -19,6 +19,7 @@ sdd_install() {
     # Install binary
     mv $package/rg "$SDD_INSTALL_PREFIX"/bin
 
+    mv $package/complete/rg.bash "$SDD_BASH_COMPLETION_DIR"/rg
     mv $package/complete/_rg "$SDD_ZSH_COMPLETION_DIR"
 
     # Install man page
@@ -30,6 +31,7 @@ sdd_install() {
 
 sdd_uninstall() {
     rm -f "$SDD_INSTALL_PREFIX"/bin/rg
+    rm -f "$SDD_BASH_COMPLETION_DIR"/rg
     rm -f "$SDD_ZSH_COMPLETION_DIR"/_rg
     rm -f "$SDD_INSTALL_PREFIX"/share/man/man1/rg.1
 }

@@ -22,10 +22,13 @@ if [[ ! "$PATH" == *"$prefix/bin"* ]]; then
     export PATH="$prefix/bin:$PATH"
 fi
 
-# Install shell completions
-mkdir -p "${XDG_DATA_HOME:-$HOME/.local/share}"/{bash-completion/completions,zsh/site-functions}
-cp "$SCRIPTDIR"/completion/sdd "${XDG_DATA_HOME:-$HOME/.local/share}"/bash-completion/completions/sdd
-cp "$SCRIPTDIR"/completion/_sdd "${XDG_DATA_HOME:-$HOME/.local/share}"/zsh/site-functions/_sdd
+# Install shell completions, compatible to bash-completion
+# https://github.com/scop/bash-completion/blob/328ce5be5b4b8822b3b9421dab4460c56990df0b/bash_completion#L2159
+SDD_BASH_COMPLETION_DIR=${BASH_COMPLETION_USER_DIR:-${XDG_DATA_HOME:-$HOME/.local/share}/bash-completion}/completions
+SDD_ZSH_COMPLETION_DIR="${XDG_DATA_HOME:-$HOME/.local/share}"/zsh/site-functions
+mkdir -p "$SDD_BASH_COMPLETION_DIR" "$SDD_ZSH_COMPLETION_DIR"
+cp "$SCRIPTDIR"/completion/sdd "$SDD_BASH_COMPLETION_DIR"
+cp "$SCRIPTDIR"/completion/_sdd "$SDD_ZSH_COMPLETION_DIR"
 
 # Record installed version
 if ! latest_tag="$(git tag --list --sort -refname | grep -m1 -E 'v0.[0-9]+.[0-9]+.[0-9]+')"; then

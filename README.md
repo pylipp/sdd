@@ -50,6 +50,17 @@ For enabling `zsh` completion functions (`oh-my-zsh` users: put this before the 
 
     fpath=(~/.local/share/zsh/site-functions $fpath)
 
+For enabling `bash` completion functions, you should be fine if you already use the [`bash-completion`](https://github.com/scop/bash-completion) package. Otherwise add this snippet to your `~/.bashrc`:
+
+```bash
+if [ -d ~/.local/share/bash_completion ]; then
+    # Source custom completion files
+    while IFS= read -r -d '' f; do
+        . "$f"
+    done < <(find ~/.local/share/bash_completion -type f -print0)
+fi
+```
+
 `sdd` is tested with `bash` 4.4.12.
 
 ### Dependencies

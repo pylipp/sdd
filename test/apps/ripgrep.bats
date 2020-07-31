@@ -7,6 +7,8 @@
   run rg --version
   [ $status -eq 0 ]
 
+  [ -f ~/.local/share/zsh/site-functions/_rg ]
+
   run sdd uninstall ripgrep
   [ $status -eq 0 ]
   [ "$output" = 'Succeeded to uninstall "ripgrep".' ]

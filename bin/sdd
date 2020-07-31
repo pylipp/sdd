@@ -15,6 +15,12 @@ SDD_DATA_DIR=${XDG_DATA_DIR:-$HOME/.local/share}/sdd
 export SDD_DATA_DIR
 mkdir -p "$SDD_DATA_DIR"/apps
 
+SDD_BASH_COMPLETION_DIR=${BASH_COMPLETION_USER_DIR:-${XDG_DATA_HOME:-$SDD_INSTALL_PREFIX/share}/bash-completion}/completions
+SDD_ZSH_COMPLETION_DIR="${XDG_DATA_HOME:-$SDD_INSTALL_PREFIX/share}"/zsh/site-functions
+export SDD_BASH_COMPLETION_DIR
+export SDD_ZSH_COMPLETION_DIR
+mkdir -p "$SDD_BASH_COMPLETION_DIR" "$SDD_ZSH_COMPLETION_DIR"
+
 main() {
     local command=$1
     local exit_code=0

@@ -19,9 +19,7 @@ sdd_install() {
     # Install binary
     mv $package/rg "$SDD_INSTALL_PREFIX"/bin
 
-    # Install zsh completion
-    mkdir -p  "$SDD_INSTALL_PREFIX"/share/zsh/site-functions
-    mv $package/complete/_rg "$SDD_INSTALL_PREFIX"/share/zsh/site-functions
+    mv $package/complete/_rg "$SDD_ZSH_COMPLETION_DIR"
 
     # Install man page
     mkdir -p "$SDD_INSTALL_PREFIX"/share/man/man1
@@ -32,7 +30,7 @@ sdd_install() {
 
 sdd_uninstall() {
     rm -f "$SDD_INSTALL_PREFIX"/bin/rg
-    rm -f "$SDD_INSTALL_PREFIX"/share/zsh/site-functions/_rg
+    rm -f "$SDD_ZSH_COMPLETION_DIR"/_rg
     rm -f "$SDD_INSTALL_PREFIX"/share/man/man1/rg.1
 }
 

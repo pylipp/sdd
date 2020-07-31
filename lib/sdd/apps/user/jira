@@ -3,16 +3,15 @@ sdd_install() {
     wget -O "$SDD_INSTALL_PREFIX"/bin/jira https://github.com/go-jira/jira/releases/download/"$version"/jira-linux-amd64
     chmod u+x "$SDD_INSTALL_PREFIX"/bin/jira
 
-    mkdir -p "$SDD_INSTALL_PREFIX"/share/{bash_completion,zsh/site-functions}
     # Work around non-zero exit code (https://github.com/go-jira/jira/issues/326)
-    "$SDD_INSTALL_PREFIX"/bin/jira --completion-script-bash > "$SDD_INSTALL_PREFIX"/share/bash_completion/jira || true
-    "$SDD_INSTALL_PREFIX"/bin/jira --completion-script-zsh > "$SDD_INSTALL_PREFIX"/share/zsh/site-functions/_jira || true
+    "$SDD_INSTALL_PREFIX"/bin/jira --completion-script-bash > "$SDD_BASH_COMPLETION_DIR"/jira || true
+    "$SDD_INSTALL_PREFIX"/bin/jira --completion-script-zsh > "$SDD_ZSH_COMPLETION_DIR"/_jira || true
 }
 
 sdd_uninstall() {
     rm -fv "$SDD_INSTALL_PREFIX"/bin/jira
-    rm -fv "$SDD_INSTALL_PREFIX"/share/bash_completion/jira
-    rm -fv "$SDD_INSTALL_PREFIX"/share/zsh/site-functions/_jira
+    rm -fv "$SDD_BASH_COMPLETION_DIR"/jira
+    rm -fv "$SDD_ZSH_COMPLETION_DIR"/_jira
 }
 
 sdd_fetch_latest_version() {

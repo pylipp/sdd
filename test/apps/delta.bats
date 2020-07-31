@@ -9,7 +9,7 @@
   run delta --version
   [ $status -eq 0 ]
 
-  [ -f ~/.local/share/bash_completion/delta ]
+  [ -f ~/.local/share/bash-completion/completions/delta ]
 
   run sdd uninstall delta
   [ $status -eq 0 ]

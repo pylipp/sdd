@@ -7,6 +7,9 @@
   run pip --version
   [ $status -eq 0 ]
 
+  [ -f ~/.local/share/bash-completion/completions/pip ]
+  [ -f ~/.local/share/zsh/site-functions/_pip ]
+
   run sdd upgrade pip=20.0.1
   [ $status -eq 0 ]
   [ "${lines[-1]}" = 'Succeeded to upgrade "pip".' ]

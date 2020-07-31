@@ -7,9 +7,8 @@ sdd_install() {
     python3 /tmp/get-pip.py --user
     sdd_upgrade "$1"
 
-    mkdir -p "$SDD_INSTALL_PREFIX"/share/{bash_completion,zsh/site-functions}
-    ~/.local/bin/pip completion --bash > "$SDD_INSTALL_PREFIX"/share/bash_completion/pip
-    ~/.local/bin/pip completion --zsh > "$SDD_INSTALL_PREFIX"/share/zsh/site-functions/_pip
+    ~/.local/bin/pip completion --bash > "$SDD_BASH_COMPLETION_DIR"/pip
+    ~/.local/bin/pip completion --zsh > "$SDD_ZSH_COMPLETION_DIR"/_pip
 
     rm /tmp/get-pip.py
 }
@@ -20,7 +19,7 @@ sdd_upgrade() {
 
 sdd_uninstall() {
     ~/.local/bin/pip uninstall --yes pip
-    rm -rvf ~/.local/share/{bash_completion/pip,zsh/site-functions/_pip}
+    rm -rvf "$SDD_BASH_COMPLETION_DIR"/pip "$SDD_ZSH_COMPLETION_DIR"/_pip
 }
 
 sdd_fetch_latest_version() {

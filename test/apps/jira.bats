@@ -7,7 +7,7 @@
   run jira version
   [ $status -eq 0 ]
 
-  [ -f ~/.local/share/bash_completion/jira ]
+  [ -f ~/.local/share/bash-completion/completions/jira ]
   [ -f ~/.local/share/zsh/site-functions/_jira ]
 
   run sdd uninstall jira

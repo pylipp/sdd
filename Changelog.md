@@ -3,7 +3,7 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## unreleased
+## [v0.2.0.0] - 2020-07-31
 ### Added
 - App management file for [gh](https://github.com/cli/cli)
 - App management file for [jira](https://github.com/go-jira/jira)

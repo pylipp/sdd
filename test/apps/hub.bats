@@ -7,6 +7,8 @@
   run hub --version
   [ $status -eq 0 ]
 
+  [ -f ~/.local/share/zsh/site-functions/_hub ]
+
   run sdd uninstall hub
   [ $status -eq 0 ]
   [ "$output" = 'Succeeded to uninstall "hub".' ]

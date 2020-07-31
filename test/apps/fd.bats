@@ -7,7 +7,7 @@
   run fd --version
   [ $status -eq 0 ]
 
-  [ -f ~/.local/share/bash_completion/fd ]
+  [ -f ~/.local/share/bash-completion/completions/fd ]
   [ -f ~/.local/share/zsh/site-functions/_fd ]
 
   run sdd uninstall fd

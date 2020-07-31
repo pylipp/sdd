@@ -14,9 +14,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - The corresponding bash completion is installed with `fd`.
 - man pages are installed with `gh` (available since v0.9.0)
 - Short forms for all provided options, see #11
+- Bash and zsh completion scripts, see #13
 ### Changes
 - Avoid using GitHub API calls, see #11
 - `list` command without further option defaults to show installed packages, see #11
+- Bash completion for apps is now installed into `~/.local/share/bash-completion/completions`, see #13
 ### Fixed
 - Avoid false matching by part of package names, see #11
 

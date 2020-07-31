@@ -1,0 +1,81 @@
+#compdef sdd
+#
+# @author: Sergei Eremenko (https://github.com/SmartFinn)
+# @license: MIT license (MIT)
+# @link: https://github.com/pylipp/sdd
+
+local state line ret=1
+
+_sdd_list_available() {
+    local app_name
+    local -a available_apps
+
+    (( $+commands[sdd] )) || return 1
+
+    while read -r _ app_name; do
+        [ -n "$app_name" ] || continue
+        available_apps+=("$app_name")
+    done < <(sdd list --available)
+
+    _wanted colors exlp 'available apps' compadd -- "${available_apps[@]}"
+    return 0
+}
+
+_sdd_list_installed() {
+    local app_name
+    local -a installed_apps
+
+    (( $+commands[sdd] )) || return 1
+
+    while IFS='=' read -r app_name _; do
+        [ -n "$app_name" ] || continue
+        installed_apps+=("$app_name")
+    done < <(sdd list --installed)
+
+    _wanted colors exlp 'installed apps' compadd -- "${installed_apps[@]}"
+    return 0
+}
+
+_arguments -C \
+    '(-h --help)'{-h,--help}'[Display help message]' \
+    '(-V --version)'{-v,--verbose}'[Display version information]' \
+    '1:commands:->cmds' \
+    '*:arguments:->args' && ret=0
+
+case $state in
+(cmds)
+    local -a cmds
+
+    cmds=(
+        'install:Install specified packages'
+        'upgrade:Upgrade installed packages'
+        'uninstall:Uninstall specified packages'
+        'list:List installed packages'
+    )
+
+    _describe -t commands 'commands' cmds && ret=0
+    ;;
+(args)
+    case $line[1] in
+    (install)
+        _arguments \
+            '*:available apps:_sdd_list_available' && ret=0
+        ;;
+    (uninstall|upgrade)
+        _arguments \
+            '*:installed apps:_sdd_list_installed' && ret=0
+        ;;
+    (list)
+        _values 'options' \
+            {-a,--available}'[List apps available for installation]' \
+            {-i,--installed}'[List installed apps]' \
+            {-u,--upgradable}'[List apps that can be upgraded]' \
+            && ret=0
+        ;;
+    esac
+    ;;
+esac
+
+return $ret
+
+# vim: ft=zsh sw=4 ts=4 et

@@ -7,7 +7,7 @@
   run gh --version
   [ $status -eq 0 ]
 
-  [ -f ~/.local/share/bash_completion/gh ]
+  [ -f ~/.local/share/bash-completion/completions/gh ]
   [ -f ~/.local/share/zsh/site-functions/_gh ]
   [ -f ~/.local/share/man/man1/gh.1 ]
 

@@ -22,6 +22,14 @@ if [[ ! "$PATH" == *"$prefix/bin"* ]]; then
     export PATH="$prefix/bin:$PATH"
 fi
 
+# Install shell completions, compatible to bash-completion
+# https://github.com/scop/bash-completion/blob/328ce5be5b4b8822b3b9421dab4460c56990df0b/bash_completion#L2159
+SDD_BASH_COMPLETION_DIR=${BASH_COMPLETION_USER_DIR:-${XDG_DATA_HOME:-$prefix/share}/bash-completion}/completions
+SDD_ZSH_COMPLETION_DIR="${XDG_DATA_HOME:-$prefix/share}"/zsh/site-functions
+mkdir -p "$SDD_BASH_COMPLETION_DIR" "$SDD_ZSH_COMPLETION_DIR"
+cp "$SCRIPTDIR"/completion/sdd "$SDD_BASH_COMPLETION_DIR"
+cp "$SCRIPTDIR"/completion/_sdd "$SDD_ZSH_COMPLETION_DIR"
+
 # Record installed version
 if ! latest_tag="$(git tag --list --sort -refname | grep -m1 -E 'v0.[0-9]+.[0-9]+.[0-9]+')"; then
     echo "Failed to find latest tag!" >&2
@@ -37,6 +45,6 @@ fi
 
 echo "$latest_tag" > "$prefix"/lib/sdd/version
 
-SDD_APPS_DIR=${XDG_DATA_DIR:-$HOME/.local/share}/sdd/apps
+SDD_APPS_DIR=${XDG_DATA_HOME:-$HOME/.local/share}/sdd/apps
 mkdir -p "$SDD_APPS_DIR"
 echo sdd="$head_sha" >> "$SDD_APPS_DIR"/installed

@@ -19,6 +19,9 @@ sdd_install() {
     "$SDD_INSTALL_PREFIX"/bin/gh completion --shell bash > "$SDD_BASH_COMPLETION_DIR"/gh
     "$SDD_INSTALL_PREFIX"/bin/gh completion --shell zsh > "$SDD_ZSH_COMPLETION_DIR"/_gh
 
+    mkdir -p "$SDD_INSTALL_PREFIX"/share/man/man1
+    mv "$package_dir"/share/man/man1/* "$SDD_INSTALL_PREFIX"/share/man/man1
+
     rm -rfv "$package_dir" "$archive"
 }
 
@@ -26,6 +29,7 @@ sdd_uninstall() {
     rm -rfv "$SDD_INSTALL_PREFIX"/bin/gh
     rm -rfv "$SDD_BASH_COMPLETION_DIR"/gh
     rm -rfv "$SDD_ZSH_COMPLETION_DIR"/_gh
+    rm -rfv "$SDD_INSTALL_PREFIX"/share/man/man1/gh*.1
 }
 
 sdd_fetch_latest_version() {

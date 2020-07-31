@@ -5,7 +5,7 @@ sdd_install() {
     local package=shellcheck-$version
     local archive=$package.linux.x86_64.tar.xz
 
-    wget -P /tmp https://shellcheck.storage.googleapis.com/$archive
+    wget -P /tmp https://github.com/koalaman/shellcheck/releases/download/"$version"/"$archive"
     cd /tmp
     tar xf $archive
 

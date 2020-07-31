@@ -22,6 +22,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Bash completion for apps is now installed into `~/.local/share/bash-completion/completions`, see #13
 ### Fixed
 - Avoid false matching by part of package names, see #11
+- Update download URL for shellcheck releases, see #14
 
 ## [v0.1.1.0] - 2020-03-14
 ### Added

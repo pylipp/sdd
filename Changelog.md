@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## unreleased
+### Added
+- App management file for [Telegram](https://github.com/telegramdesktop/tdesktop)
+
 ## [v0.2.0.0] - 2020-07-31
 ### Added
 - App management file for [gh](https://github.com/cli/cli)

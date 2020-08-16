@@ -174,6 +174,7 @@ sdd | Thanks for being here :)
 [slack-term](https://github.com/erroneousboat/slack-term) | Slack client for your terminal
 [ShellCheck](https://github.com/koalaman/shellcheck) | A static analysis tool for shell scripts
 [shfmt](https://github.com/mvdan/sh) | A shell parser, formatter, and interpreter (sh/bash/mksh)
+[Telegram](https://github.com/telegramdesktop/tdesktop) | Telegram Desktop messaging app
 
 ## Customization
 

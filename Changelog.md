@@ -6,6 +6,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## unreleased
 ### Added
 - App management file for [Telegram](https://github.com/telegramdesktop/tdesktop)
+- App management file for [Pandoc](https://github.com/jgm/pandoc)
 
 ## [v0.2.0.0] - 2020-07-31
 ### Added

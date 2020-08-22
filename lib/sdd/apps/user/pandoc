@@ -1,0 +1,33 @@
+#! /bin/bash
+
+sdd_install() {
+    local version=$1
+    local package=pandoc-"$version"
+    local archive="$package"-linux-amd64.tar.gz
+
+    wget -P /tmp https://github.com/jgm/pandoc/releases/download/"$version"/"$archive"
+    cd /tmp
+    tar xf "$archive"
+
+    mv "$package"/bin/pandoc "$SDD_INSTALL_PREFIX"/bin
+    mv "$package"/bin/pandoc-citeproc "$SDD_INSTALL_PREFIX"/bin
+
+    # Install man page
+    mkdir -p "$SDD_INSTALL_PREFIX"/share/man/man1
+    mv "$package"/share/man/man1/* "$SDD_INSTALL_PREFIX"/share/man/man1
+
+    "$SDD_INSTALL_PREFIX"/bin/pandoc --bash-completion > "$SDD_BASH_COMPLETION_DIR"/pandoc
+
+    rm -rf "$archive" "$package"
+}
+
+sdd_uninstall() {
+    rm -fv "$SDD_INSTALL_PREFIX"/bin/pandoc
+    rm -fv "$SDD_INSTALL_PREFIX"/share/man/man1/pandoc.1.gz
+    rm -fv "$SDD_INSTALL_PREFIX"/share/man/man1/pandoc-citeproc.1.gz
+    rm -fv "$SDD_BASH_COMPLETION_DIR"/pandoc
+}
+
+sdd_fetch_latest_version() {
+    _tag_name_of_latest_github_release jgm pandoc
+}

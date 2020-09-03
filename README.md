@@ -176,6 +176,7 @@ sdd | Thanks for being here :)
 [ShellCheck](https://github.com/koalaman/shellcheck) | A static analysis tool for shell scripts
 [shfmt](https://github.com/mvdan/sh) | A shell parser, formatter, and interpreter (sh/bash/mksh)
 [Telegram](https://github.com/telegramdesktop/tdesktop) | Telegram Desktop messaging app
+[wuzz](https://github.com/asciimoo/wuzz) | Interactive cli tool for HTTP inspection
 
 ## Customization
 

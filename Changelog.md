@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Added
 - App management file for [Telegram](https://github.com/telegramdesktop/tdesktop)
 - App management file for [Pandoc](https://github.com/jgm/pandoc)
+- App management file for [wuzz](https://github.com/asciimoo/wuzz)
 
 ## [v0.2.0.0] - 2020-07-31
 ### Added

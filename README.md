@@ -163,6 +163,7 @@ Name | Description
 [dust](https://github.com/bootandy/dust) | A more intuitive version of du in rust
 [fd](https://github.com/sharkdp/fd) | A simple, fast and user-friendly alternative to 'find'
 [gh](https://github.com/cli/cli) | GitHub's official command line tool
+[gitui](https://github.com/extrawurst/gitui) | blazing fast terminal-ui for git written in rust
 [hub](https://github.com/github/hub) | Command line tool to interact with GitHub
 [jira](https://github.com/go-jira/jira) | Simple JIRA command line client in Go
 [jq](https://github.com/stedolan/jq) | Command line JSON processor

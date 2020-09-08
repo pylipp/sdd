@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+sdd_install() {
+    local version=$1
+    local archive=ncdu-linux-x86_64-"$version".tar.gz
+    wget -P /tmp https://dev.yorhel.nl/download/"$archive"
+
+    cd /tmp
+    tar xfv "$archive"
+    mv ncdu "$SDD_INSTALL_PREFIX"/bin
+    rm "$archive"
+}
+
+sdd_uninstall() {
+    rm -f "$SDD_INSTALL_PREFIX"/bin/ncdu
+}
+
+sdd_fetch_latest_version() {
+    # Find version numbers of format X.Y or X.Y.Z
+    wget -qO- 'https://g.blicky.net/ncdu.git/plain/configure.ac' | grep -oE '[0-9]+\.[0-9]+\.*[0-9]*'
+}

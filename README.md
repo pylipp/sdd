@@ -167,6 +167,7 @@ Name | Description
 [hub](https://github.com/github/hub) | Command line tool to interact with GitHub
 [jira](https://github.com/go-jira/jira) | Simple JIRA command line client in Go
 [jq](https://github.com/stedolan/jq) | Command line JSON processor
+[ncdu](https://dev.yorhel.nl/ncdu) | Disk usage analyzer with ncurses interface
 [oh-my-zsh](https://github.com/robbyrussell/oh-my-zsh) | Framework for managing zsh configuration
 [Pandoc](https://github.com/jgm/pandoc) | Universal markup converter
 [pip](https://pypi.org/project/pip/) | Python package manager

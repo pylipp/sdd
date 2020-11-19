@@ -157,6 +157,7 @@ Name | Description
 :--- | :---
 [bat](https://github.com/sharkdp/bat) | A cat(1) clone with syntax highlighting and Git integration
 [broot](https://github.com/Canop/broot) | A new way to see and navigate directory trees
+[dasel]https://github.com/TomWright/dasel) | Query and update data structures from the command line
 [delta](https://github.com/dandavison/delta) | A syntax-highlighter for git and diff output
 [diff-so-fancy](https://github.com/so-fancy/diff-so-fancy) | Human readable diffs
 [direnv](https://github.com/direnv/direnv) | Handle environment variables depending on current directory

@@ -70,7 +70,7 @@ _validate_apps() {
             fi
         done
 
-        if [ $nr_misses -eq 2 ]; then
+        if [ "$nr_misses" -eq 2 ]; then
             printf 'App "%s" could not be found.\n' "$app" >&2
             return_code=2
         else
@@ -162,7 +162,7 @@ _manage_apps() {
         fi
     done
 
-    return $return_code
+    return "$return_code"
 }
 
 _spin() {

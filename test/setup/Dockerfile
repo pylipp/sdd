@@ -23,9 +23,10 @@ RUN git clone https://github.com/jasonkarns/bats-assert-1 /usr/local/libexec/bat
   cd /usr/local/libexec/bats-assert && \
   git checkout v2.0.0
 
-RUN package=shellcheck-v0.7.0 && \
+RUN version=v0.7.0 && \
+  package=shellcheck-$version && \
   archive=$package.linux.x86_64.tar.xz && \
-  wget -P /tmp https://shellcheck.storage.googleapis.com/$archive && \
+  wget -P /tmp https://github.com/koalaman/shellcheck/releases/download/$version/$archive && \
   cd /tmp && \
   tar xf $archive && \
   mv $package/shellcheck /opt && \

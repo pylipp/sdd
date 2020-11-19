@@ -235,7 +235,7 @@ Set up the local environment for style-checking using the [pre-commit](https://p
 
 ### Testing
 
-The program is tested in a container environment using the `bats` framework. The test runner must be invoked from the repository root (i.e. the same directory that this README resides in):
+The program is tested in a container environment using the `bats` framework. Invoke the test runner by
 
     test/run.sh
 
@@ -247,9 +247,9 @@ For attaching to the test container after the tests have completed, do
 
     test/run.sh --debug
 
-For running specific tests
+For running specific tests (paths relative to repository root)
 
-    test/run.sh apps/fd.bats apps/sdd.bats
+    test/run.sh test/apps/fd.bats test/apps/sdd.bats
 
 For creating a Docker container and attaching it to the terminal, do
 

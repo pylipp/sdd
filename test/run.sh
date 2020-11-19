@@ -9,7 +9,7 @@
 #   --style         Run style check (linting and formatting)
 #
 # Arguments:
-#   test            Arbitrary bats test files; relative to test/
+#   test            Arbitrary bats test files; relative to repository root
 #                   If omitted, all tests are run
 #
 # Environment variables:
@@ -22,21 +22,16 @@ if [ "$1" = "--style" ]; then
 fi
 
 if ! command -v docker &>/dev/null; then
-    # Assume container environment; e.g. in the context of DockerHub Autobuild/test
-    cd /opt/sdd/test || exit 1 # workaround for relative framework/ paths in tests
-    bats -r .
+    # Assume container environment using repository root as working directory
+    # e.g. in the context of DockerHub Autobuild/test
+    bats -r test
     exit $?
 fi
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 ROOT_DIR="$( cd "$SCRIPT_DIR"/.. && pwd )"
 
-if [ "$(pwd)" != "$ROOT_DIR" ]; then
-    echo "Script must be invoked from repository root." >&2
-    exit 1
-fi
-
-container_id=$(docker run -d -it --rm --volume "$ROOT_DIR":/opt/sdd --workdir /opt/sdd/test pylipp/sdd:latest)
+container_id=$(docker run -d -it --rm --volume "$ROOT_DIR":/opt/sdd --workdir /opt/sdd pylipp/sdd:latest)
 
 if [ "$1" = "--open" ]; then
     docker attach "$container_id"
@@ -52,9 +47,9 @@ fi
 if [ $# -gt 0 ]; then
     docker exec "$container_id" bats -r "$@"
 elif [[ -z $NO_APP_TESTS ]]; then
-    docker exec "$container_id" bats -r .
+    docker exec "$container_id" bats -r test
 else
-    docker exec "$container_id" bats -r framework
+    docker exec "$container_id" bats -r test/framework
 fi
 
 test_outcome=$?

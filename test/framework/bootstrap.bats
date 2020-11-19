@@ -6,7 +6,7 @@ teardown() {
 @test "Default sdd installation succeeds" {
   [ ! -e "$HOME/.local/share/sdd/apps/installed" ]
 
-  run ../bootstrap.sh
+  run "$BATS_TEST_DIRNAME"/../../bootstrap.sh
   [ $status -eq 0 ]
 
   [ -e "$HOME/.local/bin/sdd" ]
@@ -23,7 +23,7 @@ teardown() {
 
 @test "Custom sdd installation succeeds" {
   export PREFIX=/usr
-  run ../bootstrap.sh
+  run "$BATS_TEST_DIRNAME"/../../bootstrap.sh
   [ $status -eq 0 ]
 
   [ -e /usr/bin/sdd ]

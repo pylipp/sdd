@@ -1,5 +1,6 @@
 sut:
   build: .
-  command: /opt/sdd/test/run.sh
+  working_dir: /opt/sdd
+  command: ./test/run.sh
   volumes:
     - ./../../:/opt/sdd/

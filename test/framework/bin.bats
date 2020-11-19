@@ -1,11 +1,12 @@
 load '/usr/local/libexec/bats-support/load.bash'
 load '/usr/local/libexec/bats-assert/load.bash'
 
-validappfilepath=../lib/sdd/apps/user/valid_app
-superappfilepath=../lib/sdd/apps/user/super_app
+validappfilepath="$BATS_TEST_DIRNAME"/../../lib/sdd/apps/user/valid_app
+superappfilepath="$BATS_TEST_DIRNAME"/../../lib/sdd/apps/user/super_app
 validcustomappfilepath=$HOME/.config/sdd/apps/valid_app
-invalidappfilepath=../lib/sdd/apps/user/invalid_app
+invalidappfilepath="$BATS_TEST_DIRNAME"/../../lib/sdd/apps/user/invalid_app
 appsrecordfilepath=$HOME/.local/share/sdd/apps/installed
+fixturesfilepath="$BATS_TEST_DIRNAME"/fixtures
 
 setup() {
   mkdir -p $(dirname $validcustomappfilepath)
@@ -61,7 +62,7 @@ teardown() {
 @test "invoking install command with valid app succeeds" {
   # Create app management file for 'valid_app' containing an sdd_install
   # function that creates an executable 'valid_app'
-  cp framework/fixtures/valid_app $validappfilepath
+  cp "$fixturesfilepath"/valid_app $validappfilepath
 
   run sdd install valid_app
   [ "$status" -eq 0 ]
@@ -80,7 +81,7 @@ teardown() {
 @test "invoking install command with valid custom app succeeds" {
   # Create app management file for 'valid_app' containing an sdd_install
   # function that creates an executable 'valid_app'
-  cp framework/fixtures/valid_app $validcustomappfilepath
+  cp "$fixturesfilepath"/valid_app $validcustomappfilepath
 
   run sdd install valid_app
   [ "$status" -eq 0 ]
@@ -99,9 +100,9 @@ teardown() {
 
 @test "invoking install command with valid customized app succeeds" {
   # Custom app management file specifies newer version
-  cp framework/fixtures/valid_app $validcustomappfilepath
+  cp "$fixturesfilepath"/valid_app $validcustomappfilepath
   sed -i 's/1.0/1.1/' $validcustomappfilepath
-  cp framework/fixtures/valid_app $validappfilepath
+  cp "$fixturesfilepath"/valid_app $validappfilepath
 
   run sdd install valid_app
   [ "$status" -eq 0 ]
@@ -120,7 +121,7 @@ teardown() {
 
 @test "invoking install command with valid customized app without sdd_fetch_latest_version succeeds" {
   echo "sdd_install() { return 0; }" > $validcustomappfilepath
-  cp framework/fixtures/valid_app $validappfilepath
+  cp "$fixturesfilepath"/valid_app $validappfilepath
 
   run sdd install valid_app
   [ "$status" -eq 0 ]
@@ -138,7 +139,7 @@ teardown() {
 }
 
 @test "invoking install command with valid and non-existing app installs only valid one" {
-  cp framework/fixtures/valid_app $validappfilepath
+  cp "$fixturesfilepath"/valid_app $validappfilepath
 
   run sdd install valid_app non_existing_app
   assert_failure 2
@@ -154,7 +155,7 @@ teardown() {
 }
 
 @test "invoking install command with valid and invalid app installs only valid one" {
-  cp framework/fixtures/valid_app $validappfilepath
+  cp "$fixturesfilepath"/valid_app $validappfilepath
   touch $invalidappfilepath
 
   run sdd install valid_app invalid_app
@@ -172,7 +173,7 @@ teardown() {
 }
 
 @test "invoking install command with valid custom and non-existing app installs only custom one" {
-  cp framework/fixtures/valid_app $validcustomappfilepath
+  cp "$fixturesfilepath"/valid_app $validcustomappfilepath
 
   run sdd install valid_app non_existing_app
   assert_failure 2
@@ -190,7 +191,7 @@ teardown() {
 }
 
 @test "invoking install command with valid app and version succeeds" {
-  cp framework/fixtures/valid_app $validappfilepath
+  cp "$fixturesfilepath"/valid_app $validappfilepath
 
   run sdd install valid_app=1.1
   [ "$status" -eq 0 ]
@@ -225,7 +226,7 @@ teardown() {
 @test "invoking uninstall command with valid app succeeds" {
   # Create app management file for 'valid_app' containing an sdd_uninstall
   # function that uninstalls the executable 'valid_app'
-  cp framework/fixtures/valid_app $validappfilepath
+  cp "$fixturesfilepath"/valid_app $validappfilepath
 
   # Install 'valid_app'
   sdd install valid_app
@@ -247,7 +248,7 @@ teardown() {
 
 @test "invoking uninstall command with valid customized app succeeds" {
   echo "sdd_uninstall() { touch /tmp/uninstalled; }" > $validcustomappfilepath
-  cp framework/fixtures/valid_app $validappfilepath
+  cp "$fixturesfilepath"/valid_app $validappfilepath
 
   run sdd install valid_app
   [ "$status" -eq 0 ]
@@ -281,7 +282,7 @@ teardown() {
 
 @test "invoking upgrade command with existing app succeeds" {
   # Assume app is already installed
-  cp framework/fixtures/valid_app $validappfilepath
+  cp "$fixturesfilepath"/valid_app $validappfilepath
   sdd install valid_app
 
   # Bump version number
@@ -302,7 +303,7 @@ teardown() {
 }
 
 @test "invoking upgrade command with valid app and version succeeds" {
-  cp framework/fixtures/valid_app $validappfilepath
+  cp "$fixturesfilepath"/valid_app $validappfilepath
   sdd install valid_app
 
   # Bump version number
@@ -340,7 +341,7 @@ FILE
 }
 
 @test "invoking upgrade command with valid and non-existing app upgrades only valid one" {
-  cp framework/fixtures/valid_app $validappfilepath
+  cp "$fixturesfilepath"/valid_app $validappfilepath
 
   run sdd upgrade valid_app non_existing_app
   assert_failure 2
@@ -356,7 +357,7 @@ FILE
 }
 
 @test "invoking upgrade command with existing app and sdd_upgrade succeeds" {
-  cp framework/fixtures/valid_app $validappfilepath
+  cp "$fixturesfilepath"/valid_app $validappfilepath
   echo 'sdd_upgrade() { sdd_install >/dev/null; echo Upgrading to $1...; }' >> $validappfilepath
 
   run sdd upgrade valid_app
@@ -399,7 +400,7 @@ FILE
 }
 
 @test "invoking list with --installed option displays installed apps including versions" {
-  cp framework/fixtures/valid_app $validappfilepath
+  cp "$fixturesfilepath"/valid_app $validappfilepath
   sdd install valid_app
 
   run sdd list --installed
@@ -423,7 +424,7 @@ FILE
 }
 
 @test "invoking list with --available option displays available apps" {
-  cp framework/fixtures/valid_app $validappfilepath
+  cp "$fixturesfilepath"/valid_app $validappfilepath
   touch $(dirname $validcustomappfilepath)/custom_app
 
   run sdd list --available
@@ -435,14 +436,14 @@ FILE
 
   # Two lines for categories, one for 'custom_app'. Empty line not counted by bats
   expected_nr_lines=3
-  ((expected_nr_lines+=$(find ../lib/sdd/apps/user -type f | wc -l)))
+  ((expected_nr_lines+=$(find "$BATS_TEST_DIRNAME"/../../lib/sdd/apps/user -type f | wc -l)))
   assert_equal ${#lines[@]} $expected_nr_lines
 }
 
 @test "invoking list with --upgradable option displays upgradable apps" {
   # Install two apps
-  cp framework/fixtures/valid_app $validappfilepath
-  cp framework/fixtures/valid_app $superappfilepath
+  cp "$fixturesfilepath"/valid_app $validappfilepath
+  cp "$fixturesfilepath"/valid_app $superappfilepath
   sed 's/valid/super/g' $superappfilepath
 
   sdd install valid_app super_app

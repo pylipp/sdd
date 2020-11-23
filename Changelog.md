@@ -11,6 +11,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - App management file for [gitui](https://github.com/extrawurst/gitui)
 - App management file for [ncdu](https://dev.yorhel.nl/ncdu)
 - App management file for [dasel](https://github.com/TomWright/dasel)
+- App management file for [git-trim](https://github.com/foriequal0/git-trim)
 
 ## [v0.2.0.0] - 2020-07-31
 ### Added

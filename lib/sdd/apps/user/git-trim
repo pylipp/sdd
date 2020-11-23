@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+sdd_install() {
+    local version=$1
+    local package=git-trim
+    local archive=$package-linux-"$version".tgz
+
+    wget -P /tmp https://github.com/foriequal0/git-trim/releases/download/"$version"/"$archive"
+    cd /tmp || return 1
+    tar vxf "$archive"
+
+    mv $package/git-trim "$SDD_INSTALL_PREFIX"/bin
+
+    rm -rfv "$archive" $package
+}
+
+sdd_uninstall() {
+    rm -fv "$SDD_INSTALL_PREFIX"/bin/git-trim
+}
+
+sdd_fetch_latest_version() {
+    _tag_name_of_latest_github_release foriequal0 git-trim
+}

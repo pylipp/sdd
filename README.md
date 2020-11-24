@@ -166,6 +166,7 @@ Name | Description
 [gh](https://github.com/cli/cli) | GitHub's official command line tool
 [gitui](https://github.com/extrawurst/gitui) | blazing fast terminal-ui for git written in rust
 [git-trim](https://github.com/foriequal0/git-trim) | Automatically trims your branches whose tracking remote refs are merged or stray
+[go](https://github.com/golang/go) | The Go programming language
 [hub](https://github.com/github/hub) | Command line tool to interact with GitHub
 [jira](https://github.com/go-jira/jira) | Simple JIRA command line client in Go
 [jq](https://github.com/stedolan/jq) | Command line JSON processor

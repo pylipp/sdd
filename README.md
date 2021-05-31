@@ -182,6 +182,7 @@ sdd | Thanks for being here :)
 [shfmt](https://github.com/mvdan/sh) | A shell parser, formatter, and interpreter (sh/bash/mksh)
 [Telegram](https://github.com/telegramdesktop/tdesktop) | Telegram Desktop messaging app
 [wuzz](https://github.com/asciimoo/wuzz) | Interactive cli tool for HTTP inspection
+[xsv](https://github.com/BurntSushi/xsv) | A fast CSV command line toolkit written in Rust
 
 ## Customization
 

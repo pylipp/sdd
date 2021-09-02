@@ -2,10 +2,10 @@
 
 sdd_install() {
     local version=$1
-    local arch=$(arch)
+    local arch=x86_64
     local suffix=musl
 
-    if [[ $arch = *arm ]]; then
+    if [[ $(arch) = arm* ]]; then
         arch=arm
         suffix=gnueabihf
     fi

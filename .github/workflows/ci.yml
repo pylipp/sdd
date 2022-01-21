@@ -30,7 +30,7 @@ jobs:
 
       - name: Run test suite
         run: |
-          pwd
+          ls /__w/sdd/sdd
+          export PATH=/root/.local/bin:/__w/sdd/sdd/bin:$PATH
           echo $PATH
-          ls /opt/sdd/bin
           ./test/run.sh

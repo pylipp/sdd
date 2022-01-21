@@ -20,8 +20,6 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: pylipp/sdd:latest
-      volumes:
-        - .:/opt/sdd/
 
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
@@ -36,5 +34,4 @@ jobs:
           ls /__w/sdd/sdd
           export PATH=/root/.local/bin:/__w/sdd/sdd/bin:$PATH
           echo $PATH
-          ls /opt/sdd
           ./test/run.sh

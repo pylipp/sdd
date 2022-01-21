@@ -26,8 +26,7 @@ jobs:
 
       - name: Check style
         run: |
-          ls
-          /opt/shellcheck -x bin/sdd **/*.bash
+          /opt/shellcheck -x bin/sdd lib/sdd/framework/utils.bash
 
       - name: Run test suite
         run: |

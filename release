@@ -14,4 +14,4 @@ fi
 set -e
 git tag "$version"
 git push --tags origin master
-hub release create -m "$version" -m "$(awk -v RS='' "/\[$version\]/" Changelog.md | tail -n+2)" -e -o "$version"
+gh release create "$version" -n "$(awk -v RS='' "/\[$version\]/" Changelog.md | tail -n+2)" -t "$version"

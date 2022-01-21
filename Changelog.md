@@ -15,6 +15,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - App management file for [dasel](https://github.com/TomWright/dasel)
 - App management file for [git-trim](https://github.com/foriequal0/git-trim)
 - App management file for [go](https://github.com/golang/go). Note that you should add `export GOROOT=~/.local/go; export GOPATH=~/.local/share/goprojects; export PATH=$GOPATH/bin:$GOROOT/bin:$PATH` or similar to your `~/.profile`
+### Changed
+- Use GitHub Actions for CI, see #15
 
 ## [v0.2.0.0] - 2020-07-31
 ### Added

@@ -20,6 +20,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Fixed
 - New download URL for `ncdu`, see #18
 - Update bash completion file path for `fd`, see #18
+- Support installation of `pip` on Python 3.5, see #18
 
 ## [v0.2.0.0] - 2020-07-31
 ### Added

@@ -3,7 +3,11 @@
 sdd_install() {
     command -v python3 >/dev/null 2>&1 || return 1
 
-    wget -P /tmp https://bootstrap.pypa.io/get-pip.py
+    if [[ $(python3 --version) = "Python 3.5."* ]]; then
+        wget -P /tmp https://bootstrap.pypa.io/pip/3.5/get-pip.py
+    else
+        wget -P /tmp https://bootstrap.pypa.io/get-pip.py
+    fi
     python3 /tmp/get-pip.py --user
     sdd_upgrade "$1"
 

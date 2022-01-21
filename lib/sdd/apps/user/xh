@@ -1,0 +1,33 @@
+#! /bin/bash
+
+sdd_install() {
+    local version=$1
+    local package=xh-$version-x86_64-unknown-linux-musl
+    local archive=$package.tar.gz
+
+    wget -P /tmp https://github.com/ducaale/xh/releases/download/"$version"/"$archive"
+    cd /tmp || return 1
+    tar xfv "$archive"
+
+    mv -v "$package"/xh "$SDD_INSTALL_PREFIX"/bin
+
+    # Install man page
+    mkdir -p "$SDD_INSTALL_PREFIX"/share/man/man1
+    mv -v "$package"/doc/xh.1 "$SDD_INSTALL_PREFIX"/share/man/man1
+
+    cp -v "$package"/completions/xh.bash "$SDD_BASH_COMPLETION_DIR"/xh
+    cp -v "$package"/completions/_xh "$SDD_ZSH_COMPLETION_DIR"/_xh
+
+    rm -rfv "$archive" "$package"
+}
+
+sdd_uninstall() {
+    rm -fv "$SDD_INSTALL_PREFIX"/bin/xh
+    rm -fv "$SDD_INSTALL_PREFIX"/share/man/man1/xh.1
+    rm -fv "$SDD_BASH_COMPLETION_DIR"/xh
+    rm -fv "$SDD_ZSH_COMPLETION_DIR"/_xh
+}
+
+sdd_fetch_latest_version() {
+    _tag_name_of_latest_github_release ducaale xh
+}

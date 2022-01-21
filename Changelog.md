@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - App management file for [Telegram](https://github.com/telegramdesktop/tdesktop)
 - App management file for [Pandoc](https://github.com/jgm/pandoc)
 - App management file for [wuzz](https://github.com/asciimoo/wuzz)
+- App management file for [xh](https://github.com/ducaale/xh)
 - App management file for [gitui](https://github.com/extrawurst/gitui)
 - App management file for [ncdu](https://dev.yorhel.nl/ncdu)
 - App management file for [dasel](https://github.com/TomWright/dasel)

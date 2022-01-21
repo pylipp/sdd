@@ -21,7 +21,7 @@ jobs:
     container:
       image: pylipp/sdd:latest
       volumes:
-        - ./:/opt/sdd/
+        - .:/opt/sdd/
 
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it

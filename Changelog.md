@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## unreleased
+
+## [v0.2.1.0] - 2022-01-22
 ### Added
 - App management file for [xsv](https://github.com/BurntSushi/xsv)
 - App management file for [Telegram](https://github.com/telegramdesktop/tdesktop)

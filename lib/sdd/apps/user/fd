@@ -15,6 +15,7 @@ sdd_install() {
     mv $package/fd.1 "$SDD_INSTALL_PREFIX"/share/man/man1
 
     cp "$package"/autocomplete/fd.bash-completion "$SDD_BASH_COMPLETION_DIR"/fd
+    cp "$package"/autocomplete/fd.bash "$SDD_BASH_COMPLETION_DIR"/fd
     cp "$package"/autocomplete/_fd "$SDD_ZSH_COMPLETION_DIR"/_fd
 
     rm -rf $package.tar.gz $package

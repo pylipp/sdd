@@ -30,5 +30,6 @@ jobs:
 
       - name: Run test suite
         run: |
-          ls
+          which sdd
+          echo $PATH
           ./test/run.sh

@@ -161,6 +161,7 @@ Name | Description
 [delta](https://github.com/dandavison/delta) | A syntax-highlighter for git and diff output
 [diff-so-fancy](https://github.com/so-fancy/diff-so-fancy) | Human readable diffs
 [direnv](https://github.com/direnv/direnv) | Handle environment variables depending on current directory
+[docker-compose](https://github.com/docker/compose) | Define and run multi-container applications with Docker (v2)
 [dust](https://github.com/bootandy/dust) | A more intuitive version of du in rust
 [fd](https://github.com/sharkdp/fd) | A simple, fast and user-friendly alternative to 'find'
 [gh](https://github.com/cli/cli) | GitHub's official command line tool

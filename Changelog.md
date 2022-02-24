@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## unreleased
+### Added
+- App management file for [docker-compose](https://github.com/docker/compose) (v2)
 
 ## [v0.2.1.0] - 2022-01-22
 ### Added

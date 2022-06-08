@@ -6,6 +6,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## unreleased
 ### Added
 - App management file for [docker-compose](https://github.com/docker/compose) (v2)
+- App management file for [ffsend](https://github.com/timvisee/ffsend)
 
 ## [v0.2.1.0] - 2022-01-22
 ### Added

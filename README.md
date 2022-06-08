@@ -164,6 +164,7 @@ Name | Description
 [docker-compose](https://github.com/docker/compose) | Define and run multi-container applications with Docker (v2)
 [dust](https://github.com/bootandy/dust) | A more intuitive version of du in rust
 [fd](https://github.com/sharkdp/fd) | A simple, fast and user-friendly alternative to 'find'
+[ffsend](https://github.com/timvisee/ffsend) | Easily and securely share files from the command line
 [gh](https://github.com/cli/cli) | GitHub's official command line tool
 [gitui](https://github.com/extrawurst/gitui) | blazing fast terminal-ui for git written in rust
 [git-trim](https://github.com/foriequal0/git-trim) | Automatically trims your branches whose tracking remote refs are merged or stray

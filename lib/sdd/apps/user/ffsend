@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+sdd_install() {
+    local version=$1
+    wget -O "$SDD_INSTALL_PREFIX"/bin/ffsend https://github.com/timvisee/ffsend/releases/download/"$version"/ffsend-"$version"-linux-x64-static
+    chmod u+x "$SDD_INSTALL_PREFIX"/bin/ffsend
+}
+
+sdd_uninstall() {
+    rm -vf "$SDD_INSTALL_PREFIX"/bin/ffsend
+}
+
+sdd_fetch_latest_version() {
+    _tag_name_of_latest_github_release timvisee ffsend
+}

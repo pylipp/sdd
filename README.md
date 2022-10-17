@@ -156,6 +156,7 @@ In alphabetical order:
 Name | Description
 :--- | :---
 [bat](https://github.com/sharkdp/bat) | A cat(1) clone with syntax highlighting and Git integration
+[borg](https://www.borgbackup.org/) | Deduplicating archiver with compression and authenticated encryption
 [broot](https://github.com/Canop/broot) | A new way to see and navigate directory trees
 [dasel](https://github.com/TomWright/dasel) | Query and update data structures from the command line
 [delta](https://github.com/dandavison/delta) | A syntax-highlighter for git and diff output

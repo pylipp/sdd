@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+sdd_install() {
+    local version=$1
+    local package=circleci-cli_${version:1}_linux_amd64
+    local archive="$package".tar.gz
+    wget -P /tmp https://github.com/CircleCI-Public/circleci-cli/releases/download/"$version"/"$archive"
+
+    cd /tmp || return 1
+    tar xfv "$archive"
+    mv "$package"/circleci "$SDD_INSTALL_PREFIX"/bin/circleci
+    "$SDD_INSTALL_PREFIX"/bin/circleci completion bash > "$SDD_BASH_COMPLETION_DIR"/circleci
+    "$SDD_INSTALL_PREFIX"/bin/circleci completion zsh > "$SDD_ZSH_COMPLETION_DIR"/_circleci
+    rm -rfv "$archive" "$package"
+}
+
+sdd_uninstall() {
+    rm -fv "$SDD_INSTALL_PREFIX"/bin/circleci
+    rm -fv "$SDD_BASH_COMPLETION_DIR"/circleci
+    rm -fv "$SDD_ZSH_COMPLETION_DIR"/_circleci
+}
+
+sdd_fetch_latest_version() {
+    _tag_name_of_latest_github_release CircleCI-Public circleci-cli
+}

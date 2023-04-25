@@ -1,0 +1,30 @@
+#!/bin/bash
+
+sdd_install() {
+    local date=20230116
+    local version=3.10.9+$date
+    local package=cpython-$version-x86_64-unknown-linux-gnu-install_only
+    local archive=$package.tar.gz
+
+    wget -P /tmp https://github.com/indygreg/python-build-standalone/releases/download/$date/$archive
+    cd /tmp || return 1
+    tar vxf $archive
+
+    # Install man page
+    mkdir -p "$SDD_INSTALL_PREFIX"/share/man/man1
+    mv python/share/man/man1/python3* "$SDD_INSTALL_PREFIX"/share/man/man1
+
+    # Install rest of software
+    mkdir -p "$SDD_INSTALL_PREFIX"/python
+    mv python "$SDD_INSTALL_PREFIX"/python/$version
+
+    rm -rf $archive
+}
+
+sdd_uninstall() {
+    echo "Uninstalling disabled." >&2
+}
+
+sdd_fetch_latest_version() {
+    _tag_name_of_latest_github_release indygreg python-build-standalone
+}

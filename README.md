@@ -178,6 +178,7 @@ Name | Description
 [oh-my-zsh](https://github.com/robbyrussell/oh-my-zsh) | Framework for managing zsh configuration
 [Pandoc](https://github.com/jgm/pandoc) | Universal markup converter
 [pip](https://pypi.org/project/pip/) | Python package manager
+[Python](https://github.com/indygreg/python-build-standalone) | Python language installed from redistributable builds
 [qrcp](https://github.com/claudiodangelis/qrcp) | Transfer files over wifi from your computer to your mobile device by scanning a QR code
 [ripgrep](https://github.com/BurntSushi/ripgrep) | Line-oriented text search tool
 sdd | Thanks for being here :)

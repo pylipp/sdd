@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [v0.2.X] - 2025-
+### Added
+- App management file for [xan](https://github.com/medialab/xan)
+
 ## [v0.2.3.1] - 2025-04-01
 ### Fixed
 - App management file for [jq](https://github.com/jqlang/jq): update GitHub repo, install man page

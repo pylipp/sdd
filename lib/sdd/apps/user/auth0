@@ -2,8 +2,9 @@
 
 sdd_install() {
     local version=$1
+    local version_no_v
     # Strip prefixed v from version number for package name
-    local version_no_v=$(echo $version | tr -d v)
+    version_no_v=$(echo "$version" | tr -d v)
     local package=auth0-cli_${version_no_v}_Linux_x86_64
     local archive="$package".tar.gz
     wget -P /tmp https://github.com/auth0/auth0-cli/releases/download/"$version"/"$archive"

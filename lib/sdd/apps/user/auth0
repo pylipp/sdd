@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+sdd_install() {
+    local version=$1
+    # Strip prefixed v from version number for package name
+    local version_no_v=$(echo $version | tr -d v)
+    local package=auth0-cli_${version_no_v}_Linux_x86_64
+    local archive="$package".tar.gz
+    wget -P /tmp https://github.com/auth0/auth0-cli/releases/download/"$version"/"$archive"
+
+    cd /tmp || return 1
+    tar xfv "$archive"
+    mv auth0 "$SDD_INSTALL_PREFIX"/bin/auth0
+    "$SDD_INSTALL_PREFIX"/bin/auth0 completion bash > "$SDD_BASH_COMPLETION_DIR"/auth0
+    rm -rfv "$archive"
+}
+
+sdd_uninstall() {
+    rm -fv "$SDD_INSTALL_PREFIX"/bin/auth0
+    rm -fv "$SDD_BASH_COMPLETION_DIR"/auth0
+}
+
+sdd_fetch_latest_version() {
+    _tag_name_of_latest_github_release auth0 auth0-cli
+}

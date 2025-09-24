@@ -10,7 +10,7 @@ sdd_install() {
     tar xfv "$archive"
     mv xan "$SDD_INSTALL_PREFIX"/bin/xan
     "$SDD_INSTALL_PREFIX"/bin/xan completions bash > "$SDD_BASH_COMPLETION_DIR"/xan
-    "$SDD_INSTALL_PREFIX"/bin/xan completion zsh > "$SDD_ZSH_COMPLETION_DIR"/_xan
+    "$SDD_INSTALL_PREFIX"/bin/xan completions zsh > "$SDD_ZSH_COMPLETION_DIR"/_xan
     rm -rfv "$archive"
 }
 

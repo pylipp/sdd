@@ -6,6 +6,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [v0.2.X] - 2025-
 ### Added
 - App management file for [xan](https://github.com/medialab/xan)
+- App management file for [auth0](https://github.com/auth0/auth0-cli), see #21
 
 ## [v0.2.3.1] - 2025-04-01
 ### Fixed

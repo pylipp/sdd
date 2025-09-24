@@ -155,6 +155,7 @@ In alphabetical order:
 
 Name | Description
 :--- | :---
+[auth0](https://github.com/auth0/auth0-cli) | Build, manage and test your Auth0 integrations from the command line
 [bat](https://github.com/sharkdp/bat) | A cat(1) clone with syntax highlighting and Git integration
 [borg](https://www.borgbackup.org/) | Deduplicating archiver with compression and authenticated encryption
 [broot](https://github.com/Canop/broot) | A new way to see and navigate directory trees

@@ -4,7 +4,7 @@
   [[ "${lines[0]}" = 'Latest version available: '* ]]
   [ "${lines[-1]}" = 'Succeeded to install "python".' ]
 
-  run ~/.local/python/3.10.9+20230116/bin/python3 --version
+  run ~/.local/python/3.14.0+20251007/bin/python3 --version
   [ $status -eq 0 ]
 
   run sdd uninstall python

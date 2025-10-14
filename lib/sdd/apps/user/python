@@ -1,12 +1,12 @@
 #!/bin/bash
 
 sdd_install() {
-    local date=20231002
-    local version=3.12.0+$date
+    local date=20251007
+    local version=3.14.0+$date
     local package=cpython-$version-x86_64-unknown-linux-gnu-install_only
     local archive=$package.tar.gz
 
-    wget -P /tmp https://github.com/indygreg/python-build-standalone/releases/download/$date/$archive
+    wget -P /tmp https://github.com/astral-sh/python-build-standalone/releases/download/$date/$archive
     cd /tmp || return 1
     tar vxf $archive
 
@@ -26,5 +26,5 @@ sdd_uninstall() {
 }
 
 sdd_fetch_latest_version() {
-    _tag_name_of_latest_github_release indygreg python-build-standalone
+    _tag_name_of_latest_github_release astral-sh python-build-standalone
 }

@@ -7,6 +7,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Added
 - App management file for [xan](https://github.com/medialab/xan)
 - App management file for [auth0](https://github.com/auth0/auth0-cli), see #21
+### Updated
+- Update download repository and hardcode v3.14.0 in Python app management file.
 
 ## [v0.2.3.1] - 2025-04-01
 ### Fixed

@@ -8,14 +8,17 @@ sdd_install() {
 
     cd /tmp || return 1
     tar xfv "$archive"
-    mv "$package"/circleci "$SDD_INSTALL_PREFIX"/bin/circleci
+    mv circleci "$SDD_INSTALL_PREFIX"/bin/circleci
+    mkdir -p "$SDD_INSTALL_PREFIX"/share/man/man1
+    mv share/man/man1/circleci.1 "$SDD_INSTALL_PREFIX"/share/man/man1
     "$SDD_INSTALL_PREFIX"/bin/circleci completion bash > "$SDD_BASH_COMPLETION_DIR"/circleci
     "$SDD_INSTALL_PREFIX"/bin/circleci completion zsh > "$SDD_ZSH_COMPLETION_DIR"/_circleci
-    rm -rfv "$archive" "$package"
+    rm -rfv "$archive"
 }
 
 sdd_uninstall() {
     rm -fv "$SDD_INSTALL_PREFIX"/bin/circleci
+    rm -fv "$SDD_INSTALL_PREFIX"/share/man/man1/circleci.1
     rm -fv "$SDD_BASH_COMPLETION_DIR"/circleci
     rm -fv "$SDD_ZSH_COMPLETION_DIR"/_circleci
 }
